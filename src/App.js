@@ -1,7 +1,5 @@
 import logo from './logo.svg';
 import './styles/App.css';
-import FoodList from './components/FoodList';
-import { app } from './firebaseConfig';
 //import helloworld from './helloworld.js';
 
 function App() {

@@ -44,10 +44,6 @@ const FoodList = () => {
   };
 
   // You can fetch existing food items here if needed
-  useEffect(() => {
-    // Fetch food items logic
-  }, []);
-
   return (
     <div>
       <h1>Food List</h1>
@@ -60,13 +56,6 @@ const FoodList = () => {
       <input value={club} onChange={(e) => setClub(e.target.value)} placeholder="Club" required />
   <button type="submit">Add Food</button>
 </form>
-
-      {/* Render existing food items here */}
-      <ul>
-        {foodItems.map((item) => (
-          <li key={item.foodId}>{item.food} - {item.building}</li> // Adjust as per your data structure
-        ))}
-      </ul>
     </div>
   );
 };
