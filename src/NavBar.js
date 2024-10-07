@@ -11,6 +11,9 @@ const NavBar = () => {
                 <li style={{ marginRight: '20px' }}>
                     <Link to="/GPS">GPS</Link>
                 </li>
+                <li style={{ marginRight: '20px' }}>
+                    <Link to="/FoodList">FoodList</Link>
+                </li>
             </ul>
         </nav>
     );
