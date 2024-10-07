@@ -118,7 +118,7 @@ const GPS = () => {
     // Load the Google Maps API script
     useEffect(() => {
         const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=API_Key=initMap`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&callback=initMap`;
         script.async = true;
         script.defer = true;
         document.body.appendChild(script);
