@@ -1,11 +1,11 @@
 // Component to display food events (optional)
-// Manual user input form, writing foodInfo to database
+// Manual foodInfo input form, writing foodInfo to database
 
 import { writeFoodInfo } from '../firebaseUtils';
 import React, { useState, useEffect } from 'react';
 
 const FoodList = () => {
-  const [foodItems, setFoodItems] = useState([]); // Assuming you have a state for food items
+  const [foodItems, setFoodItems] = useState([]); // State to store food items, used to store/manage list of food items
   const [building, setBuilding] = useState('');
   const [room, setRoom] = useState('');
   const [food, setFood] = useState('');
@@ -27,12 +27,12 @@ const FoodList = () => {
     const foodData = {
       building,
       room,
-      food,   // This corresponds to the type of food
+      food,   
       time,
       club
     };
   
-    // Write to Firebase
+    // Write to Firebase database
     writeFoodInfo(foodId, foodData); 
   
     // Reset the form fields
@@ -43,11 +43,10 @@ const FoodList = () => {
     setClub('');
   };
 
-  // You can fetch existing food items here if needed
   return (
     <div>
       <h1>Food List</h1>
-      {/* Form to add food items */}
+      
       <form onSubmit={handleSubmit}>
       <input value={building} onChange={(e) => setBuilding(e.target.value)} placeholder="Building" required />
       <input value={room} onChange={(e) => setRoom(e.target.value)} placeholder="Room" required />
