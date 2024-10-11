@@ -23,8 +23,8 @@ const GPS = () => {
         const centerCoordinates = { lat: 33.794035, lng: -84.3248153 };
         const zoom = 14;
 
-        // Calculate the boundary for a 1-mile radius
-        const bounds = calculateBounds(centerCoordinates, 1.0);
+        // Calculate the boundary for a 0.5-mile radius
+        const bounds = calculateBounds(centerCoordinates, 0.5);
 
         // Create a map centered at the specified coordinates
         const map = new window.google.maps.Map(mapRef.current, {
@@ -118,7 +118,7 @@ const GPS = () => {
     // Load the Google Maps API script
     useEffect(() => {
         const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&callback=initMap`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&callback=initMap`;
         script.async = true;
         script.defer = true;
         document.body.appendChild(script);
@@ -150,8 +150,8 @@ const GPS = () => {
             <div style={styles.buttonContainer}>
                 <h3>Mode Selection</h3>
                 <select ref={modeSel} defaultValue="WALKING" style={styles.select}>
-                    <option value="WALKING">Walking</option>
-                    <option value="BICYCLING">Biking</option>
+                    <option value="WALKING">Walking</option>{}
+                    <option value="BICYCLING">Biking</option>{}
                 </select>
                 <h3>Navigation</h3>
                 <div style={styles.buttonList}>
