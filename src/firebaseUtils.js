@@ -1,4 +1,4 @@
-import { getDatabase, ref, set, update, remove } from 'firebase/database';
+import { getDatabase, ref, set, update, remove, get, child } from 'firebase/database';
 import { app } from './firebaseConfig';  // Import the initialized app
 
 // Initialize Realtime Database
@@ -22,4 +22,22 @@ export function writeUserInfo(userId, userData) {
     email: userData.email,
     password: userData.password
   });
+}
+
+export async function getFoodInfo() {
+  const dbRef = ref(database);  // Get a reference to the database root
+  try {
+    // Get the foodInfo node
+    const snapshot = await get(child(dbRef, 'foodInfo'));
+    if (snapshot.exists()) {
+      // Return the food data if it exists
+      return snapshot.val();
+    } else {
+      console.log("No data available");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching food data:", error);
+    return null;
+  }
 }
