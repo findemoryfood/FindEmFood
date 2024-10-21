@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import NavBar from './NavBar';
 import Home from './Home';
 import GPS from './GPS';
+import UserSignUp from './components/OrgSignIn';
 import FoodList from './components/FoodList';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/GPS" element={<GPS />} />
           <Route path="/FoodList" element={<FoodList />} />
+          <Route path="/OrgSignIn" element={<UserSignUp />} />
         </Routes>
       </div>
       <div className="App">
