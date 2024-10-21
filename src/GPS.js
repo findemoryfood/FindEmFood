@@ -1,12 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 const GPS = () => {
     const mapRef = useRef(null);
-    const directionsService = useRef(null);
-    const directionsRenderer = useRef(null);
-    const modeSel = useRef(null)
+    const modeSel = useRef(null);
+    const [map, setMap] = useState(null);
 
-    //Ending Locations
     const locations = {
         'White Hall': {lat: 33.790821310664015, lng: -84.32591313179799},
         'MSC': {lat: 33.79042898587455, lng: -84.32649785333206},
@@ -18,130 +20,88 @@ const GPS = () => {
 
     const start = { lat: 33.7932052496357, lng: -84.32220089095104 };
 
-    // Initialize the map
-    const initMap = () => {
-        const centerCoordinates = { lat: 33.794035, lng: -84.3248153 };
-        const zoom = 14;
-
-        // Calculate the boundary for a 0.5-mile radius
-        const bounds = calculateBounds(centerCoordinates, 0.5);
-
-        // Create a map centered at the specified coordinates
-        const map = new window.google.maps.Map(mapRef.current, {
-            center: centerCoordinates,
-            zoom: zoom,
-            restriction: {
-                latLngBounds: bounds,
-            },
+    useEffect(() => {
+        const map = new mapboxgl.Map({
+            container: mapRef.current,
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [start.lng, start.lat],
+            zoom: 14,
         });
 
-        //For the directions service and renderer
-        directionsService.current = new window.google.maps.DirectionsService();
-        directionsRenderer.current = new window.google.maps.DirectionsRenderer();
-        directionsRenderer.current.setMap(map);
+        setMap(map);
 
-        // Create a marker at the center point
-        new window.google.maps.Marker({
-            position: centerCoordinates,
-            map: map,
-            title: 'Center Point',
-        });
+        new mapboxgl.Marker()
+            .setLngLat([start.lng, start.lat])
+            .setPopup(new mapboxgl.Popup().setText('Campus Center'))
+            .addTo(map);
 
-        //Add the over location markers
         addLocationMarkers(map);
-    };
 
-    //Goes through the locations and adds to location Markers
+        return () => map.remove();
+    }, []);
+
     const addLocationMarkers = (map) => {
         Object.keys(locations).forEach((location) => {
             const { lat, lng } = locations[location];
-            new window.google.maps.Marker({
-                position: {lat, lng},
-                map: map,
-                title: location,
-            });
+            new mapboxgl.Marker()
+                .setLngLat([lng, lat])
+                .setPopup(new mapboxgl.Popup().setText(location))
+                .addTo(map);
         });
     };
 
-    //Function to start the walking or biking routes
-    const locationSelection = (location) => {
-        const destination = start;
+    const handleLocationSelect = (location) => {
+        calculateAndDisplayRoute(location);
+    };
+
+    const calculateAndDisplayRoute = (location) => {
         const selectedLocation = locations[location];
+        const mode = modeSel.current.value === 'WALKING' ? 'walking' : 'cycling';
 
         if (selectedLocation) {
-            calculateAndDisplayRoute(selectedLocation, destination);
+            const directionUrl = `https://api.mapbox.com/directions/v5/mapbox/${mode}/${selectedLocation.lng},${selectedLocation.lat};${start.lng},${start.lat}?geometries=geojson&access_token=${mapboxgl.accessToken}`;
+
+            fetch(directionUrl)
+                .then((response) => response.json())
+                .then((data) => {
+                    const route = data.routes[0].geometry.coordinates;
+                    drawRoute(route);
+                })
+                .catch((error) => console.error('Error fetching directions: ', error));
         }
     };
 
-    const calculateAndDisplayRoute = (selectedLocation, destination) => {
-        const mode = modeSel.current.value;
-
-        directionsService.current.route(
-            {
-                origin: new window.google.maps.LatLng(selectedLocation.lat, selectedLocation.lng),
-                destination: new window.google.maps.LatLng(destination.lat, destination.lng),
-                travelMode: window.google.maps.TravelMode[mode],
-            },
-            (response, status) => {
-                if (status === window.google.maps.DirectionsStatus.OK) {
-                    directionsRenderer.current.setDirections(response);
-                } else {
-                    console.error('Directions request failed due to ' + status);
-                }
-            }
-        );
-    };
-
-    // Function to calculate the bounds for a given radius in miles
-    const calculateBounds = (center, radiusInMiles) => {
-        const latInDegrees = radiusInMiles / 69; // 1 degree latitude ≈ 69 miles
-        const lngInDegrees = radiusInMiles / (69 * Math.cos(center.lat * (Math.PI / 180))); // Converts to longitude degrees
-
-        // Calculate the bounds
-        const northEast = {
-            lat: center.lat + latInDegrees,
-            lng: center.lng + lngInDegrees,
-        };
-
-        const southWest = {
-            lat: center.lat - latInDegrees,
-            lng: center.lng - lngInDegrees,
-        };
-
-        return { north: northEast.lat, south: southWest.lat, east: northEast.lng, west: southWest.lng };
-    };
-
-    useEffect(() => {
-        window.initMap = initMap; // Assign initMap to the global window object
-    }, []);
-
-    // Load the Google Maps API script
-    useEffect(() => {
-        const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&callback=initMap`;
-        script.async = true;
-        script.defer = true;
-        document.body.appendChild(script);
-
-        // Cleanup the script when the component unmounts
-        return () => {
-            document.body.removeChild(script);
-        };
-    }, []);
-
-     const renderLocationButtons = () => (
-        <>
-            {Object.keys(locations).map((location) => (
-                <button key={location} style={styles.button} onClick={() => handleLocationSelect(location)}>
-                    {location}
-                </button>
-            ))}
-        </>
-    );
-
-    const handleLocationSelect = (location) => {
-        console.log(`Selected location: ${location}`);
-        locationSelection(location);
+    const drawRoute = (route) => {
+        if (map.getSource('route')) {
+            map.getSource('route').setData({
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                    type: 'LineString',
+                    coordinates: route,
+                },
+            });
+        } else {
+            map.addLayer({
+                id: 'route',
+                type: 'line',
+                source: {
+                    type: 'geojson',
+                    data: {
+                        type: 'Feature',
+                        properties: {},
+                        geometry: {
+                            type: 'LineString',
+                            coordinates: route,
+                        },
+                    },
+                },
+                layout: {
+                    'line-color': '#007AFF',
+                    'line-width': 5,
+                },
+            });
+        }
     };
 
     return (
@@ -150,19 +110,26 @@ const GPS = () => {
             <div style={styles.buttonContainer}>
                 <h3>Mode Selection</h3>
                 <select ref={modeSel} defaultValue="WALKING" style={styles.select}>
-                    <option value="WALKING">Walking</option>{}
-                    <option value="BICYCLING">Biking</option>{}
+                    <option value="WALKING">Walking</option>
+                    <option value="BICYCLING">Biking</option>
                 </select>
                 <h3>Navigation</h3>
                 <div style={styles.buttonList}>
-                    {renderLocationButtons()}
+                    {Object.keys(locations).map((location) => (
+                        <button
+                            key={location}
+                            style={styles.button}
+                            onClick={() => handleLocationSelect(location)}
+                        >
+                            {location}
+                        </button>
+                    ))}
                 </div>
             </div>
         </div>
     );
 };
 
-// CSS styles for now
 const styles = {
     container: {
         display: 'flex',
