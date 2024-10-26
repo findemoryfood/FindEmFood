@@ -1,6 +1,3 @@
-// Component to display food events (optional)
-// Manual foodInfo input form, writing foodInfo to database
-
 import { writeFoodInfo } from '../firebaseUtils';
 import { getFoodInfo } from '../firebaseUtils';
 import React, { useState, useEffect } from 'react';
@@ -14,6 +11,7 @@ const FoodList = () => {
   const [club, setClub] = useState('');
   const [showForm, setShowForm] = useState(true); // Toggle between showing form and displaying food list
   const [loading, setLoading] = useState(false); // To handle loading state when fetching data
+  const [selectedBuilding, setSelectedBuilding] = useState(''); // State to store selected building for GPS link
 
   // Function to handle form submission for adding food data
   const handleSubmit = (e) => {
@@ -60,6 +58,11 @@ const FoodList = () => {
     setLoading(false); // Stop loading once data is fetched
   };
 
+  // Function to generate dummy GPS link
+  const getGPSLink = (building) => {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(building)}`;
+  };
+
   return (
     <div>
       <h1>Food List</h1>
@@ -90,12 +93,29 @@ const FoodList = () => {
                 foodItems.map((item) => (
                   <li key={item.foodId}>
                     {item.food} - {item.building}, Room: {item.room}, Time: {item.time}, Club: {item.club}
+                    <button onClick={() => setSelectedBuilding(item.building)}>
+                      View Building
+                    </button>
                   </li>
                 ))
               ) : (
                 <p>No food items found.</p>
               )}
             </ul>
+          )}
+
+          {/* Display selected building and GPS link */}
+          {selectedBuilding && (
+            <div>
+              <h2>Selected Building: {selectedBuilding}</h2>
+              <a
+                href={getGPSLink(selectedBuilding)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Navigate to {selectedBuilding}
+              </a>
+            </div>
           )}
         </div>
       )}
@@ -104,4 +124,3 @@ const FoodList = () => {
 };
 
 export default FoodList;
- 
