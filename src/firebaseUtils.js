@@ -17,8 +17,7 @@ export function writeFoodInfo(foodId, foodData) {
 // Function to write user data to the database
 export function writeUserInfo(userId, userData) {
   return set(ref(database, 'userInfo/' + userId), {
-    first: userData.first,
-    last: userData.last,
+    username: userData.username,
     email: userData.email,
     password: userData.password
   });
