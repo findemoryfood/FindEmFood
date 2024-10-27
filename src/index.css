@@ -34,4 +34,21 @@ nav a {
 nav a:hover {
     text-decoration: underline;
 }
+/* For the Outdoor GPS container */
+#google-map-container {
+    height: 70vh; /* Ensure a consistent height */
+    min-height: 400px; /* Set a minimum height */
+    max-height: 70vh; /* Set a max height */
+    width: 100%;
+    overflow: hidden; /* Prevent overflow issues */
+}
+
+/* For the Indoor GPS container */
+#mapbox-container {
+    height: 70vh; /* Ensure a consistent height */
+    min-height: 400px; /* Set a minimum height */
+    max-height: 70vh; /* Set a max height */
+    width: 100%;
+    overflow: hidden; /* Prevent overflow issues */
+}
 

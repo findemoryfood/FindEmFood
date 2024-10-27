@@ -11,9 +11,9 @@ const GPS = () => {
     const mapRef = useRef(null);
     const directionsService = useRef(null);
     const directionsRenderer = useRef(null);
-    const modeSel = useRef(null);
     const [isIndoor, setIsIndoor] = useState(false);
     const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
+    const mapInstance = useRef(null); // For the Google Map instance
 
     // Define locations and floor plans
     const locations = {
@@ -53,6 +53,8 @@ const GPS = () => {
             restriction: { latLngBounds: bounds },
         });
 
+        mapInstance.current = map; // Save the map instance for later use
+
         directionsService.current = new window.google.maps.DirectionsService();
         directionsRenderer.current = new window.google.maps.DirectionsRenderer();
         directionsRenderer.current.setMap(map);
@@ -84,6 +86,19 @@ const GPS = () => {
                 if (status === window.google.maps.DirectionsStatus.OK) {
                     directionsRenderer.current.setDirections(response);
                     setSelectedFloorPlan(floorPlans[destinationLocation]);
+
+                    // Adjust the map view to fit the route
+                    const bounds = new window.google.maps.LatLngBounds();
+                    const route = response.routes[0];
+
+                    // Extend bounds to include each route's legs
+                    route.legs.forEach((leg) => {
+                        bounds.extend(leg.start_location);
+                        bounds.extend(leg.end_location);
+                    });
+
+                    // Fit the map to the bounds of the route
+                    mapInstance.current.fitBounds(bounds);
                 } else {
                     console.error('Directions request failed due to ' + status);
                 }
@@ -220,6 +235,7 @@ const styles = {
         height: '100vh',
         width: '100%',
     },
+
     mapContainer: {
         flex: 1,
         position: 'relative',
