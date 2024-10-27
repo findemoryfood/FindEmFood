@@ -1,32 +1,44 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import coxLayout from './floorplans/cox-layout.jpg';
 
 const GPS = () => {
     const mapRef = useRef(null);
     const directionsService = useRef(null);
     const directionsRenderer = useRef(null);
-    const modeSel = useRef(null)
+    const modeSel = useRef(null);
 
-    //Ending Locations
+    const floorPlans = {
+        'White Hall': '/floorplans/white_hall_layout.jpg',
+        'MSC': '/floorplans/msc_layout.jpg',
+        'Cox Hall': coxLayout,
+        'McDonough Field': '/floorplans/mcdonough_layout.jpg',
+        'Emory Student Center': '/floorplans/emory_student_center_layout.jpg',
+        'Clairmont Campus': '/floorplans/clairmont_layout.jpg',
+        'Goizueta Business School': '/floorplans/goizueta_layout.jpg',
+        'Woodruff Library': '/floorplans/woodruff_layout.jpg',
+    };
+
     const locations = {
-        'White Hall': {lat: 33.790821310664015, lng: -84.32591313179799},
-        'MSC': {lat: 33.79042898587455, lng: -84.32649785333206},
-        'Cox Hall': {lat: 33.79233555962954, lng: -84.32311903755512},
-        'McDonough Field': {lat: 33.79406973743722, lng: -84.32512134776637},
-        'Emory Student Center': {lat: 33.79363510030303, lng: -84.32386296768192},
-        'Clairmont Campus': {lat: 33.79848511148154, lng: -84.3089384586827},
-    }
+        'White Hall': { lat: 33.790821310664015, lng: -84.32591313179799 },
+        'MSC': { lat: 33.79042898587455, lng: -84.32649785333206 },
+        'Cox Hall': { lat: 33.79233555962954, lng: -84.32311903755512 },
+        'McDonough Field': { lat: 33.79406973743722, lng: -84.32512134776637 },
+        'Emory Student Center': { lat: 33.79363510030303, lng: -84.32386296768192 },
+        'Clairmont Campus': { lat: 33.79848511148154, lng: -84.3089384586827 },
+        'Goizueta Business School': { lat: 33.790124, lng: -84.322036 },
+        'Woodruff Library': { lat: 33.790748, lng: -84.323125 },
+    };
 
-    const start = { lat: 33.7932052496357, lng: -84.32220089095104 };
+    const [startLocation, setStartLocation] = useState('White Hall');
+    const [destinationLocation, setDestinationLocation] = useState('MSC');
+    const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
 
-    // Initialize the map
     const initMap = () => {
         const centerCoordinates = { lat: 33.794035, lng: -84.3248153 };
         const zoom = 14;
 
-        // Calculate the boundary for a 0.5-mile radius
-        const bounds = calculateBounds(centerCoordinates, 0.5);
+        const bounds = calculateBounds(centerCoordinates, 1);
 
-        // Create a map centered at the specified coordinates
         const map = new window.google.maps.Map(mapRef.current, {
             center: centerCoordinates,
             zoom: zoom,
@@ -35,56 +47,37 @@ const GPS = () => {
             },
         });
 
-        //For the directions service and renderer
         directionsService.current = new window.google.maps.DirectionsService();
         directionsRenderer.current = new window.google.maps.DirectionsRenderer();
         directionsRenderer.current.setMap(map);
 
-        // Create a marker at the center point
-        new window.google.maps.Marker({
-            position: centerCoordinates,
-            map: map,
-            title: 'Center Point',
-        });
-
-        //Add the over location markers
         addLocationMarkers(map);
     };
 
-    //Goes through the locations and adds to location Markers
     const addLocationMarkers = (map) => {
         Object.keys(locations).forEach((location) => {
             const { lat, lng } = locations[location];
             new window.google.maps.Marker({
-                position: {lat, lng},
+                position: { lat, lng },
                 map: map,
                 title: location,
             });
         });
     };
 
-    //Function to start the walking or biking routes
-    const locationSelection = (location) => {
-        const destination = start;
-        const selectedLocation = locations[location];
-
-        if (selectedLocation) {
-            calculateAndDisplayRoute(selectedLocation, destination);
-        }
-    };
-
-    const calculateAndDisplayRoute = (selectedLocation, destination) => {
+    const calculateAndDisplayRoute = (start, destination) => {
         const mode = modeSel.current.value;
 
         directionsService.current.route(
             {
-                origin: new window.google.maps.LatLng(selectedLocation.lat, selectedLocation.lng),
+                origin: new window.google.maps.LatLng(start.lat, start.lng),
                 destination: new window.google.maps.LatLng(destination.lat, destination.lng),
                 travelMode: window.google.maps.TravelMode[mode],
             },
             (response, status) => {
                 if (status === window.google.maps.DirectionsStatus.OK) {
                     directionsRenderer.current.setDirections(response);
+                    setSelectedFloorPlan(floorPlans[destinationLocation]);
                 } else {
                     console.error('Directions request failed due to ' + status);
                 }
@@ -92,12 +85,10 @@ const GPS = () => {
         );
     };
 
-    // Function to calculate the bounds for a given radius in miles
     const calculateBounds = (center, radiusInMiles) => {
-        const latInDegrees = radiusInMiles / 69; // 1 degree latitude ≈ 69 miles
-        const lngInDegrees = radiusInMiles / (69 * Math.cos(center.lat * (Math.PI / 180))); // Converts to longitude degrees
+        const latInDegrees = radiusInMiles / 69; 
+        const lngInDegrees = radiusInMiles / (69 * Math.cos(center.lat * (Math.PI / 180)));
 
-        // Calculate the bounds
         const northEast = {
             lat: center.lat + latInDegrees,
             lng: center.lng + lngInDegrees,
@@ -111,11 +102,19 @@ const GPS = () => {
         return { north: northEast.lat, south: southWest.lat, east: northEast.lng, west: southWest.lng };
     };
 
+    const handleRouteCalculation = () => {
+        const start = locations[startLocation];
+        const destination = locations[destinationLocation];
+
+        if (start && destination) {
+            calculateAndDisplayRoute(start, destination);
+        }
+    };
+
     useEffect(() => {
-        window.initMap = initMap; // Assign initMap to the global window object
+        window.initMap = initMap; 
     }, []);
 
-    // Load the Google Maps API script
     useEffect(() => {
         const script = document.createElement('script');
         script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&callback=initMap`;
@@ -123,26 +122,10 @@ const GPS = () => {
         script.defer = true;
         document.body.appendChild(script);
 
-        // Cleanup the script when the component unmounts
         return () => {
             document.body.removeChild(script);
         };
     }, []);
-
-     const renderLocationButtons = () => (
-        <>
-            {Object.keys(locations).map((location) => (
-                <button key={location} style={styles.button} onClick={() => handleLocationSelect(location)}>
-                    {location}
-                </button>
-            ))}
-        </>
-    );
-
-    const handleLocationSelect = (location) => {
-        console.log(`Selected location: ${location}`);
-        locationSelection(location);
-    };
 
     return (
         <div style={styles.container}>
@@ -153,40 +136,90 @@ const GPS = () => {
                     <option value="WALKING">Walking</option>
                     <option value="BICYCLING">Biking</option>
                 </select>
-                <h3>Navigation</h3>
-                <div style={styles.buttonList}>
-                    {renderLocationButtons()}
-                </div>
+
+                <h3>Starting Location</h3>
+                <select value={startLocation} onChange={(e) => setStartLocation(e.target.value)} style={styles.select}>
+                    {Object.keys(locations).map((location) => (
+                        <option key={location} value={location}>
+                            {location}
+                        </option>
+                    ))}
+                </select>
+
+                <h3>Destination</h3>
+                <select value={destinationLocation} onChange={(e) => setDestinationLocation(e.target.value)} style={styles.select}>
+                    {Object.keys(locations).map((location) => (
+                        <option key={location} value={location}>
+                            {location}
+                        </option>
+                    ))}
+                </select>
+
+                <button style={styles.button} onClick={handleRouteCalculation}>
+                    Calculate Route
+                </button>
+            </div>
+
+            {/* New area for floor plan */}
+            <div style={styles.floorPlanArea}>
+                {selectedFloorPlan && (
+                    <div style={styles.floorPlanContainer}>
+                        <h3>Floor Plan</h3>
+                        <img src={selectedFloorPlan} alt="Floor Plan" style={styles.floorPlanImage} />
+                    </div>
+                )}
             </div>
         </div>
     );
 };
 
-// CSS styles for now
+// CSS styles
 const styles = {
     container: {
         display: 'flex',
-        height: '500px',
+        flexDirection: 'column',
+        height: 'auto',
+        alignItems: 'center',
     },
     mapContainer: {
-        flex: 2,
+        width: '80%',
+        height: '400px',
         border: '1px solid #ccc',
+        marginBottom: '20px',
     },
     buttonContainer: {
-        flex: 1,
-        overflowY: 'auto',
-        borderLeft: '1px solid #ccc',
+        width: '80%',
         padding: '10px',
+        border: '1px solid #ccc',
+        marginBottom: '20px',
     },
-    buttonList: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '10px',
+    select: {
+        width: '100%',
+        padding: '10px',
+        marginBottom: '10px',
     },
     button: {
         padding: '10px',
+        width: '100%',
         cursor: 'pointer',
+    },
+    floorPlanArea: {
+        width: '80%',
+        textAlign: 'center',
+        marginBottom: '20px',
+        border: '1px solid #ccc',
+        padding: '10px',
+    },
+    floorPlanContainer: {
+        marginTop: '10px',
+    },
+    floorPlanImage: {
+        width: '100%',
+        maxHeight: '300px',
+        objectFit: 'cover',
     },
 };
 
 export default GPS;
+
+
