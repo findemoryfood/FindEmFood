@@ -7,7 +7,7 @@ import coxLayout from './floorplans/cox-layout.jpg';
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
-const GPS = () => {
+const GPS = ({ selectedBuilding }) => {
     const mapRef = useRef(null);
     const directionsService = useRef(null);
     const directionsRenderer = useRef(null);
@@ -87,17 +87,14 @@ const GPS = () => {
                     directionsRenderer.current.setDirections(response);
                     setSelectedFloorPlan(floorPlans[destinationLocation]);
 
-                    // Adjust the map view to fit the route
                     const bounds = new window.google.maps.LatLngBounds();
                     const route = response.routes[0];
 
-                    // Extend bounds to include each route's legs
                     route.legs.forEach((leg) => {
                         bounds.extend(leg.start_location);
                         bounds.extend(leg.end_location);
                     });
 
-                    // Fit the map to the bounds of the route
                     mapInstance.current.fitBounds(bounds);
                 } else {
                     console.error('Directions request failed due to ' + status);
@@ -171,6 +168,18 @@ const GPS = () => {
         };
     }, []);
 
+    // Add the new useEffect for selected building
+    useEffect(() => {
+        if (selectedBuilding && mapRef.current && locations[selectedBuilding]) {
+            const { lat, lng } = locations[selectedBuilding];
+            mapRef.current.flyTo({ center: [lng, lat], zoom: 16 });
+            new mapboxgl.Marker()
+                .setLngLat([lng, lat])
+                .setPopup(new mapboxgl.Popup().setText(selectedBuilding))
+                .addTo(mapRef.current);
+        }
+    }, [selectedBuilding, mapRef]);
+
     return (
         <div style={styles.container}>
             {/* Outdoor Map Container */}
@@ -188,7 +197,6 @@ const GPS = () => {
 
             {/* Controls */}
             <div style={styles.buttonContainer}>
-
                 <h3>Starting Location</h3>
                 <select value={startLocation} onChange={(e) => setStartLocation(e.target.value)} style={styles.select}>
                     {Object.keys(locations).map((location) => (

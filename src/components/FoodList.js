@@ -2,7 +2,7 @@ import { writeFoodInfo } from '../firebaseUtils';
 import { getFoodInfo } from '../firebaseUtils';
 import React, { useState, useEffect } from 'react';
 
-const FoodList = () => {
+const FoodList = ({ onSelectBuilding }) => {
   const [foodItems, setFoodItems] = useState([]); // State to store food items
   const [building, setBuilding] = useState('');
   const [room, setRoom] = useState('');
