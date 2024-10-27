@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+footer h4 {
+  display: inline;
+  margin-right: 1em;
+  margin-left: 1em;
+}

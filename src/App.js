@@ -1,25 +1,24 @@
-import logo from './logo.svg';
+//import logo from './logo.svg';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import SettingsSidebar from './components/SettingsSidebar';
+import AddEventPopUp from './components/AddEventPopUp';
+import { SettingsProvider } from './SettingsContext';
 import './styles/App.css';
-//import helloworld from './helloworld.js';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          HELLO CS 370 <code></code> 
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Welcome to FindEmFood
-        </a>
-      </header>
-    </div>
+  return(
+    <SettingsProvider>
+      <Router>
+        <div >
+            <SettingsSidebar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} />
+            <AddEventPopUp />
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+            </Routes>
+        </div>
+      </Router>
+    </SettingsProvider>
   );
 }
 
