@@ -11,3 +11,44 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* For the navigation bar */
+nav {
+    background-color: #282c34;
+    padding: 1rem;
+}
+
+nav ul {
+    display: flex;
+}
+
+nav li {
+    margin-right: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+/* For the Outdoor GPS container */
+#google-map-container {
+    height: 70vh; /* Ensure a consistent height */
+    min-height: 400px; /* Set a minimum height */
+    max-height: 70vh; /* Set a max height */
+    width: 100%;
+    overflow: hidden; /* Prevent overflow issues */
+}
+
+/* For the Indoor GPS container */
+#mapbox-container {
+    height: 70vh; /* Ensure a consistent height */
+    min-height: 400px; /* Set a minimum height */
+    max-height: 70vh; /* Set a max height */
+    width: 100%;
+    overflow: hidden; /* Prevent overflow issues */
+}
+
