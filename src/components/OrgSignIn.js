@@ -1,12 +1,13 @@
 // User sign up form, writing userInfo to database
 //import functions to write user infromation to the database
+//To do: make email a valid entry if ends with emory.edu
 import { writeUserInfo} from '../firebaseUtils';
 import React, { useState } from 'react';
 
 const UserSignUp = () => {
     const [username, setUsername]= userState('');
     const [email, setEmail] = useState('');
-    const [password, setPassword] = iseState('');
+    const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword]= useState('');
 
     const handleSubmit = (e) => {e.preventDefault();
@@ -18,6 +19,13 @@ const UserSignUp = () => {
             return;
         }
 
+        //Check that email ends with "emory.edu"
+        const emailDomain = email.split('@').pop();
+        if (emailDomain != "emory.edu"){
+            alert("Email must be an emory email");
+            return;
+        }
+        
         //checking passwords match
         if (password !== confirmPassword){
             alert("Passwords do not match");
