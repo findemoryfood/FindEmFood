@@ -1,9 +1,8 @@
 import { writeFoodInfo } from '../firebaseUtils';
 import { getFoodInfo } from '../firebaseUtils';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-const FoodList = ({ onSelectBuilding }) => {
-  const [foodItems, setFoodItems] = useState([]); // State to store food items
+const FoodList = ({ foodItems, setFoodItems }) => {
   const [building, setBuilding] = useState('');
   const [room, setRoom] = useState('');
   const [food, setFood] = useState('');
@@ -36,6 +35,10 @@ const FoodList = ({ onSelectBuilding }) => {
     // Write food data to Firebase
     writeFoodInfo(foodId, foodData);
 
+    // Add new item to the food items state
+    const updatedFoodItems = [...foodItems, { foodId, ...foodData }];
+    setFoodItems(updatedFoodItems); // Update shared state in App
+
     // Reset form fields
     setBuilding('');
     setRoom('');
@@ -53,15 +56,11 @@ const FoodList = ({ onSelectBuilding }) => {
         foodId: key,
         ...foodData[key],
       }));
-      setFoodItems(foodArray); // Update the state with the fetched food items
+      setFoodItems(foodArray); // Update shared state in App
     }
     setLoading(false); // Stop loading once data is fetched
   };
 
-  // Function to generate dummy GPS link
-  const getGPSLink = (building) => {
-    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(building)}`;
-  };
 
   return (
     <div>
@@ -93,9 +92,6 @@ const FoodList = ({ onSelectBuilding }) => {
                 foodItems.map((item) => (
                   <li key={item.foodId}>
                     {item.food} - {item.building}, Room: {item.room}, Time: {item.time}, Club: {item.club}
-                    <button onClick={() => setSelectedBuilding(item.building)}>
-                      View Building
-                    </button>
                   </li>
                 ))
               ) : (
@@ -104,19 +100,6 @@ const FoodList = ({ onSelectBuilding }) => {
             </ul>
           )}
 
-          {/* Display selected building and GPS link */}
-          {selectedBuilding && (
-            <div>
-              <h2>Selected Building: {selectedBuilding}</h2>
-              <a
-                href={getGPSLink(selectedBuilding)}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Navigate to {selectedBuilding}
-              </a>
-            </div>
-          )}
         </div>
       )}
     </div>

@@ -6,7 +6,6 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "mapbox-gl": "^3.7.0",
     "firebase": "^10.14.0",
     "mapbox-gl": "^3.7.0",
     "react": "^18.3.1",
@@ -14,6 +13,7 @@
     "react-map-gl": "^7.1.7",
     "react-router-dom": "^6.26.2",
     "react-scripts": "5.0.1",
+    "react-switch": "^7.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

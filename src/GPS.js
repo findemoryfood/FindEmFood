@@ -2,12 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import coxLayout from './floorplans/cox-layout.jpg';
+import Switch from 'react-switch'; // Add a library for toggle switches (Install with `npm install react-switch`)
 
 // Set Mapbox access token
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
-const GPS = ({ selectedBuilding }) => {
+const GPS = ({ foodItems }) => {
     const mapRef = useRef(null);
     const directionsService = useRef(null);
     const directionsRenderer = useRef(null);
@@ -15,7 +16,7 @@ const GPS = ({ selectedBuilding }) => {
     const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
     const mapInstance = useRef(null); // For the Google Map instance
 
-    // Define locations and floor plans
+    // Define original locations and floor plans
     const locations = {
         'White Hall': { lat: 33.790821310664015, lng: -84.32591313179799 },
         'MSC': { lat: 33.79042898587455, lng: -84.32649785333206 },
@@ -40,6 +41,8 @@ const GPS = ({ selectedBuilding }) => {
 
     const [startLocation, setStartLocation] = useState('White Hall');
     const [destinationLocation, setDestinationLocation] = useState('MSC');
+    const [useMyLocation, setUseMyLocation] = useState(false); // State for toggle switch
+    const [userLocation, setUserLocation] = useState(null); // State to store user's current location
 
     // Initialize Google Map
     const initMap = () => {
@@ -103,6 +106,25 @@ const GPS = ({ selectedBuilding }) => {
         );
     };
 
+    // Get user's current geolocation
+    const getUserLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setUserLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    });
+                },
+                (error) => {
+                    console.error("Error getting user's location: ", error);
+                }
+            );
+        } else {
+            alert('Geolocation is not supported by this browser.');
+        }
+    };
+
     // Load Mapbox indoor map
     const loadIndoorMap = () => {
         const mapboxMap = new mapboxgl.Map({
@@ -147,8 +169,26 @@ const GPS = ({ selectedBuilding }) => {
     };
 
     const handleRouteCalculation = () => {
-        const start = locations[startLocation];
-        const destination = locations[destinationLocation];
+        let start;
+        if (useMyLocation && userLocation) {
+            start = userLocation;
+        } else {
+            start = locations[startLocation];
+        }
+
+        let destination;
+        if (locations[destinationLocation]) {
+            destination = locations[destinationLocation];
+        } else {
+            const selectedFoodItem = foodItems.find((item) => item.building === destinationLocation);
+            if (selectedFoodItem) {
+                destination = {
+                    lat: locations[selectedFoodItem.building].lat,
+                    lng: locations[selectedFoodItem.building].lng,
+                };
+            }
+        }
+
         if (start && destination) calculateAndDisplayRoute(start, destination);
     };
 
@@ -168,17 +208,12 @@ const GPS = ({ selectedBuilding }) => {
         };
     }, []);
 
-    // Add the new useEffect for selected building
+    // Fetch user location when the toggle switch is turned on
     useEffect(() => {
-        if (selectedBuilding && mapRef.current && locations[selectedBuilding]) {
-            const { lat, lng } = locations[selectedBuilding];
-            mapRef.current.flyTo({ center: [lng, lat], zoom: 16 });
-            new mapboxgl.Marker()
-                .setLngLat([lng, lat])
-                .setPopup(new mapboxgl.Popup().setText(selectedBuilding))
-                .addTo(mapRef.current);
+        if (useMyLocation) {
+            getUserLocation(); // Fetch user's location when "My Location" is selected
         }
-    }, [selectedBuilding, mapRef]);
+    }, [useMyLocation]);
 
     return (
         <div style={styles.container}>
@@ -198,21 +233,50 @@ const GPS = ({ selectedBuilding }) => {
             {/* Controls */}
             <div style={styles.buttonContainer}>
                 <h3>Starting Location</h3>
-                <select value={startLocation} onChange={(e) => setStartLocation(e.target.value)} style={styles.select}>
-                    {Object.keys(locations).map((location) => (
-                        <option key={location} value={location}>
-                            {location}
-                        </option>
-                    ))}
-                </select>
+
+                {/* Toggle for My Location vs. Selected Start Location */}
+                <label style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                    <span style={{ marginRight: '10px' }}>Use My Location</span>
+                    <Switch
+                        checked={useMyLocation}
+                        onChange={(checked) => setUseMyLocation(checked)}
+                        onColor="#86d3ff"
+                        onHandleColor="#2693e6"
+                        handleDiameter={30}
+                        uncheckedIcon={false}
+                        checkedIcon={false}
+                        boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                        activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                        height={20}
+                        width={48}
+                    />
+                </label>
+
+                {!useMyLocation && (
+                    <select value={startLocation} onChange={(e) => setStartLocation(e.target.value)} style={styles.select}>
+                        {Object.keys(locations).map((location) => (
+                            <option key={location} value={location}>
+                                {location}
+                            </option>
+                        ))}
+                    </select>
+                )}
 
                 <h3>Destination</h3>
                 <select value={destinationLocation} onChange={(e) => setDestinationLocation(e.target.value)} style={styles.select}>
+                    {/* Original Locations */}
                     {Object.keys(locations).map((location) => (
                         <option key={location} value={location}>
                             {location}
                         </option>
                     ))}
+                    {/* Additional Locations from Food List */}
+                    {foodItems.length > 0 &&
+                        foodItems.map((item) => (
+                            <option key={item.foodId} value={item.building}>
+                                {`${item.building} - Room: ${item.room}, Food: ${item.food}, Time: ${item.time}, Club: ${item.club}`}
+                            </option>
+                        ))}
                 </select>
 
                 <button style={styles.button} onClick={handleRouteCalculation}>
@@ -243,7 +307,6 @@ const styles = {
         height: '100vh',
         width: '100%',
     },
-
     mapContainer: {
         flex: 1,
         position: 'relative',
