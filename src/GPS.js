@@ -43,6 +43,7 @@ const GPS = ({ foodItems }) => {
     const [destinationLocation, setDestinationLocation] = useState('MSC');
     const [useMyLocation, setUseMyLocation] = useState(false); // State for toggle switch
     const [userLocation, setUserLocation] = useState(null); // State to store user's current location
+    const [showPopup, setShowPopup] = useState(false); // State for popup visibility
 
     // Initialize Google Map
     const initMap = () => {
@@ -192,6 +193,13 @@ const GPS = ({ foodItems }) => {
         if (start && destination) calculateAndDisplayRoute(start, destination);
     };
 
+    // Show popup if there are food items available
+    useEffect(() => {
+        if (foodItems.length > 0) {
+            setShowPopup(true);
+        }
+    }, [foodItems]);
+
     useEffect(() => {
         window.initMap = initMap;
     }, []);
@@ -295,6 +303,26 @@ const GPS = ({ foodItems }) => {
                     <img src={selectedFloorPlan} alt="Floor Plan" style={styles.floorPlanImage} />
                 </div>
             )}
+
+            {/* Popup Component */}
+            {showPopup && (
+                <div style={styles.overlay}>
+                    <div style={styles.popup}>
+                        <h2>Events Available!</h2>
+                        <p>There are new events happening at the following locations:</p>
+                        <ul>
+                            {foodItems.map((item) => (
+                                <li key={item.foodId}>
+                                    {item.building} - {item.food}, Room: {item.room}, Time: {item.time}, Club: {item.club}
+                                </li>
+                            ))}
+                        </ul>
+                        <button onClick={() => setShowPopup(false)} style={styles.closeButton}>
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
@@ -340,6 +368,34 @@ const styles = {
         width: '100%',
         maxHeight: '300px',
         objectFit: 'cover',
+    },
+    overlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    popup: {
+        backgroundColor: '#fff',
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+        width: '80%',
+        maxWidth: '500px',
+    },
+    closeButton: {
+        marginTop: '10px',
+        padding: '10px',
+        backgroundColor: '#007BFF',
+        color: '#fff',
+        border: 'none',
+        cursor: 'pointer',
+        borderRadius: '5px',
     },
 };
 
