@@ -308,7 +308,7 @@ const GPS = ({ foodItems }) => {
             {showPopup && (
                 <div style={styles.overlay}>
                     <div style={styles.popup}>
-                        <h2>Events Available!</h2>
+                        <h2>Food Events Available on Campus!</h2>
                         <p>There are new events happening at the following locations:</p>
                         <ul>
                             {foodItems.map((item) => (
