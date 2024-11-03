@@ -3,21 +3,24 @@ import React, { useState } from 'react';
 import { writeUserInfo, getUserInfo } from '../firebaseUtils';
 
 const OrgSignIn = ({ onLogin, isLoggedIn, user, onLogout }) => {
-  const [usernameOrEmail, setUsernameOrEmail] = useState('');
+  const [username, setUsername] = useState(''); // Separate username field
+  const [email, setEmail] = useState(''); // Separate email field
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showLogin, setShowLogin] = useState(true);
+  const [usernameOrEmail, setUsernameOrEmail] = useState(''); // For login only
 
   const toggleForm = () => setShowLogin(!showLogin);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    if (!usernameOrEmail || !password || !confirmPassword) {
+    // Check that all fields are filled out
+    if (!username || !email || !password || !confirmPassword) {
       alert('All fields are required');
       return;
     }
-    if (!usernameOrEmail.endsWith('@emory.edu')) {
+    if (!email.endsWith('@emory.edu')) {
       alert('Please use an @emory.edu email to sign up.');
       return;
     }
@@ -27,12 +30,13 @@ const OrgSignIn = ({ onLogin, isLoggedIn, user, onLogout }) => {
     }
 
     const userId = Math.random().toString(36).substr(2, 9);
-    const userData = { username: usernameOrEmail, email: usernameOrEmail, password };
+    const userData = { username, email, password };
     await writeUserInfo(userId, userData);
 
     alert('Sign-up successful! Please log in.');
     setShowLogin(true);
-    setUsernameOrEmail('');
+    setUsername('');
+    setEmail('');
     setPassword('');
     setConfirmPassword('');
   };
@@ -69,12 +73,31 @@ const OrgSignIn = ({ onLogin, isLoggedIn, user, onLogout }) => {
         </div>
       ) : (
         <form onSubmit={showLogin ? handleLogin : handleSignUp}>
-          <input
-            value={usernameOrEmail}
-            onChange={(e) => setUsernameOrEmail(e.target.value)}
-            placeholder="Email or Username"
-            required
-          />
+          {!showLogin ? (
+            <>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Username"
+                required
+              />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email (@emory.edu)"
+                required
+              />
+            </>
+          ) : (
+            <input
+              value={usernameOrEmail}
+              onChange={(e) => setUsernameOrEmail(e.target.value)}
+              placeholder="Email or Username"
+              required
+            />
+          )}
           <input
             type="password"
             value={password}
