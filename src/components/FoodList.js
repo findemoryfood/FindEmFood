@@ -1,20 +1,23 @@
-import { writeFoodInfo } from '../firebaseUtils';
-import { getFoodInfo } from '../firebaseUtils';
-import React, { useState } from 'react';
+import { writeFoodInfo, getFoodInfo } from '../firebaseUtils';
+import React, { useState, useEffect } from 'react';
 
-const FoodList = ({ foodItems, setFoodItems }) => {
+const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
   const [building, setBuilding] = useState('');
   const [room, setRoom] = useState('');
   const [food, setFood] = useState('');
   const [time, setTime] = useState('');
   const [club, setClub] = useState('');
-  const [showForm, setShowForm] = useState(true); // Toggle between showing form and displaying food list
+  const [showForm, setShowForm] = useState(false); // Toggle between showing form and displaying food list
   const [loading, setLoading] = useState(false); // To handle loading state when fetching data
-  const [selectedBuilding, setSelectedBuilding] = useState(''); // State to store selected building for GPS link
 
   // Function to handle form submission for adding food data
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!isLoggedIn) {
+      alert('Please log in to add food entries.');
+      return;
+    }
 
     // Validate form inputs
     if (!building || !room || !food || !time || !club) {
@@ -23,14 +26,7 @@ const FoodList = ({ foodItems, setFoodItems }) => {
     }
 
     const foodId = Math.random().toString(36).substr(2, 9); // Generate random ID
-
-    const foodData = {
-      building,
-      room,
-      food,
-      time,
-      club,
-    };
+    const foodData = { building, room, food, time, club };
 
     // Write food data to Firebase
     writeFoodInfo(foodId, foodData);
@@ -61,19 +57,34 @@ const FoodList = ({ foodItems, setFoodItems }) => {
     setLoading(false); // Stop loading once data is fetched
   };
 
+  useEffect(() => {
+    fetchFoodItems();
+  }, []);
 
   return (
     <div>
       <h1>Food List</h1>
 
-      {/* Buttons to toggle between form and list */}
+      {/* Display add food option based on login status */}
       <div>
-        <button onClick={() => setShowForm(true)}>Add Food</button>
-        <button onClick={() => { setShowForm(false); fetchFoodItems(); }}>View Food List</button>
+        {isLoggedIn ? (
+          <button onClick={() => setShowForm(!showForm)}>
+            {showForm ? 'Hide Form' : 'Add Food'}
+          </button>
+        ) : (
+          <div>
+            <button disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+              Log in to add food entries
+            </button>
+            <p style={{ fontSize: '0.9em', color: '#555' }}>
+              Log in to add your own food entries to the list!
+            </p>
+          </div>
+        )}
       </div>
 
-      {/* Show form or list depending on state */}
-      {showForm ? (
+      {/* Show form only if the user is logged in */}
+      {isLoggedIn && showForm && (
         <form onSubmit={handleSubmit}>
           <input value={building} onChange={(e) => setBuilding(e.target.value)} placeholder="Building" required />
           <input value={room} onChange={(e) => setRoom(e.target.value)} placeholder="Room" required />
@@ -82,26 +93,26 @@ const FoodList = ({ foodItems, setFoodItems }) => {
           <input value={club} onChange={(e) => setClub(e.target.value)} placeholder="Club" required />
           <button type="submit">Add Food</button>
         </form>
-      ) : (
-        <div>
-          {loading ? (
-            <p>Loading food items...</p>
-          ) : (
-            <ul>
-              {foodItems.length > 0 ? (
-                foodItems.map((item) => (
-                  <li key={item.foodId}>
-                    {item.food} - {item.building}, Room: {item.room}, Time: {item.time}, Club: {item.club}
-                  </li>
-                ))
-              ) : (
-                <p>No food items found.</p>
-              )}
-            </ul>
-          )}
-
-        </div>
       )}
+
+      {/* Display food items */}
+      <div>
+        {loading ? (
+          <p>Loading food items...</p>
+        ) : (
+          <ul>
+            {foodItems.length > 0 ? (
+              foodItems.map((item) => (
+                <li key={item.foodId}>
+                  {item.food} - {item.building}, Room: {item.room}, Time: {item.time}, Club: {item.club}
+                </li>
+              ))
+            ) : (
+              <p>No food items found.</p>
+            )}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };
