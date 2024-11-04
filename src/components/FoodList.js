@@ -1,6 +1,5 @@
-import { writeFoodInfo } from '../firebaseUtils';
-import { getFoodInfo } from '../firebaseUtils';
-import React, { useState } from 'react';
+import { writeFoodInfo, getFoodInfo } from '../firebaseUtils';
+import React, { useState, useEffect } from 'react';
 import locations from "../BuildingContent";
 
 const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
