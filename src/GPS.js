@@ -37,12 +37,14 @@ const GPS = ({ foodItems }) => {
     const initMap = () => {
         const centerCoordinates = { lat: 33.794035, lng: -84.3248153 };
         const zoom = 14;
-        const bounds = calculateBounds(centerCoordinates, 0.3);
+        const bounds = calculateBounds(centerCoordinates, 0.5);
 
         const map = new window.google.maps.Map(mapRef.current, {
             center: centerCoordinates,
             zoom: zoom,
             restriction: { latLngBounds: bounds },
+            gestureHandling: 'greedy', // Allows panning even when zoomed in
+            draggable: true,
         });
 
         mapInstance.current = map; // Save the map instance for later use
