@@ -1,0 +1,19 @@
+html, body {
+    height: 100%; /* Ensure full height for body and html */
+    margin: 0; /* Remove default margin */
+  }
+  
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full height of the viewport */
+    background-image: url('./EMMAP.png'); /* Path to your background image */
+    background-size: cover; /* Ensure the image covers the entire container */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent the image from repeating */
+  }
+  
+  .main-content {
+    flex: 1; /* Allow main content to take available space */
+    background-color: rgba(255, 255, 255, 0.8); /* Optional: Slight white background for readability */
+  }
