@@ -10,11 +10,25 @@ import OrgSignIn from './components/OrgSignIn';
 
 function App() {
   const [foodItems, setFoodItems] = useState([]); // Shared state for food items
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State for login status
+  const [user, setUser] = useState(null); // State for user info
+
+  // Function to handle login and update state
+  const handleLogin = (userData) => {
+    setUser(userData);
+    setIsLoggedIn(true);
+  };
+
+  // Function to handle logout
+  const handleLogout = () => {
+    setUser(null);
+    setIsLoggedIn(false);
+  };
 
   return (
     <Router>
       <div>
-        <NavBar />
+        <NavBar isLoggedIn={isLoggedIn} user={user} onLogout={handleLogout} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
@@ -23,9 +37,25 @@ function App() {
           />
           <Route
             path="/FoodList"
-            element={<FoodList foodItems={foodItems} setFoodItems={setFoodItems} />} // Pass food items and setFoodItems to FoodList
+            element={
+              <FoodList
+                foodItems={foodItems}
+                setFoodItems={setFoodItems}
+                isLoggedIn={isLoggedIn} // Pass login status to control form visibility
+              />
+            }
           />
-          <Route path="/OrgSignIn" element={<OrgSignIn />} />
+          <Route
+            path="/OrgSignIn"
+            element={
+              <OrgSignIn
+                onLogin={handleLogin}
+                isLoggedIn={isLoggedIn}
+                user={user}
+                onLogout={handleLogout}
+              />
+            }
+          />
         </Routes>
       </div>
       <div className="App">
