@@ -1,6 +1,7 @@
 import { writeFoodInfo } from '../firebaseUtils';
 import { getFoodInfo } from '../firebaseUtils';
 import React, { useState } from 'react';
+import locations from "../BuildingContent";
 
 const FoodList = ({ foodItems, setFoodItems }) => {
   const [building, setBuilding] = useState('');
@@ -75,7 +76,15 @@ const FoodList = ({ foodItems, setFoodItems }) => {
       {/* Show form or list depending on state */}
       {showForm ? (
         <form onSubmit={handleSubmit}>
-          <input value={building} onChange={(e) => setBuilding(e.target.value)} placeholder="Building" required />
+          {/* Dropdown for Building Selection based on buildings from BuildingContent to prevent mapping error / typo*/}
+          <select value={building} onChange={(e) => setBuilding(e.target.value)} required>
+            <option value="">Select Building</option>
+            {Object.keys(locations).map((location) => (
+              <option key={location} value={location}>
+                {location}
+              </option>
+            ))}
+          </select>
           <input value={room} onChange={(e) => setRoom(e.target.value)} placeholder="Room" required />
           <input value={food} onChange={(e) => setFood(e.target.value)} placeholder="Food" required />
           <input value={time} onChange={(e) => setTime(e.target.value)} placeholder="Time" required />

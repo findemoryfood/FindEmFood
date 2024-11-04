@@ -3,7 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import coxLayout from './floorplans/cox-layout.jpg';
 import Switch from 'react-switch'; // Add a library for toggle switches (Install with `npm install react-switch`)
-
+import locations from "./BuildingContent";
 // Set Mapbox access token
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 mapboxgl.accessToken = MAPBOX_TOKEN;
@@ -15,18 +15,6 @@ const GPS = ({ foodItems }) => {
     const [isIndoor, setIsIndoor] = useState(false);
     const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
     const mapInstance = useRef(null); // For the Google Map instance
-
-    // Define original locations and floor plans
-    const locations = {
-        'White Hall': { lat: 33.790821310664015, lng: -84.32591313179799 },
-        'MSC': { lat: 33.79042898587455, lng: -84.32649785333206 },
-        'Cox Hall': { lat: 33.79233555962954, lng: -84.32311903755512 },
-        'McDonough Field': { lat: 33.79406973743722, lng: -84.32512134776637 },
-        'Emory Student Center': { lat: 33.79363510030303, lng: -84.32386296768192 },
-        'Clairmont Campus': { lat: 33.79848511148154, lng: -84.3089384586827 },
-        'Goizueta Business School': { lat: 33.790124, lng: -84.322036 },
-        'Woodruff Library': { lat: 33.790748, lng: -84.323125 },
-    };
 
     const floorPlans = {
         'White Hall': '/floorplans/white_hall_layout.jpg',
@@ -49,7 +37,7 @@ const GPS = ({ foodItems }) => {
     const initMap = () => {
         const centerCoordinates = { lat: 33.794035, lng: -84.3248153 };
         const zoom = 14;
-        const bounds = calculateBounds(centerCoordinates, 0.5);
+        const bounds = calculateBounds(centerCoordinates, 0.3);
 
         const map = new window.google.maps.Map(mapRef.current, {
             center: centerCoordinates,
@@ -119,10 +107,20 @@ const GPS = ({ foodItems }) => {
                 },
                 (error) => {
                     console.error("Error getting user's location: ", error);
+
+                    // Reset the "Use My Location" toggle switch
+                    setUseMyLocation(false);
+
+                    // Show an alert to inform the user
+                    alert("Unable to access your location. Please select a starting location from the dropdown.");
                 }
             );
         } else {
+            // If the browser does not support geolocation, show an alert
             alert('Geolocation is not supported by this browser.');
+
+            // Reset the "Use My Location" toggle switch
+            setUseMyLocation(false);
         }
     };
 
