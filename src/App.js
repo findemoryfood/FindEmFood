@@ -4,6 +4,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import NavBar from './NavBar';
 import Home from './Home';
 import GPS from './GPS';
+<<<<<<< Updated upstream
+=======
+import FoodList from './components/FoodList';
+import OrgSignIn from './components/OrgSignIn';
+// import Indoor from './IndoorMap';
+>>>>>>> Stashed changes
 
 function App() {
   return (
@@ -15,7 +21,7 @@ function App() {
           <Route path="/GPS" element={<GPS />} />
         </Routes>
       </div>
-      <div className="App">
+      {/* <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
@@ -30,7 +36,10 @@ function App() {
             Welcome to FindEmFood
           </a>
         </header>
-      </div>
+      </div> */}
+      {/* <div>
+      <Indoor />
+    </div> */}
     </Router>
   );
 }
