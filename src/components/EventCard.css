@@ -1,0 +1,80 @@
+/* EventCard.css */
+
+/* Style for the event card container */
+.event-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  width: 250px; /* Adjust size to fit your layout */
+  margin: 10px;
+}
+
+.event-card:hover {
+  transform: scale(1.05); /* Slight zoom effect on hover */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+}
+
+/* Style for the event title */
+.event-card h3 {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+  padding-bottom: 5px;
+}
+
+/* Style for the event date */
+.event-card p {
+  font-size: 0.95em;
+  color: #777;
+  margin: 0;
+}
+
+/* Style for the event button (the clickable part) */
+.event-card-button {
+  all: unset;
+  background-color: transparent;
+  font-size: 1em;
+  color: inherit;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+}
+
+/* Hover effect for the button */
+.event-card-button:hover {
+  color: #007bff;
+}
+
+/* Styles for the popup content */
+.popup-content {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  width: 300px;
+}
+
+/* Close button styling for the popup */
+.close-popup-button {
+  padding: 10px;
+  background-color: #ff6f61;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+  width: 100%;
+  font-size: 1em;
+}
+
+/* Hover effect for the close button */
+.close-popup-button:hover {
+  background-color: #e55d50;
+}

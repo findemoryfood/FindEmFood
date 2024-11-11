@@ -1,7 +1,7 @@
-// Sidebar.js
+// EventSidebar.js
 import React, { useState, useContext } from 'react';
 import { EventsContext } from './EventContext';
-import './Sidebar.css'; // Import CSS for styling
+import './oldEventSidebar.css'; // Import CSS for styling
 
 const Sidebar = ({ openPopup }) => {
   const { events } = useContext(EventsContext);

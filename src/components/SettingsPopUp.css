@@ -1,0 +1,80 @@
+/* Style for the settings button */
+.settings-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .settings-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  /* The overlay that covers the screen when the pop-up is open */
+  .settings-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  /* The actual pop-up container */
+  .settings-popup {
+    background-color: white;
+    padding: 20px;
+    width: 400px;
+    max-height: 80%;
+    overflow-y: auto; /* Makes the content scrollable */
+    border-radius: 8px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Close button inside the pop-up */
+  .close-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  
+  .close-btn:hover {
+    background-color: #e60000;
+  }
+  
+  /* Content inside the pop-up */
+  .settings-content {
+    margin-top: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  
+  /* Individual setting item styling */
+  .setting-item {
+    margin-bottom: 15px;
+  }
+  
+  .setting-item input[type="checkbox"] {
+    margin-right: 10px;
+  }
+  
+  .setting-item input[type="text"],
+  .setting-item input[type="password"] {
+    padding: 8px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
