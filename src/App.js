@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import logo from './assets/logo.png';
 import './styles/App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import React, { useState } from 'react';
@@ -62,16 +62,9 @@ function App() {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
-            HELLO CS 370 <code></code>
+            Welcome to Find 'Em Food <code></code>
           </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Welcome to FindEmFood
-          </a>
+
         </header>
       </div>
     </Router>

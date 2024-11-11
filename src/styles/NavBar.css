@@ -1,0 +1,83 @@
+/* Styling for the header */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 40px;  /* Increased vertical padding for a taller navbar */
+  height: 100px;  /* Increased height of the navbar */
+  background-color: #ffffff; /* white background for the header */
+  box-shadow: 0 4px 6px rgba(0, 68, 204, 0.8);
+  position: relative;
+}
+
+/* Styling for the logo */
+.logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.logo img {
+  height: 200px; /* Increased logo height to better fit the taller navbar */
+  width: auto;  /* Maintain aspect ratio */
+}
+
+/* Styling for the navigation links */
+.nav-links {
+  display: flex;
+  align-items: center;
+  background-color: #0044cc; /* Blue from the logo */
+  padding: 10px 20px; /* Add some padding for spacing around the links */
+  border-radius: 8px; /* Optional: Adds rounded corners for a better appearance */
+}
+
+.nav-left {
+  margin-right: auto;
+}
+
+.nav-right {
+  margin-left: auto;
+}
+
+nav ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+nav li {
+  margin: 0 20px;
+  position: relative;
+}
+
+nav a {
+  color: #ffcc33; /* Gold color to complement the logo */
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 20px; /* Slightly larger font size for improved readability */
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: #ffffff; /* White color for hover effect to make it more readable */
+}
+
+/* Styling for hover underline effect */
+nav a::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background-color: #ffcc33; /* Gold underline from the logo */
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0%;
+  transition: width 250ms ease-in-out;
+}
+
+nav a:hover::before {
+  width: 100%;
+}

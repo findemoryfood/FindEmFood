@@ -248,16 +248,18 @@ const GPS = ({ foodItems }) => {
                     <Switch
                         checked={useMyLocation}
                         onChange={(checked) => setUseMyLocation(checked)}
-                        onColor="#86d3ff"
-                        onHandleColor="#2693e6"
+                        onColor="#ffcc33"              // Gold color when switch is ON
+                        offColor="#0044cc"             // Blue color when switch is OFF
+                        onHandleColor="#ffd966"        // Lighter gold for the handle when switch is ON (optional)
                         handleDiameter={30}
                         uncheckedIcon={false}
                         checkedIcon={false}
-                        boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-                        activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                        boxShadow="0px 1px 5px rgba(0, 68, 204, 0.6)"        // Blue shadow when the switch is OFF
+                        activeBoxShadow="0px 0px 1px 10px rgba(255, 204, 51, 0.2)" // Gold shadow when the switch is ON
                         height={20}
                         width={48}
                     />
+
                 </label>
 
                 {!useMyLocation && (
@@ -340,6 +342,7 @@ const styles = {
         position: 'relative',
         height: '100%',
         width: '100%',
+        border: '5px solid #0044CC',  // Added blue border with thickness of 5px
     },
     buttonContainer: {
         width: '80%',
@@ -391,12 +394,15 @@ const styles = {
     closeButton: {
         marginTop: '10px',
         padding: '10px',
-        backgroundColor: '#007BFF',
+        backgroundColor: '#0044CC',
         color: '#fff',
         border: 'none',
         cursor: 'pointer',
         borderRadius: '5px',
     },
 };
+
+
+
 
 export default GPS;
