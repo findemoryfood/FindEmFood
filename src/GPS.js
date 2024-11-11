@@ -336,6 +336,8 @@ const styles = {
         flexDirection: 'column',
         height: '100vh',
         width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     mapContainer: {
         flex: 1,
@@ -401,8 +403,4 @@ const styles = {
         borderRadius: '5px',
     },
 };
-
-
-
-
 export default GPS;

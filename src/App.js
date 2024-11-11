@@ -71,4 +71,8 @@ function App() {
   );
 }
 
+const styles = {
+    //.div
+};
+
 export default App;
