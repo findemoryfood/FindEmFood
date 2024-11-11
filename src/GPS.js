@@ -4,8 +4,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import coxLayout from './floorplans/cox-layout.jpg';
 import Switch from 'react-switch'; // Add a library for toggle switches (Install with `npm install react-switch`)
 import locations from "./BuildingContent";
-import Switch from 'react-switch'; // Add a library for toggle switches (Install with `npm install react-switch`)
-import locations from "./BuildingContent";
 import IndoorMap from './floorplans/IndoorMap.js';
 // Set Mapbox access token
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -101,33 +99,33 @@ const GPS = ({ foodItems }) => {
     };
 
     // Get user's current geolocation
-    const getUserLocation = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    setUserLocation({
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                    });
-                },
-                (error) => {
-                    console.error("Error getting user's location: ", error);
-
-                    // Reset the "Use My Location" toggle switch
-                    setUseMyLocation(false);
-
-                    // Show an alert to inform the user
-                    alert("Unable to access your location. Please select a starting location from the dropdown.");
-                }
-            );
-        } else {
-            // If the browser does not support geolocation, show an alert
-            alert('Geolocation is not supported by this browser.');
-
-            // Reset the "Use My Location" toggle switch
-            setUseMyLocation(false);
-        }
-    };
+    // const getUserLocation = () => {
+    //     if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition(
+    //             (position) => {
+    //                 setUserLocation({
+    //                     lat: position.coords.latitude,
+    //                     lng: position.coords.longitude,
+    //                 });
+    //             },
+    //             (error) => {
+    //                 console.error("Error getting user's location: ", error);
+    //
+    //                 // Reset the "Use My Location" toggle switch
+    //                 setUseMyLocation(false);
+    //
+    //                 // Show an alert to inform the user
+    //                 alert("Unable to access your location. Please select a starting location from the dropdown.");
+    //             }
+    //         );
+    //     } else {
+    //         // If the browser does not support geolocation, show an alert
+    //         alert('Geolocation is not supported by this browser.');
+    //
+    //         // Reset the "Use My Location" toggle switch
+    //         setUseMyLocation(false);
+    //     }
+    // };
 
     // Get user's current geolocation
     const getUserLocation = () => {

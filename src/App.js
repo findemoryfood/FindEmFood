@@ -5,8 +5,8 @@ import React, { useState } from 'react';
 import NavBar from './NavBar';
 import Home from './Home';
 import GPS from './GPS';
-import FoodList from './components/FoodList';
-import OrgSignIn from './components/OrgSignIn';
+
+
 <<<<<<< Updated upstream
 =======
 import FoodList from './components/FoodList';
