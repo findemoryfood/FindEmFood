@@ -4,6 +4,9 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import coxLayout from './floorplans/cox-layout.jpg';
 import Switch from 'react-switch'; // Add a library for toggle switches (Install with `npm install react-switch`)
 import locations from "./BuildingContent";
+import Switch from 'react-switch'; // Add a library for toggle switches (Install with `npm install react-switch`)
+import locations from "./BuildingContent";
+import IndoorMap from './floorplans/IndoorMap.js';
 // Set Mapbox access token
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 mapboxgl.accessToken = MAPBOX_TOKEN;
@@ -18,7 +21,7 @@ const GPS = ({ foodItems }) => {
 
     const floorPlans = {
         'White Hall': '/floorplans/white_hall_layout.jpg',
-        'MSC': '/floorplans/msc_layout.jpg',
+        'MSC': IndoorMap,
         'Cox Hall': coxLayout,
         'McDonough Field': '/floorplans/mcdonough_layout.jpg',
         'Emory Student Center': '/floorplans/emory_student_center_layout.jpg',
@@ -126,6 +129,36 @@ const GPS = ({ foodItems }) => {
         }
     };
 
+    // Get user's current geolocation
+    const getUserLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setUserLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    });
+                },
+                (error) => {
+                    console.error("Error getting user's location: ", error);
+
+                    // Reset the "Use My Location" toggle switch
+                    setUseMyLocation(false);
+
+                    // Show an alert to inform the user
+                    alert("Unable to access your location. Please select a starting location from the dropdown.");
+                }
+            );
+        } else {
+            // If the browser does not support geolocation, show an alert
+            alert('Geolocation is not supported by this browser.');
+
+            // Reset the "Use My Location" toggle switch
+            setUseMyLocation(false);
+        }
+    };
+
+
     // Load Mapbox indoor map
     const loadIndoorMap = () => {
         const mapboxMap = new mapboxgl.Map({
@@ -192,6 +225,14 @@ const GPS = ({ foodItems }) => {
 
         if (start && destination) calculateAndDisplayRoute(start, destination);
     };
+
+    // Show popup if there are food items available
+    useEffect(() => {
+        if (foodItems.length > 0) {
+            setShowPopup(true);
+        }
+    }, [foodItems]);
+
 
     // Show popup if there are food items available
     useEffect(() => {
@@ -299,10 +340,44 @@ const GPS = ({ foodItems }) => {
             </div>
 
             {/* Floor Plan Display */}
-            {selectedFloorPlan && (
-                <div style={styles.floorPlanArea}>
-                    <h3>Floor Plan</h3>
-                    <img src={selectedFloorPlan} alt="Floor Plan" style={styles.floorPlanImage} />
+{selectedFloorPlan && (
+    <div style={styles.floorPlanArea}>
+        <h3>Floor Plan</h3>
+        <div>
+            <h1>Indoor Map</h1>
+            <iframe
+                href="https://www.mappedin.com/"
+                title="Mappedin Map"
+                name="Mappedin Map"
+                allow="clipboard-write 'self' https://app.mappedin.com; web-share 'self' https://app.mappedin.com"
+                scrolling="no"
+                width="100%"
+                height="650"
+                frameBorder="0"
+                style={{ border: 0 }}
+                src="https://app.mappedin.com/map/6732310c66ce60000b9169e8?embedded=true">
+            </iframe>
+        </div>
+    </div>
+)}
+
+            {/* Popup Component */}
+            {showPopup && (
+                <div style={styles.overlay}>
+                    <div style={styles.popup}>
+                        <h2>Food Events Available on Campus!</h2>
+                        <p>There are new events happening at the following locations:</p>
+                        <ul>
+                            {foodItems.map((item) => (
+                                <li key={item.foodId}>
+                                    {item.building} - {item.food}, Room: {item.room}, Time: {item.time}, Club: {item.club}
+                                </li>
+                            ))}
+                        </ul>
+                        <button onClick={() => setShowPopup(false)} style={styles.closeButton}>
+                            Close
+                        </button>
+                    </div>
                 </div>
             )}
 
