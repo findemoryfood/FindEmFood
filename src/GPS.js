@@ -289,7 +289,7 @@ const GPS = ({ foodItems }) => {
                         onChange={(checked) => setUseMyLocation(checked)}
                         onColor="#ffcc33"              // Gold color when switch is ON
                         offColor="#0044cc"             // Blue color when switch is OFF
-                        onHandleColor="#ffd966"        // Lighter gold for the handle when switch is ON (optional)
+                        onHandleColor="#ffd966"        // Lighter gold for the handle when switch is ON
                         handleDiameter={30}
                         uncheckedIcon={false}
                         checkedIcon={false}

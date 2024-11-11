@@ -29,7 +29,7 @@
   align-items: center;
   background-color: #0044cc; /* Blue from the logo */
   padding: 10px 20px; /* Add some padding for spacing around the links */
-  border-radius: 8px; /* Optional: Adds rounded corners for a better appearance */
+  border-radius: 8px; /* Rounded corners for a better appearance */
 }
 
 .nav-left {
