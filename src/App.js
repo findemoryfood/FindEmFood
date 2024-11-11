@@ -10,7 +10,7 @@ import FoodList from './components/FoodList';
 import OrgSignIn from './components/OrgSignIn';
 import { EventsProvider } from './components/EventContext';
 import React, { useState } from 'react';
-import EventSidebar from './components/oldEventSidebar';
+import EventSidebar from './components/EventSidebar';
 import SettingsPopUp from './components/SettingsPopUp'; // Import the new SettingsPopUp
 
 function App() {
