@@ -5,14 +5,9 @@ import React, { useState } from 'react';
 import NavBar from './NavBar';
 import Home from './Home';
 import GPS from './GPS';
-
-
-<<<<<<< Updated upstream
-=======
 import FoodList from './components/FoodList';
 import OrgSignIn from './components/OrgSignIn';
-// import Indoor from './IndoorMap';
->>>>>>> Stashed changes
+
 
 function App() {
   const [foodItems, setFoodItems] = useState([]); // Shared state for food items
