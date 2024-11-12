@@ -8,6 +8,7 @@ import GPS from './GPS';
 import FoodList from './components/FoodList';
 import OrgSignIn from './components/OrgSignIn';
 
+
 function App() {
   const [foodItems, setFoodItems] = useState([]); // Shared state for food items
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State for login status
