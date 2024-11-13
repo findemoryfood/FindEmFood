@@ -12,10 +12,9 @@
 
 /* Styling for the logo */
 .logo {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
+  display: flex;
+  align-items: center;
+
 }
 
 .logo img {
@@ -48,6 +47,7 @@ nav ul {
 }
 
 nav li {
+  display: inline-flex;
   margin: 0 20px;
   position: relative;
 }

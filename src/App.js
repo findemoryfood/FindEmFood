@@ -3,7 +3,6 @@ import './styles/App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import React, { useState } from 'react';
 import NavBar from './NavBar';
-import Home from './Home';
 import GPS from './GPS';
 import FoodList from './components/FoodList';
 import OrgSignIn from './components/OrgSignIn';
@@ -31,7 +30,6 @@ function App() {
       <div>
         <NavBar isLoggedIn={isLoggedIn} user={user} onLogout={handleLogout} />
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route
             path="/GPS"
             element={<GPS foodItems={foodItems} />} // Pass food items to GPS

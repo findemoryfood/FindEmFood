@@ -1,19 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logo from './assets/logo.png'; // Update with the correct path for your logo
+import logo from './assets/logo.png';
 import './styles/NavBar.css'; // Link to the CSS file for styles
 
 const NavBar = ({ isLoggedIn, user }) => {
   return (
-    <header className="navbar">
+    <div className="navbar">
       {/* Left Links */}
       <nav className="nav-links nav-left">
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/GPS">GPS</Link>
           </li>
           <li>
-            <Link to="/GPS">GPS</Link>
+            <Link to="/FoodList">Food List</Link>
           </li>
         </ul>
       </nav>
@@ -27,22 +27,22 @@ const NavBar = ({ isLoggedIn, user }) => {
 
       {/* Right Links */}
       <nav className="nav-links nav-right">
-        <ul>
-          <li>
-            <Link to="/FoodList">Food List</Link>
-          </li>
-          <li>
-            {isLoggedIn ? (
-              <Link to="/UserProfile">
-                <span>{user?.username}</span>
-              </Link>
-            ) : (
-              <Link to="/OrgSignIn">Log In</Link>
-            )}
-          </li>
-        </ul>
+          <ul>
+              <li>
+                  <Link to="/Setting">Settings</Link>
+              </li>
+              <li>
+                  {isLoggedIn ? (
+                      <Link to="/UserProfile">
+                          <span>{user?.username}</span>
+                      </Link>
+                  ) : (
+                      <Link to="/OrgSignIn">Log In</Link>
+                  )}
+              </li>
+          </ul>
       </nav>
-    </header>
+    </div>
   );
 };
 

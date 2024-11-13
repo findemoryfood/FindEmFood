@@ -98,34 +98,6 @@ const GPS = ({ foodItems }) => {
         );
     };
 
-    // Get user's current geolocation
-    // const getUserLocation = () => {
-    //     if (navigator.geolocation) {
-    //         navigator.geolocation.getCurrentPosition(
-    //             (position) => {
-    //                 setUserLocation({
-    //                     lat: position.coords.latitude,
-    //                     lng: position.coords.longitude,
-    //                 });
-    //             },
-    //             (error) => {
-    //                 console.error("Error getting user's location: ", error);
-    //
-    //                 // Reset the "Use My Location" toggle switch
-    //                 setUseMyLocation(false);
-    //
-    //                 // Show an alert to inform the user
-    //                 alert("Unable to access your location. Please select a starting location from the dropdown.");
-    //             }
-    //         );
-    //     } else {
-    //         // If the browser does not support geolocation, show an alert
-    //         alert('Geolocation is not supported by this browser.');
-    //
-    //         // Reset the "Use My Location" toggle switch
-    //         setUseMyLocation(false);
-    //     }
-    // };
 
     // Get user's current geolocation
     const getUserLocation = () => {
