@@ -30,6 +30,10 @@ function App() {
       <div>
         <NavBar isLoggedIn={isLoggedIn} user={user} onLogout={handleLogout} />
         <Routes>
+            <Route
+            path="/"
+            element={<GPS foodItems={foodItems} />} // Pass food items to GPS
+          />
           <Route
             path="/GPS"
             element={<GPS foodItems={foodItems} />} // Pass food items to GPS
