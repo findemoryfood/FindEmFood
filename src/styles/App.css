@@ -8,7 +8,7 @@
 /* Main content area */
 .App-content {
   padding: 20px;
-  width: 100%;
+  width: 95%;
   margin-top: 60px; /* Added margin to fix overlap problem with NavBar */
 }
 
