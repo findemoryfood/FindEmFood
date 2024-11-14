@@ -11,7 +11,7 @@ const IndoorMap = () => {
       scrolling="no" 
       width="100%" 
       height="650" 
-      frameborder="0" 
+      frameBorder="0"
       style="border:0" src="https://app.mappedin.com/map/6732310c66ce60000b9169e8?embedded=true"></iframe>
     </div>
   );

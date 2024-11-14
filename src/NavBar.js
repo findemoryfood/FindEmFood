@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import logo from './assets/logo.png';
+import logo from './assets/logo_v2.png';
 import './styles/NavBar.css';
 
 const NavBar = ({ isLoggedIn, user }) => {
@@ -42,6 +42,13 @@ const NavBar = ({ isLoggedIn, user }) => {
 
       {/* Main navbar for larger screens of full screen on computer */}
       <div className="main-nav">
+        {/* Logo with Product Name */}
+        <div className="logo-container">
+          <Link to="/">
+            <img src={logo} alt="Logo" className="logo" />
+          </Link>
+        </div>
+
         {/* Left Links */}
         <nav className="nav-links nav-left">
           <ul>
@@ -51,30 +58,24 @@ const NavBar = ({ isLoggedIn, user }) => {
             <li>
               <Link to="/FoodList">Food List</Link>
             </li>
+            <li>
+              <Link to="/Setting">Settings</Link>
+            </li>
           </ul>
         </nav>
 
-        {/* Logo with Product Name */}
-        <div className="logo-container">
-          <Link to="/">
-            <img src={logo} alt="Logo" className="logo" />
-          </Link>
-          {/*<div className="logo-text">Find 'Em Food</div>*/}
-        </div>
 
         {/* Right Links */}
         <nav className="nav-links nav-right">
           <ul>
-            <li>
-              <Link to="/Setting">Settings</Link>
-            </li>
+
             <li>
               {isLoggedIn ? (
                 <Link to="/UserProfile">
                   <span>{user?.username}</span>
                 </Link>
               ) : (
-                <Link to="/OrgSignIn">Log In</Link>
+                <Link to="/OrgSignIn">Log In / Sign Up</Link>
               )}
             </li>
           </ul>
