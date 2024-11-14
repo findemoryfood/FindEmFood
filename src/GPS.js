@@ -8,7 +8,6 @@ import IndoorMap from './floorplans/IndoorMap.js';
 // Set Mapbox access token
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 mapboxgl.accessToken = MAPBOX_TOKEN;
-//test
 
 const GPS = ({ foodItems }) => {
     const mapRef = useRef(null);
@@ -98,6 +97,7 @@ const GPS = ({ foodItems }) => {
             }
         );
     };
+
 
     // Get user's current geolocation
     const getUserLocation = () => {
