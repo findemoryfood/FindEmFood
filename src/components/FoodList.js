@@ -1,6 +1,7 @@
 import { writeFoodInfo, getFoodInfo } from '../firebaseUtils'; 
 import { populateFirebaseFromGroupMe } from '../groupmeUtils'; // Updated import
 import React, { useState, useEffect } from 'react';
+import locations from "../BuildingContent";
 
 const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
   const [building, setBuilding] = useState('');
@@ -10,6 +11,7 @@ const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
   const [club, setClub] = useState('');
   const [showForm, setShowForm] = useState(false); // Toggle between showing form and displaying food list
   const [loading, setLoading] = useState(false); // To handle loading state when fetching data
+  const [selectedBuilding, setSelectedBuilding] = useState(''); // State to store selected building for GPS link
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -88,7 +90,15 @@ const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
 
       {isLoggedIn && showForm && (
         <form onSubmit={handleSubmit}>
-          <input value={building} onChange={(e) => setBuilding(e.target.value)} placeholder="Building" required />
+          {/* Dropdown for Building Selection based on buildings from BuildingContent to prevent mapping error / typo*/}
+          <select value={building} onChange={(e) => setBuilding(e.target.value)} required>
+            <option value="">Select Building</option>
+            {Object.keys(locations).map((location) => (
+              <option key={location} value={location}>
+                {location}
+              </option>
+            ))}
+          </select>
           <input value={room} onChange={(e) => setRoom(e.target.value)} placeholder="Room" />
           <input value={food} onChange={(e) => setFood(e.target.value)} placeholder="Food" />
           <input value={time} onChange={(e) => setTime(e.target.value)} placeholder="Time" />

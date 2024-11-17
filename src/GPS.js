@@ -3,7 +3,8 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import coxLayout from './floorplans/cox-layout.jpg';
 import Switch from 'react-switch'; // Add a library for toggle switches (Install with `npm install react-switch`)
-
+import locations from "./BuildingContent";
+import IndoorMap from './floorplans/IndoorMap.js';
 // Set Mapbox access token
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 mapboxgl.accessToken = MAPBOX_TOKEN;
@@ -16,21 +17,9 @@ const GPS = ({ foodItems }) => {
     const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
     const mapInstance = useRef(null); // For the Google Map instance
 
-    // Define original locations and floor plans
-    const locations = {
-        'White Hall': { lat: 33.790821310664015, lng: -84.32591313179799 },
-        'MSC': { lat: 33.79042898587455, lng: -84.32649785333206 },
-        'Cox Hall': { lat: 33.79233555962954, lng: -84.32311903755512 },
-        'McDonough Field': { lat: 33.79406973743722, lng: -84.32512134776637 },
-        'Emory Student Center': { lat: 33.79363510030303, lng: -84.32386296768192 },
-        'Clairmont Campus': { lat: 33.79848511148154, lng: -84.3089384586827 },
-        'Goizueta Business School': { lat: 33.790124, lng: -84.322036 },
-        'Woodruff Library': { lat: 33.790748, lng: -84.323125 },
-    };
-
     const floorPlans = {
         'White Hall': '/floorplans/white_hall_layout.jpg',
-        'MSC': '/floorplans/msc_layout.jpg',
+        'MSC': IndoorMap,
         'Cox Hall': coxLayout,
         'McDonough Field': '/floorplans/mcdonough_layout.jpg',
         'Emory Student Center': '/floorplans/emory_student_center_layout.jpg',
@@ -55,6 +44,8 @@ const GPS = ({ foodItems }) => {
             center: centerCoordinates,
             zoom: zoom,
             restriction: { latLngBounds: bounds },
+            gestureHandling: 'greedy', // Allows panning even when zoomed in
+            draggable: true,
         });
 
         mapInstance.current = map; // Save the map instance for later use
@@ -107,6 +98,7 @@ const GPS = ({ foodItems }) => {
         );
     };
 
+
     // Get user's current geolocation
     const getUserLocation = () => {
         if (navigator.geolocation) {
@@ -119,12 +111,23 @@ const GPS = ({ foodItems }) => {
                 },
                 (error) => {
                     console.error("Error getting user's location: ", error);
+
+                    // Reset the "Use My Location" toggle switch
+                    setUseMyLocation(false);
+
+                    // Show an alert to inform the user
+                    alert("Unable to access your location. Please select a starting location from the dropdown.");
                 }
             );
         } else {
+            // If the browser does not support geolocation, show an alert
             alert('Geolocation is not supported by this browser.');
+
+            // Reset the "Use My Location" toggle switch
+            setUseMyLocation(false);
         }
     };
+
 
     // Load Mapbox indoor map
     const loadIndoorMap = () => {
@@ -200,6 +203,14 @@ const GPS = ({ foodItems }) => {
         }
     }, [foodItems]);
 
+
+    // Show popup if there are food items available
+    useEffect(() => {
+        if (foodItems.length > 0) {
+            setShowPopup(true);
+        }
+    }, [foodItems]);
+
     useEffect(() => {
         window.initMap = initMap;
     }, []);
@@ -248,16 +259,18 @@ const GPS = ({ foodItems }) => {
                     <Switch
                         checked={useMyLocation}
                         onChange={(checked) => setUseMyLocation(checked)}
-                        onColor="#86d3ff"
-                        onHandleColor="#2693e6"
+                        onColor="#ffcc33"              // Gold color when switch is ON
+                        offColor="#0044cc"             // Blue color when switch is OFF
+                        onHandleColor="#ffd966"        // Lighter gold for the handle when switch is ON
                         handleDiameter={30}
                         uncheckedIcon={false}
                         checkedIcon={false}
-                        boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-                        activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                        boxShadow="0px 1px 5px rgba(0, 68, 204, 0.6)"        // Blue shadow when the switch is OFF
+                        activeBoxShadow="0px 0px 1px 10px rgba(255, 204, 51, 0.2)" // Gold shadow when the switch is ON
                         height={20}
                         width={48}
                     />
+
                 </label>
 
                 {!useMyLocation && (
@@ -297,10 +310,44 @@ const GPS = ({ foodItems }) => {
             </div>
 
             {/* Floor Plan Display */}
-            {selectedFloorPlan && (
-                <div style={styles.floorPlanArea}>
-                    <h3>Floor Plan</h3>
-                    <img src={selectedFloorPlan} alt="Floor Plan" style={styles.floorPlanImage} />
+{selectedFloorPlan && (
+    <div style={styles.floorPlanArea}>
+        <h3>Floor Plan</h3>
+        <div>
+            <h1>Indoor Map</h1>
+            <iframe
+                href="https://www.mappedin.com/"
+                title="Mappedin Map"
+                name="Mappedin Map"
+                allow="clipboard-write 'self' https://app.mappedin.com; web-share 'self' https://app.mappedin.com"
+                scrolling="no"
+                width="100%"
+                height="650"
+                frameBorder="0"
+                style={{ border: 0 }}
+                src="https://app.mappedin.com/map/6732310c66ce60000b9169e8?embedded=true">
+            </iframe>
+        </div>
+    </div>
+)}
+
+            {/* Popup Component */}
+            {showPopup && (
+                <div style={styles.overlay}>
+                    <div style={styles.popup}>
+                        <h2>Food Events Available on Campus!</h2>
+                        <p>There are new events happening at the following locations:</p>
+                        <ul>
+                            {foodItems.map((item) => (
+                                <li key={item.foodId}>
+                                    {item.building} - {item.food}, Room: {item.room}, Time: {item.time}, Club: {item.club}
+                                </li>
+                            ))}
+                        </ul>
+                        <button onClick={() => setShowPopup(false)} style={styles.closeButton}>
+                            Close
+                        </button>
+                    </div>
                 </div>
             )}
 
@@ -334,12 +381,16 @@ const styles = {
         flexDirection: 'column',
         height: '100vh',
         width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     mapContainer: {
         flex: 1,
         position: 'relative',
         height: '100%',
-        width: '100%',
+        width: '95%',
+        marginBottom: '20px',
+        border: '5px solid #0044CC',  // Added blue border with thickness of 5px
     },
     buttonContainer: {
         width: '80%',
@@ -391,12 +442,11 @@ const styles = {
     closeButton: {
         marginTop: '10px',
         padding: '10px',
-        backgroundColor: '#007BFF',
+        backgroundColor: '#0044CC',
         color: '#fff',
         border: 'none',
         cursor: 'pointer',
         borderRadius: '5px',
     },
 };
-
 export default GPS;

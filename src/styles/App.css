@@ -1,56 +1,40 @@
 .App {
-  text-align: center;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Main content area */
+.App-content {
+  padding: 20px;
+  width: 95%;
+  margin-top: 60px; /* Added margin to fix overlap problem with NavBar */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* NavBar styling: NavBar is on the top and stays in position */
+.NavBar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 /* For the Outdoor GPS container */
 #google-map-container {
-    height: 70vh; /* Ensure a consistent height */
-    min-height: 400px; /* Set a minimum height */
-    max-height: 70vh; /* Set a max height */
-    width: 100%;
-    overflow: hidden; /* Prevent overflow issues */
+    height: 70vh;
+    min-height: 400px;
+    max-height: 70vh;
+    width: calc(80% - 20px); /* Adjust width to prevent overlap */
+    margin-top: 10px; /* Add space under NavBar */
+    overflow: hidden; /* Fix overflow problem */
 }
 
 /* For the Indoor GPS container */
 #mapbox-container {
-    height: 70vh; /* Ensure a consistent height */
-    min-height: 400px; /* Set a minimum height */
-    max-height: 70vh; /* Set a max height */
-    width: 100%;
-    overflow: hidden; /* Prevent overflow issues */
+    height: 70vh;
+    min-height: 400px;
+    max-height: 70vh;
+    width: calc(100% - 20px); /* Adjust width to prevent overlap */
+    margin-top: 10px; /* Add space under NavBar */
+    overflow: hidden; /* Fix overflow problem */
 }
