@@ -3,37 +3,43 @@ import { Link } from 'react-router-dom';
 import '../styles/AboutUs.css';
 import placeholderImage from '../assets/logo.png'; // Default placeholder for team images
 import jazmin from '../assets/jazmin.png'
+import ashley from '../assets/ashley.png'
+import cassie from '../assets/cassie.png'
+import david from '../assets/david.png'
+import katie from '../assets/katie.png'
+import michelle from '../assets/michelle.png'
+import ryan from '../assets/ryan.png'
 
 const teamMembers = [
     {
         name: "Ashley-Jordan Annoh",
         role: "Frontend Team",
         email: "aannoh@emory.edu",
-        image: placeholderImage,
+        image: ashley,
     },
     {
         name: "Michelle Carpinteyro",
         role: "Database Team",
         email: "mcarpi2@emory.edu",
-        image: placeholderImage,
+        image: michelle,
     },
     {
         name: "David Cruz",
         role: "Database Team",
         email: "david.cruz@emory.edu",
-        image: placeholderImage,
+        image: david,
     },
     {
         name: "Cassie St. Felix",
         role: "Frontend Team",
         email: "rose.st.felix@emory.edu",
-        image: placeholderImage,
+        image: cassie,
     },
     {
         name: "Katie Park",
         role: "GPS Team",
         email: "kjpark9@emory.edu",
-        image: placeholderImage,
+        image: katie,
     },
     {
         name: "Ja’Zmin McKeel",
@@ -45,7 +51,7 @@ const teamMembers = [
         name: "Ryan Xu",
         role: "Frontend Team",
         email: "rxu67@emory.edu",
-        image: placeholderImage,
+        image: ryan,
     },
 ];
 
