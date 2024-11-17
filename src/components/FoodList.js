@@ -1,4 +1,5 @@
-import { writeFoodInfo, getFoodInfo } from '../firebaseUtils';
+import { writeFoodInfo, getFoodInfo } from '../firebaseUtils'; 
+import { populateFirebaseFromGroupMe } from '../groupmeUtils'; // Updated import
 import React, { useState, useEffect } from 'react';
 
 const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
@@ -10,7 +11,6 @@ const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
   const [showForm, setShowForm] = useState(false); // Toggle between showing form and displaying food list
   const [loading, setLoading] = useState(false); // To handle loading state when fetching data
 
-  // Function to handle form submission for adding food data
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -19,23 +19,23 @@ const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
       return;
     }
 
-    // Validate form inputs
-    if (!building || !room || !food || !time || !club) {
-      alert('All fields are required!');
+    if (!building) {
+      alert('Building name is required!');
       return;
     }
 
-    const foodId = Math.random().toString(36).substr(2, 9); // Generate random ID
-    const foodData = { building, room, food, time, club };
-
-    // Write food data to Firebase
+    const foodId = Math.random().toString(36).substr(2, 9);
+    const foodData = {
+      building,
+      room: room || "Not Specified",
+      food: food || "Free Food!",
+      time: time || "Not Specified",
+      club: club || "Not Specified",
+    };
     writeFoodInfo(foodId, foodData);
-
-    // Add new item to the food items state
     const updatedFoodItems = [...foodItems, { foodId, ...foodData }];
-    setFoodItems(updatedFoodItems); // Update shared state in App
+    setFoodItems(updatedFoodItems);
 
-    // Reset form fields
     setBuilding('');
     setRoom('');
     setFood('');
@@ -43,29 +43,32 @@ const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
     setClub('');
   };
 
-  // Function to fetch food data from Firebase
   const fetchFoodItems = async () => {
-    setLoading(true); // Set loading state to true while fetching
+    setLoading(true);
     const foodData = await getFoodInfo();
     if (foodData) {
       const foodArray = Object.keys(foodData).map((key) => ({
         foodId: key,
         ...foodData[key],
       }));
-      setFoodItems(foodArray); // Update shared state in App
+      setFoodItems(foodArray);
     }
-    setLoading(false); // Stop loading once data is fetched
+    setLoading(false);
   };
 
   useEffect(() => {
     fetchFoodItems();
   }, []);
 
+  const handleGroupMeFetch = async () => {
+    await populateFirebaseFromGroupMe(); // Updated function call
+    fetchFoodItems(); // Refresh the food list after populating
+  };
+
   return (
     <div>
       <h1>Food List</h1>
 
-      {/* Display add food option based on login status */}
       <div>
         {isLoggedIn ? (
           <button onClick={() => setShowForm(!showForm)}>
@@ -83,19 +86,21 @@ const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
         )}
       </div>
 
-      {/* Show form only if the user is logged in */}
       {isLoggedIn && showForm && (
         <form onSubmit={handleSubmit}>
           <input value={building} onChange={(e) => setBuilding(e.target.value)} placeholder="Building" required />
-          <input value={room} onChange={(e) => setRoom(e.target.value)} placeholder="Room" required />
-          <input value={food} onChange={(e) => setFood(e.target.value)} placeholder="Food" required />
-          <input value={time} onChange={(e) => setTime(e.target.value)} placeholder="Time" required />
-          <input value={club} onChange={(e) => setClub(e.target.value)} placeholder="Club" required />
+          <input value={room} onChange={(e) => setRoom(e.target.value)} placeholder="Room" />
+          <input value={food} onChange={(e) => setFood(e.target.value)} placeholder="Food" />
+          <input value={time} onChange={(e) => setTime(e.target.value)} placeholder="Time" />
+          <input value={club} onChange={(e) => setClub(e.target.value)} placeholder="Club" />
           <button type="submit">Add Food</button>
         </form>
       )}
 
-      {/* Display food items */}
+      <div>
+        <button onClick={handleGroupMeFetch}>Fetch Food Entries from GroupMe</button> {/* Updated Button */}
+      </div>
+
       <div>
         {loading ? (
           <p>Loading food items...</p>
