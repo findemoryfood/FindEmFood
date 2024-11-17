@@ -6,6 +6,8 @@ import NavBar from './NavBar';
 import GPS from './GPS';
 import FoodList from './components/FoodList';
 import OrgSignIn from './components/OrgSignIn';
+import AboutUs from './components/AboutUs';
+import Settings from './components/Settings';
 
 function App() {
   const [foodItems, setFoodItems] = useState([]); // Shared state for food items
@@ -60,6 +62,14 @@ function App() {
                   onLogout={handleLogout}
                 />
               }
+            />
+            <Route
+              path="/AboutUs"
+              element={<AboutUs />}
+            />
+            <Route
+              path="/Settings"
+              element={<Settings />}
             />
           </Routes>
         </div>

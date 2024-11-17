@@ -18,30 +18,33 @@ const NavBar = ({ isLoggedIn, user }) => {
 
       {/* Sidebar */}
       <div className={`sidebar ${isSidebarOpen ? 'show' : ''}`}>
-        <ul>
-          <li>
-            <Link to="/GPS" onClick={toggleSidebar}>GPS</Link>
-          </li>
-          <li>
-            <Link to="/FoodList" onClick={toggleSidebar}>Food List</Link>
-          </li>
-          <li>
-            <Link to="/Setting" onClick={toggleSidebar}>Settings</Link>
-          </li>
-          <li>
-            {isLoggedIn ? (
-              <Link to="/UserProfile" onClick={toggleSidebar}>
-                <span>{user?.username}</span>
-              </Link>
-            ) : (
-              <Link to="/OrgSignIn" onClick={toggleSidebar}>Log In</Link>
-            )}
-          </li>
-        </ul>
+          <ul>
+              <li>
+                  <Link to="/GPS" onClick={toggleSidebar}>GPS</Link>
+              </li>
+              <li>
+                  <Link to="/FoodList" onClick={toggleSidebar}>Food List</Link>
+              </li>
+              <li>
+                  <Link to="/Setting" onClick={toggleSidebar}>Settings</Link>
+              </li>
+              <li>
+                  <Link to="/AboutUs" onClick={toggleSidebar}>About Us</Link>
+              </li>
+              <li>
+                  {isLoggedIn ? (
+                      <Link to="/UserProfile" onClick={toggleSidebar}>
+                          <span>{user?.username}</span>
+                      </Link>
+                  ) : (
+                      <Link to="/OrgSignIn" onClick={toggleSidebar}>Log In</Link>
+                  )}
+              </li>
+          </ul>
       </div>
 
-      {/* Main navbar for larger screens of full screen on computer */}
-      <div className="main-nav">
+        {/* Main navbar for larger screens of full screen on computer */}
+        <div className="main-nav">
         {/* Logo with Product Name */}
         <div className="logo-container">
           <Link to="/">
@@ -51,22 +54,25 @@ const NavBar = ({ isLoggedIn, user }) => {
 
         {/* Left Links */}
         <nav className="nav-links nav-left">
-          <ul>
-            <li>
-              <Link to="/GPS">GPS</Link>
-            </li>
-            <li>
-              <Link to="/FoodList">Food List</Link>
-            </li>
-            <li>
-              <Link to="/Setting">Settings</Link>
-            </li>
-          </ul>
+            <ul>
+                <li>
+                    <Link to="/GPS">GPS</Link>
+                </li>
+                <li>
+                    <Link to="/FoodList">Food List</Link>
+                </li>
+                <li>
+                    <Link to="/Setting">Settings</Link>
+                </li>
+                <li>
+                    <Link to="/AboutUs">About Us</Link>
+                </li>
+            </ul>
         </nav>
 
 
-        {/* Right Links */}
-        <nav className="nav-links nav-right">
+            {/* Right Links */}
+            <nav className="nav-links nav-right">
           <ul>
 
             <li>
