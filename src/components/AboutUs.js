@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/AboutUs.css';
-import placeholderImage from '../assets/logo.png'; // Default placeholder for team images
 import jazmin from '../assets/jazmin.png'
 import ashley from '../assets/ashley.png'
 import cassie from '../assets/cassie.png'
