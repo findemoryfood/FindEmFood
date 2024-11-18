@@ -42,6 +42,10 @@ const GPS = () => {
 
     const [startLocation, setStartLocation] = useState('White Hall');
     const [destinationLocation, setDestinationLocation] = useState('MSC');
+    const [useMyLocation, setUseMyLocation] = useState(false); // State for toggle switch
+    const [userLocation, setUserLocation] = useState(null); // State to store user's current location
+    const [showPopup, setShowPopup] = useState(false); // State for popup visibility
+    const [showMap, setShowMap] = useState(false);
 
     // Initialize Google Map
     const initMap = () => {
@@ -140,26 +144,26 @@ const GPS = () => {
 
     // Load Mapbox indoor map
     const loadIndoorMap = () => {
-        const mapboxMap = new mapboxgl.Map({
-            container: 'mapbox-container',
-            style: 'mapbox://styles/mapbox/light-v10',
-            center: [-84.32661616462353, 33.790241869210575],
-            zoom: 18,
-        });
+        // const mapboxMap = new mapboxgl.Map({
+        //     container: 'mapbox-container',
+        //     style: 'mapbox://styles/mapbox/light-v10',
+        //     center: [-84.32661616462353, 33.790241869210575],
+        //     zoom: 18,
+        // });
 
-        mapboxMap.on('load', () => {
-            mapboxMap.addSource('test-raster', {
-                'type': 'raster',
-                'url': 'mapbox://red-grace2024.648zhuku',
-                'tileSize': 256,
-            });
+        // mapboxMap.on('load', () => {
+        //     mapboxMap.addSource('test-raster', {
+        //         'type': 'raster',
+        //         'url': 'mapbox://red-grace2024.648zhuku',
+        //         'tileSize': 256,
+        //     });
 
-            mapboxMap.addLayer({
-                'id': 'test-raster-layer',
-                'type': 'raster',
-                'source': 'test-raster',
-            });
-        });
+        //     mapboxMap.addLayer({
+        //         'id': 'test-raster-layer',
+        //         'type': 'raster',
+        //         'source': 'test-raster',
+        //     });
+        // });
     };
 
     // Toggle between indoor and outdoor maps
@@ -251,12 +255,43 @@ const GPS = () => {
                     Calculate Route
                 </button>
 
+                {/* Indoor */}
+                <div>
                 <button style={styles.button} onClick={toggleIndoorOutdoor}>
                     {isIndoor ? 'Switch to Outdoor Map' : 'Switch to Indoor Map'}
                 </button>
+                {isIndoor && 
+                (
+                <iframe
+                    href="https://www.mappedin.com/"
+                    title="Mappedin Map"
+                    name="Mappedin Map"
+                    allow="clipboard-write 'self' https://app.mappedin.com; web-share 'self' https://app.mappedin.com"
+                    scrolling="no"
+                    width="100%"
+                    height="650"
+                    frameBorder="0"
+                    style={{
+                        // flex: ,
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        height: '52.5%',
+                        width: '90.2%',
+                        marginTop: '19%',
+                        marginLeft:'4%',
+                        
+                        // marginBottom: '20px',
+                        //  border: '5px solid #0044CC'
+                    }}
+                    src="https://app.mappedin.com/map/6732310c66ce60000b9169e8?embedded=true"
+                ></iframe>
+            )}
             </div>
 
-            {/* Floor Plan Display */}
+            </div>
+
+            {/* Floor Plan Display
 {selectedFloorPlan && (
     <div style={styles.floorPlanArea}>
         <h3>Floor Plan</h3>
@@ -276,7 +311,27 @@ const GPS = () => {
             </iframe>
         </div>
     </div>
-)}
+)} */}
+
+            {/* Popup Component */}
+            {showPopup && (
+                <div style={styles.overlay}>
+                    <div style={styles.popup}>
+                        <h2>Food Events Available on Campus!</h2>
+                        <p>There are new events happening at the following locations:</p>
+                        <ul>
+                            {foodItems.map((item) => (
+                                <li key={item.foodId}>
+                                    {item.building} - {item.food}, Room: {item.room}, Time: {item.time}, Club: {item.club}
+                                </li>
+                            ))}
+                        </ul>
+                        <button onClick={() => setShowPopup(false)} style={styles.closeButton}>
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Popup Component */}
             {showPopup && (
