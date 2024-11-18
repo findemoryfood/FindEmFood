@@ -144,7 +144,7 @@ nav a:hover::before {
 }
 
 /* For smaller screens or minimized */
-@media (max-width: 768px) {
+@media (max-width: 820px) {
   .main-nav {
     display: none; /* Hide the main navbar on small screens */
   }
