@@ -1,0 +1,162 @@
+
+.container_slide {
+  width: 100%;
+  max-width: 1100px;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+  margin: 20px auto;
+}
+
+#slider {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: calc(100% * 3);
+}
+
+.msg-col {
+  width: calc(100% / 3);
+  padding: 20px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.9);
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.controller {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.controller div {
+  width: 15px;
+  height: 15px;
+  background: #ddd;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.controller div:hover {
+  background: #ffcc33;
+}
+
+.msg-col h1 {
+  color: #ffcc33;
+  font-size: 32px;
+  font-weight: 100;
+  margin: 10px 0;
+  font-family: Arial, sans-serif;
+}
+
+.msg-col p {
+  color: #0044cc;
+  font-size: 15px;
+  line-height: 1.5;
+  font-family: Arial, sans-serif;
+}
+
+.msg-col a {
+  display: inline-block;
+  color: #555;
+  background: #fff;
+  font-size: 15px;
+  padding: 10px 35px;
+  border-radius: 20px;
+  margin-top: 15px;
+}
+
+/* Styling for the links in the slides (Same thing basically as the nav bar links) */
+.links-style {
+  color: #ffcc33;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 20px;
+  font-weight: bold;
+  transition: color 0.3s ease;
+  position: relative;
+  text-align: center;
+}
+
+.links-style:hover {
+  color: #0044cc;
+}
+
+.links-style::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background-color: #ffcc33;
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0%;
+  transition: width 250ms ease-in-out;
+}
+
+.links-style:hover::before {
+  width: 100%;
+}
+
+/* About Us Cards Section Styling */
+.about-us-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  padding: 40px 0;
+}
+
+.about-us-column {
+  flex: 1 1 calc(30% - 20px);
+  max-width: 300px;
+  margin: 20px 10px;
+  padding: 0 8px;
+}
+
+.about-us-card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.about-us-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.team-member-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+}
+
+.about-us-card-container {
+  padding: 16px;
+}
+
+.title {
+  color: grey;
+  font-size: 18px;
+}
+
+.email {
+  color: #555;
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+@media screen and (max-width: 768px) {
+  .about-us-column {
+    flex: 1 1 100%;
+    max-width: 100%;
+    display: block;
+  }
+}

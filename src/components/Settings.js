@@ -1,7 +1,7 @@
-import logo from '/assets/logo.png';
-import './App.css';
+import logo from '../assets/logo.png';
+import '../styles/App.css';
 
-function Setting() {
+function Settings() {
     return (
       <div className="App">
         <header className="App-header">
@@ -19,4 +19,4 @@ function Setting() {
     );
   }
 
-  export default Setting;
+  export default Settings;
