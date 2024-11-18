@@ -131,26 +131,26 @@ const GPS = ({ foodItems }) => {
 
     // Load Mapbox indoor map
     const loadIndoorMap = () => {
-        const mapboxMap = new mapboxgl.Map({
-            container: 'mapbox-container',
-            style: 'mapbox://styles/mapbox/light-v10',
-            center: [-84.32661616462353, 33.790241869210575],
-            zoom: 18,
-        });
+        // const mapboxMap = new mapboxgl.Map({
+        //     container: 'mapbox-container',
+        //     style: 'mapbox://styles/mapbox/light-v10',
+        //     center: [-84.32661616462353, 33.790241869210575],
+        //     zoom: 18,
+        // });
 
-        mapboxMap.on('load', () => {
-            mapboxMap.addSource('test-raster', {
-                'type': 'raster',
-                'url': 'mapbox://red-grace2024.648zhuku',
-                'tileSize': 256,
-            });
+        // mapboxMap.on('load', () => {
+        //     mapboxMap.addSource('test-raster', {
+        //         'type': 'raster',
+        //         'url': 'mapbox://red-grace2024.648zhuku',
+        //         'tileSize': 256,
+        //     });
 
-            mapboxMap.addLayer({
-                'id': 'test-raster-layer',
-                'type': 'raster',
-                'source': 'test-raster',
-            });
-        });
+        //     mapboxMap.addLayer({
+        //         'id': 'test-raster-layer',
+        //         'type': 'raster',
+        //         'source': 'test-raster',
+        //     });
+        // });
     };
 
     // Toggle between indoor and outdoor maps
@@ -303,10 +303,39 @@ const GPS = ({ foodItems }) => {
                 <button style={styles.button} onClick={handleRouteCalculation}>
                     Calculate Route
                 </button>
-
+                    
+                <div>
                 <button style={styles.button} onClick={toggleIndoorOutdoor}>
                     {isIndoor ? 'Switch to Outdoor Map' : 'Switch to Indoor Map'}
                 </button>
+                {isIndoor && 
+                (
+                <iframe
+                    href="https://www.mappedin.com/"
+                    title="Mappedin Map"
+                    name="Mappedin Map"
+                    allow="clipboard-write 'self' https://app.mappedin.com; web-share 'self' https://app.mappedin.com"
+                    scrolling="no"
+                    width="100%"
+                    height="650"
+                    frameBorder="0"
+                    style={{
+                        // flex: ,
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        height: '52.5%',
+                        width: '90.2%',
+                        marginTop: '19%',
+                        marginLeft:'4%',
+                        
+                        // marginBottom: '20px',
+                        //  border: '5px solid #0044CC'
+                    }}
+                    src="https://app.mappedin.com/map/6732310c66ce60000b9169e8?embedded=true"
+                ></iframe>
+            )}
+                </div>
             </div>
 
             {/* Floor Plan Display */}
