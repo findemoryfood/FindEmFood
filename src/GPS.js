@@ -320,7 +320,7 @@ const GPS = ({ foodItems }) => {
                     height="650"
                     frameBorder="0"
                     style={{
-                        // flex: ,
+                        
                         position: 'absolute',
                         top: 0,
                         left: 0,

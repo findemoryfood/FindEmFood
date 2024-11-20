@@ -56,7 +56,7 @@
   border: none;
   font-size: 30px;
   cursor: pointer;
-  position: fixed; /* Makes sure it stays in place when scrolling */
+   /* Makes sure it stays in place when scrolling */
   top: 20px;
   left: 20px;
   z-index: 2000; /* Makes sure it stays on top */
@@ -87,7 +87,7 @@
 .nav-links {
   display: flex;
   align-items: center;
-  background-color: rgba(32, 104, 253, 0.47); /* Blue from the logo */
+  background-color: #0044cc; /* Changed based on class feedback */
   padding: 10px 20px; /* Add some padding for spacing around the links */
   border-radius: 8px; /* Rounded corners for a better appearance */
 }
