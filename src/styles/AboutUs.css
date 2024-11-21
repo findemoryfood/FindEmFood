@@ -65,7 +65,7 @@
 .msg-col a {
   display: inline-block;
   color: #555;
-  background: #fff;
+  background: rgba(32, 104, 253, 0.47);
   font-size: 15px;
   padding: 10px 35px;
   border-radius: 20px;

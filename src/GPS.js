@@ -6,9 +6,6 @@ import coxLayout from './floorplans/cox-layout.jpg';
 import Switch from 'react-switch'; // Add a library for toggle switches (Install with `npm install react-switch`)
 import locations from "./BuildingContent";
 import IndoorMap from './floorplans/IndoorMap.js';
-// Set Mapbox access token
-const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
-mapboxgl.accessToken = MAPBOX_TOKEN;
 
 const GPS = ({ foodItems }) => {
     const mapRef = useRef(null);
@@ -31,7 +28,7 @@ const GPS = ({ foodItems }) => {
 
     // Settings context for remembering preferences
     const { settings, updateSettings } = useSettings();
-    const { useMyLocation } = settings;
+    const { useMyLocation, darkMode } = settings;
 
     const handleLocationToggle = (checked) => {
         updateSettings({ useMyLocation: checked });
@@ -39,7 +36,6 @@ const GPS = ({ foodItems }) => {
 
     const [startLocation, setStartLocation] = useState('White Hall');
     const [destinationLocation, setDestinationLocation] = useState('MSC');
-    //const [setUseMyLocation] = useState(false); // State for toggle switch
     const [userLocation, setUserLocation] = useState(null); // State to store user's current location
     const [showPopup, setShowPopup] = useState(false); // State for popup visibility
 
@@ -107,7 +103,6 @@ const GPS = ({ foodItems }) => {
         );
     };
 
-
     // Get user's current geolocation
     const getUserLocation = () => {
         if (navigator.geolocation) {
@@ -136,7 +131,6 @@ const GPS = ({ foodItems }) => {
             updateSettings({ useMyLocation: false });
         }
     };
-
 
     // Load Mapbox indoor map
     const loadIndoorMap = () => {
@@ -212,14 +206,6 @@ const GPS = ({ foodItems }) => {
         }
     }, [foodItems]);
 
-
-    // Show popup if there are food items available
-    useEffect(() => {
-        if (foodItems.length > 0) {
-            setShowPopup(true);
-        }
-    }, [foodItems]);
-
     useEffect(() => {
         window.initMap = initMap;
     }, []);
@@ -244,22 +230,22 @@ const GPS = ({ foodItems }) => {
     }, [useMyLocation]);
 
     return (
-        <div style={styles.container}>
+        <div style={styles(darkMode).container}>
             {/* Outdoor Map Container */}
             <div
                 ref={mapRef}
                 id="google-map-container"
-                style={{ ...styles.mapContainer, display: isIndoor ? 'none' : 'block' }}
+                style={{ ...styles(darkMode).mapContainer, display: isIndoor ? 'none' : 'block' }}
             ></div>
 
             {/* Indoor Map Container */}
             <div
                 id="mapbox-container"
-                style={{ ...styles.mapContainer, display: isIndoor ? 'block' : 'none' }}
+                style={{ ...styles(darkMode).mapContainer, display: isIndoor ? 'block' : 'none' }}
             ></div>
 
             {/* Controls */}
-            <div style={styles.buttonContainer}>
+            <div style={styles(darkMode).buttonContainer}>
                 <h3>Starting Location</h3>
 
                 {/* Toggle for My Location vs. Selected Start Location */}
@@ -279,11 +265,10 @@ const GPS = ({ foodItems }) => {
                         height={20}
                         width={48}
                     />
-
                 </label>
 
                 {!useMyLocation && (
-                    <select value={startLocation} onChange={(e) => setStartLocation(e.target.value)} style={styles.select}>
+                    <select value={startLocation} onChange={(e) => setStartLocation(e.target.value)} style={styles(darkMode).select}>
                         {Object.keys(locations).map((location) => (
                             <option key={location} value={location}>
                                 {location}
@@ -293,7 +278,7 @@ const GPS = ({ foodItems }) => {
                 )}
 
                 <h3>Destination</h3>
-                <select value={destinationLocation} onChange={(e) => setDestinationLocation(e.target.value)} style={styles.select}>
+                <select value={destinationLocation} onChange={(e) => setDestinationLocation(e.target.value)} style={styles(darkMode).select}>
                     {/* Original Locations */}
                     {Object.keys(locations).map((location) => (
                         <option key={location} value={location}>
@@ -309,61 +294,41 @@ const GPS = ({ foodItems }) => {
                         ))}
                 </select>
 
-                <button style={styles.button} onClick={handleRouteCalculation}>
+                <button style={styles(darkMode).button} onClick={handleRouteCalculation}>
                     Calculate Route
                 </button>
 
-                <button style={styles.button} onClick={toggleIndoorOutdoor}>
+                <button style={styles(darkMode).button} onClick={toggleIndoorOutdoor}>
                     {isIndoor ? 'Switch to Outdoor Map' : 'Switch to Indoor Map'}
                 </button>
             </div>
 
             {/* Floor Plan Display */}
-{selectedFloorPlan && (
-    <div style={styles.floorPlanArea}>
-        <h3>Floor Plan</h3>
-        <div>
-            <h1>Indoor Map</h1>
-            <iframe
-                href="https://www.mappedin.com/"
-                title="Mappedin Map"
-                name="Mappedin Map"
-                allow="clipboard-write 'self' https://app.mappedin.com; web-share 'self' https://app.mappedin.com"
-                scrolling="no"
-                width="100%"
-                height="650"
-                frameBorder="0"
-                style={{ border: 0 }}
-                src="https://app.mappedin.com/map/6732310c66ce60000b9169e8?embedded=true">
-            </iframe>
-        </div>
-    </div>
-)}
-
-            {/* Popup Component */}
-            {showPopup && (
-                <div style={styles.overlay}>
-                    <div style={styles.popup}>
-                        <h2>Food Events Available on Campus!</h2>
-                        <p>There are new events happening at the following locations:</p>
-                        <ul>
-                            {foodItems.map((item) => (
-                                <li key={item.foodId}>
-                                    {item.building} - {item.food}, Room: {item.room}, Time: {item.time}, Club: {item.club}
-                                </li>
-                            ))}
-                        </ul>
-                        <button onClick={() => setShowPopup(false)} style={styles.closeButton}>
-                            Close
-                        </button>
+            {selectedFloorPlan && (
+                <div style={styles(darkMode).floorPlanArea}>
+                    <h3>Floor Plan</h3>
+                    <div>
+                        <h1>Indoor Map</h1>
+                        <iframe
+                            href="https://www.mappedin.com/"
+                            title="Mappedin Map"
+                            name="Mappedin Map"
+                            allow="clipboard-write 'self' https://app.mappedin.com; web-share 'self' https://app.mappedin.com"
+                            scrolling="no"
+                            width="100%"
+                            height="650"
+                            frameBorder="0"
+                            style={{ border: 0 }}
+                            src="https://app.mappedin.com/map/6732310c66ce60000b9169e8?embedded=true">
+                        </iframe>
                     </div>
                 </div>
             )}
 
             {/* Popup Component */}
             {showPopup && (
-                <div style={styles.overlay}>
-                    <div style={styles.popup}>
+                <div style={styles(darkMode).overlay}>
+                    <div style={styles(darkMode).popup}>
                         <h2>Food Events Available on Campus!</h2>
                         <p>There are new events happening at the following locations:</p>
                         <ul>
@@ -373,7 +338,7 @@ const GPS = ({ foodItems }) => {
                                 </li>
                             ))}
                         </ul>
-                        <button onClick={() => setShowPopup(false)} style={styles.closeButton}>
+                        <button onClick={() => setShowPopup(false)} style={styles(darkMode).closeButton}>
                             Close
                         </button>
                     </div>
@@ -384,7 +349,7 @@ const GPS = ({ foodItems }) => {
 };
 
 // CSS Styles
-const styles = {
+const styles = (darkMode) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
@@ -441,7 +406,7 @@ const styles = {
         justifyContent: 'center',
     },
     popup: {
-        backgroundColor: '#fff',
+        backgroundColor: darkMode ? '#333' : '#fff',
         padding: '20px',
         borderRadius: '8px',
         boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
@@ -457,5 +422,6 @@ const styles = {
         cursor: 'pointer',
         borderRadius: '5px',
     },
-};
+});
+
 export default GPS;

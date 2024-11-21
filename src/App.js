@@ -8,13 +8,15 @@ import FoodList from './components/FoodList';
 import OrgSignIn from './components/OrgSignIn';
 import AboutUs from './components/AboutUs';
 import Settings from './components/Settings';
-import { useSettings, SettingsProvider } from './SettingsContext';
+import { SettingsProvider, useSettings } from './SettingsContext'; // Use SettingsProvider for settings context
 
 function App() {
   const [foodItems, setFoodItems] = useState([]); // Shared state for food items
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State for login status
   const [user, setUser] = useState(null); // State for user info
-  const { settings } = useSettings(); 
+
+  // Access settings context
+  const { settings } = useSettings();
   
   // Function to handle login and update state
   const handleLogin = (userData) => {
