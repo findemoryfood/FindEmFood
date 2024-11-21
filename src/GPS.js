@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useSettings } from './SettingsContext';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import coxLayout from './floorplans/cox-layout.jpg';
@@ -28,9 +29,17 @@ const GPS = ({ foodItems }) => {
         'Woodruff Library': '/floorplans/woodruff_layout.jpg',
     };
 
+    // Settings context for remembering preferences
+    const { settings, updateSettings } = useSettings();
+    const { useMyLocation } = settings;
+
+    const handleLocationToggle = (checked) => {
+        updateSettings({ useMyLocation: checked });
+    };
+
     const [startLocation, setStartLocation] = useState('White Hall');
     const [destinationLocation, setDestinationLocation] = useState('MSC');
-    const [useMyLocation, setUseMyLocation] = useState(false); // State for toggle switch
+    //const [setUseMyLocation] = useState(false); // State for toggle switch
     const [userLocation, setUserLocation] = useState(null); // State to store user's current location
     const [showPopup, setShowPopup] = useState(false); // State for popup visibility
 
@@ -113,7 +122,7 @@ const GPS = ({ foodItems }) => {
                     console.error("Error getting user's location: ", error);
 
                     // Reset the "Use My Location" toggle switch
-                    setUseMyLocation(false);
+                    updateSettings({ useMyLocation: false });
 
                     // Show an alert to inform the user
                     alert("Unable to access your location. Please select a starting location from the dropdown.");
@@ -124,7 +133,7 @@ const GPS = ({ foodItems }) => {
             alert('Geolocation is not supported by this browser.');
 
             // Reset the "Use My Location" toggle switch
-            setUseMyLocation(false);
+            updateSettings({ useMyLocation: false });
         }
     };
 
@@ -258,7 +267,7 @@ const GPS = ({ foodItems }) => {
                     <span style={{ marginRight: '10px' }}>Use My Location</span>
                     <Switch
                         checked={useMyLocation}
-                        onChange={(checked) => setUseMyLocation(checked)}
+                        onChange={handleLocationToggle}
                         onColor="#ffcc33"              // Gold color when switch is ON
                         offColor="#0044cc"             // Blue color when switch is OFF
                         onHandleColor="#ffd966"        // Lighter gold for the handle when switch is ON

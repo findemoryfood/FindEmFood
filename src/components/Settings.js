@@ -1,20 +1,40 @@
 import logo from '../assets/logo.png';
+import React, { useState, useEffect } from 'react';
+import { useSettings } from '../SettingsContext';
+import { writeUserInfo, getUserInfo } from '../firebaseUtils';
 import '../styles/App.css';
 
-function Settings() {
+const Settings = () => {
+  const { settings, updateSettings } = useSettings();
+
+  const handleToggle = (event) => {
+    const { name, checked } = event.target;
+    updateSettings({ [name]: checked });
+    window.location.reload(window.confirm("Refresh page?"));
+  };
+
+  const handleDarkmodeToggle = (event) => {
+    const { checked } = event.target;
+    updateSettings({ darkMode : checked });
+    if (window.confirm("Updated preference won't take effect until page is refreshed. Refresh now?")){
+      window.location.reload(true);
+    }
+  };
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Hello <code></code> World!
-          </p>
-          <a
-            className="App-link"
-          >
-            Learn FindEmFood WebApp
-          </a>
-        </header>
+      <div>
+        <h1>Settings</h1>
+        <div className="setting-item">
+            <label>
+                <input
+                    type="checkbox"
+                    name="darkMode"
+                    checked={settings.darkMode}
+                    onChange={handleDarkmodeToggle}
+                />
+                Enable dark mode
+            </label>
+        </div>
       </div>
     );
   }

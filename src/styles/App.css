@@ -1,8 +1,16 @@
+/* Default style (light mode) */
 .App {
-    background-color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s; /* For smooth color transition */
+}
+
+/* Dark mode style */
+.App.darkmode {
+  background-color: #2d2d2d;
+  color: #ffffff;
 }
 
 /* Main content area */
