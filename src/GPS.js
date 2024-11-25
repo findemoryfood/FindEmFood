@@ -5,11 +5,13 @@ import coxLayout from './floorplans/cox-layout.jpg';
 import Switch from 'react-switch'; // Add a library for toggle switches (Install with `npm install react-switch`)
 import locations from "./BuildingContent";
 import IndoorMap from './floorplans/IndoorMap.js';
+import AttwoodMap from './floorplans/AttwoodMap.js';
 // Set Mapbox access token
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
 const GPS = ({ foodItems }) => {
+    
     const mapRef = useRef(null);
     const directionsService = useRef(null);
     const directionsRenderer = useRef(null);
@@ -17,22 +19,20 @@ const GPS = ({ foodItems }) => {
     const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
     const mapInstance = useRef(null); // For the Google Map instance
 
-    const floorPlans = {
-        'White Hall': '/floorplans/white_hall_layout.jpg',
-        'MSC': IndoorMap,
-        'Cox Hall': coxLayout,
-        'McDonough Field': '/floorplans/mcdonough_layout.jpg',
-        'Emory Student Center': '/floorplans/emory_student_center_layout.jpg',
-        'Clairmont Campus': '/floorplans/clairmont_layout.jpg',
-        'Goizueta Business School': '/floorplans/goizueta_layout.jpg',
-        'Woodruff Library': '/floorplans/woodruff_layout.jpg',
-    };
+
 
     const [startLocation, setStartLocation] = useState('White Hall');
     const [destinationLocation, setDestinationLocation] = useState('MSC');
     const [useMyLocation, setUseMyLocation] = useState(false); // State for toggle switch
     const [userLocation, setUserLocation] = useState(null); // State to store user's current location
     const [showPopup, setShowPopup] = useState(false); // State for popup visibility
+
+    const floorPlans = {
+        'White Hall': () => <IndoorMap />,
+        'MSC': () => <IndoorMap />,
+        'Cox Hall': () => <img src={coxLayout} alt="Cox Hall Floor Plan" style={{ width: '100%' }} />, // Image-based
+        'Attwood Chemistry Center': () => <AttwoodMap />,
+    };
 
     // Initialize Google Map
     const initMap = () => {
@@ -129,34 +129,15 @@ const GPS = ({ foodItems }) => {
     };
 
 
-    // Load Mapbox indoor map
-    const loadIndoorMap = () => {
-        // const mapboxMap = new mapboxgl.Map({
-        //     container: 'mapbox-container',
-        //     style: 'mapbox://styles/mapbox/light-v10',
-        //     center: [-84.32661616462353, 33.790241869210575],
-        //     zoom: 18,
-        // });
-
-        // mapboxMap.on('load', () => {
-        //     mapboxMap.addSource('test-raster', {
-        //         'type': 'raster',
-        //         'url': 'mapbox://red-grace2024.648zhuku',
-        //         'tileSize': 256,
-        //     });
-
-        //     mapboxMap.addLayer({
-        //         'id': 'test-raster-layer',
-        //         'type': 'raster',
-        //         'source': 'test-raster',
-        //     });
-        // });
+    const renderIndoorMap = () => {
+        const MapComponent = floorPlans[destinationLocation];
+        return MapComponent ? <MapComponent /> : <div>No indoor map available.</div>;
     };
 
     // Toggle between indoor and outdoor maps
     const toggleIndoorOutdoor = () => {
         setIsIndoor(!isIndoor);
-        if (!isIndoor) loadIndoorMap();
+        if (!isIndoor) renderIndoorMap();
     };
 
     // Calculate bounds for a given radius in miles
@@ -236,45 +217,41 @@ const GPS = ({ foodItems }) => {
 
     return (
         <div style={styles.container}>
-            {/* Outdoor Map Container */}
             <div
                 ref={mapRef}
                 id="google-map-container"
                 style={{ ...styles.mapContainer, display: isIndoor ? 'none' : 'block' }}
             ></div>
 
-            {/* Indoor Map Container */}
-            <div
-                id="mapbox-container"
-                style={{ ...styles.mapContainer, display: isIndoor ? 'block' : 'none' }}
-            ></div>
+            {isIndoor && (
+                <div style={styles.mapContainer}>
+                    {renderIndoorMap()}
+                </div>
+            )}
 
-            {/* Controls */}
             <div style={styles.buttonContainer}>
                 <h3>Starting Location</h3>
-
-                {/* Toggle for My Location vs. Selected Start Location */}
                 <label style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                     <span style={{ marginRight: '10px' }}>Use My Location</span>
                     <Switch
                         checked={useMyLocation}
-                        onChange={(checked) => setUseMyLocation(checked)}
-                        onColor="#ffcc33"              // Gold color when switch is ON
-                        offColor="#0044cc"             // Blue color when switch is OFF
-                        onHandleColor="#ffd966"        // Lighter gold for the handle when switch is ON
+                        onChange={setUseMyLocation}
+                        onColor="#ffcc33"
+                        offColor="#0044cc"
                         handleDiameter={30}
-                        uncheckedIcon={false}
-                        checkedIcon={false}
-                        boxShadow="0px 1px 5px rgba(0, 68, 204, 0.6)"        // Blue shadow when the switch is OFF
-                        activeBoxShadow="0px 0px 1px 10px rgba(255, 204, 51, 0.2)" // Gold shadow when the switch is ON
                         height={20}
                         width={48}
+                        uncheckedIcon={false}
+                        checkedIcon={false}
                     />
-
                 </label>
 
                 {!useMyLocation && (
-                    <select value={startLocation} onChange={(e) => setStartLocation(e.target.value)} style={styles.select}>
+                    <select
+                        value={startLocation}
+                        onChange={(e) => setStartLocation(e.target.value)}
+                        style={styles.select}
+                    >
                         {Object.keys(locations).map((location) => (
                             <option key={location} value={location}>
                                 {location}
@@ -284,121 +261,22 @@ const GPS = ({ foodItems }) => {
                 )}
 
                 <h3>Destination</h3>
-                <select value={destinationLocation} onChange={(e) => setDestinationLocation(e.target.value)} style={styles.select}>
-                    {/* Original Locations */}
-                    {Object.keys(locations).map((location) => (
+                <select
+                    value={destinationLocation}
+                    onChange={(e) => setDestinationLocation(e.target.value)}
+                    style={styles.select}
+                >
+                    {Object.keys(floorPlans).map((location) => (
                         <option key={location} value={location}>
                             {location}
                         </option>
                     ))}
-                    {/* Additional Locations from Food List */}
-                    {foodItems.length > 0 &&
-                        foodItems.map((item) => (
-                            <option key={item.foodId} value={item.building}>
-                                {`${item.building} - Room: ${item.room}, Food: ${item.food}, Time: ${item.time}, Club: ${item.club}`}
-                            </option>
-                        ))}
                 </select>
 
-                <button style={styles.button} onClick={handleRouteCalculation}>
-                    Calculate Route
-                </button>
-                    
-                <div>
                 <button style={styles.button} onClick={toggleIndoorOutdoor}>
                     {isIndoor ? 'Switch to Outdoor Map' : 'Switch to Indoor Map'}
                 </button>
-                {isIndoor && 
-                (
-                <iframe
-                    href="https://www.mappedin.com/"
-                    title="Mappedin Map"
-                    name="Mappedin Map"
-                    allow="clipboard-write 'self' https://app.mappedin.com; web-share 'self' https://app.mappedin.com"
-                    scrolling="no"
-                    width="100%"
-                    height="650"
-                    frameBorder="0"
-                    style={{
-                        // flex: ,
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        height: '52.5%',
-                        width: '90.2%',
-                        marginTop: '19%',
-                        marginLeft:'4%',
-                        
-                        // marginBottom: '20px',
-                        //  border: '5px solid #0044CC'
-                    }}
-                    src="https://app.mappedin.com/map/6732310c66ce60000b9169e8?embedded=true"
-                ></iframe>
-            )}
-                </div>
             </div>
-
-            {/* Floor Plan Display */}
-{selectedFloorPlan && (
-    <div style={styles.floorPlanArea}>
-        <h3>Floor Plan</h3>
-        <div>
-            <h1>Indoor Map</h1>
-            <iframe
-                href="https://www.mappedin.com/"
-                title="Mappedin Map"
-                name="Mappedin Map"
-                allow="clipboard-write 'self' https://app.mappedin.com; web-share 'self' https://app.mappedin.com"
-                scrolling="no"
-                width="100%"
-                height="650"
-                frameBorder="0"
-                style={{ border: 0 }}
-                src="https://app.mappedin.com/map/6732310c66ce60000b9169e8?embedded=true">
-            </iframe>
-        </div>
-    </div>
-)}
-
-            {/* Popup Component */}
-            {showPopup && (
-                <div style={styles.overlay}>
-                    <div style={styles.popup}>
-                        <h2>Food Events Available on Campus!</h2>
-                        <p>There are new events happening at the following locations:</p>
-                        <ul>
-                            {foodItems.map((item) => (
-                                <li key={item.foodId}>
-                                    {item.building} - {item.food}, Room: {item.room}, Time: {item.time}, Club: {item.club}
-                                </li>
-                            ))}
-                        </ul>
-                        <button onClick={() => setShowPopup(false)} style={styles.closeButton}>
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            {/* Popup Component */}
-            {showPopup && (
-                <div style={styles.overlay}>
-                    <div style={styles.popup}>
-                        <h2>Food Events Available on Campus!</h2>
-                        <p>There are new events happening at the following locations:</p>
-                        <ul>
-                            {foodItems.map((item) => (
-                                <li key={item.foodId}>
-                                    {item.building} - {item.food}, Room: {item.room}, Time: {item.time}, Club: {item.club}
-                                </li>
-                            ))}
-                        </ul>
-                        <button onClick={() => setShowPopup(false)} style={styles.closeButton}>
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
@@ -416,10 +294,10 @@ const styles = {
     mapContainer: {
         flex: 1,
         position: 'relative',
-        height: '100%',
+        height: '500px',
         width: '95%',
         marginBottom: '20px',
-        border: '5px solid #0044CC',  // Added blue border with thickness of 5px
+        border: '5px solid #0044CC',
     },
     buttonContainer: {
         width: '80%',
@@ -436,46 +314,11 @@ const styles = {
         padding: '10px',
         width: '100%',
         cursor: 'pointer',
-    },
-    floorPlanArea: {
-        width: '80%',
-        textAlign: 'center',
-        marginBottom: '20px',
-        border: '1px solid #ccc',
-        padding: '10px',
-    },
-    floorPlanImage: {
-        width: '100%',
-        maxHeight: '300px',
-        objectFit: 'cover',
-    },
-    overlay: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    popup: {
-        backgroundColor: '#fff',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-        width: '80%',
-        maxWidth: '500px',
-    },
-    closeButton: {
-        marginTop: '10px',
-        padding: '10px',
         backgroundColor: '#0044CC',
-        color: '#fff',
-        border: 'none',
-        cursor: 'pointer',
+        color: 'white',
         borderRadius: '5px',
+        border: 'none',
     },
 };
+
 export default GPS;
