@@ -28,10 +28,20 @@ const GPS = ({ foodItems }) => {
     const [showPopup, setShowPopup] = useState(false); // State for popup visibility
 
     const floorPlans = {
-        'White Hall': () => <IndoorMap />,
+        'Atwood Chemistry Center': () => <AttwoodMap />,
+        'Callaway Center': null,
+        'Clairmont Campus': null,
+        'Cox Hall': () => <img src={coxLayout} alt="Cox Hall Floor Plan" style={{ width: '100%' }} />,
+        'Emerson Hall': null,
+        'Emory Student Center': null,
+        'Goizueta Business School': null,
+        'McDonough Field': null,
         'MSC': () => <IndoorMap />,
-        'Cox Hall': () => <img src={coxLayout} alt="Cox Hall Floor Plan" style={{ width: '100%' }} />, // Image-based
-        'Attwood Chemistry Center': () => <AttwoodMap />,
+        'Quadrangle': null,
+        'Rita Anne Rollins Building':null,
+        'White Hall': () => <IndoorMap />,
+        'Woodruff Library':null,
+        'Woodruff Soccer Field':null,
     };
 
     // Initialize Google Map
@@ -272,6 +282,10 @@ const GPS = ({ foodItems }) => {
                         </option>
                     ))}
                 </select>
+
+                <button style={styles.button} onClick={handleRouteCalculation}>
+                    Calculate Route
+                </button>
 
                 <button style={styles.button} onClick={toggleIndoorOutdoor}>
                     {isIndoor ? 'Switch to Outdoor Map' : 'Switch to Indoor Map'}
