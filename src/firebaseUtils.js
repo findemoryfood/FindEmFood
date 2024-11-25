@@ -64,3 +64,20 @@ export async function getUserInfo(identifier) {
     return null;
   }
 }
+
+export const getAllUsers = async () => {
+  const database = getDatabase();
+  const usersRef = ref(database, 'userInfo');
+
+  try {
+    const snapshot = await get(usersRef);
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      return {};
+    }
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return {};
+  }
+};

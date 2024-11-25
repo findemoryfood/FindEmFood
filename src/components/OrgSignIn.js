@@ -1,6 +1,6 @@
 // OrgSignIn.js
 import React, { useState } from 'react';
-import { writeUserInfo, getUserInfo } from '../firebaseUtils';
+import { writeUserInfo, getAllUsers } from '../firebaseUtils';
 
 const OrgSignIn = ({ onLogin, isLoggedIn, user, onLogout }) => {
   const [username, setUsername] = useState(''); // Separate username field
@@ -24,21 +24,44 @@ const OrgSignIn = ({ onLogin, isLoggedIn, user, onLogout }) => {
       alert('Please use an @emory.edu email to sign up.');
       return;
     }
+
+    // Validate password complexity
+    const passwordRegex = /^(?=.*[!@#$%^&*])(?=.{8,})/;
+    if (!passwordRegex.test(password)) {
+      alert('Password must be at least 8 characters long and include at least one special character.');
+      return;
+    }
+
     if (password !== confirmPassword) {
       alert('Passwords do not match');
       return;
     }
 
-    const userId = Math.random().toString(36).substr(2, 9);
-    const userData = { username, email, password };
-    await writeUserInfo(userId, userData);
+    try {
+      // Check if the email already exists
+      const allUsers = await getAllUsers();
+      const emailExists = Object.values(allUsers).some((user) => user.email === email);
 
-    alert('Sign-up successful! Please log in.');
-    setShowLogin(true);
-    setUsername('');
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
+      if (emailExists) {
+        alert('An account with this email already exists.');
+        return;
+      }
+
+      // Create new user if email does not exist
+      const userId = Math.random().toString(36).substr(2, 9);
+      const userData = { username, email, password };
+      await writeUserInfo(userId, userData);
+
+      alert('Sign-up successful! Please log in.');
+      setShowLogin(true);
+      setUsername('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+    } catch (error) {
+      console.error('Error during sign-up:', error);
+      alert('An error occurred during sign-up. Please try again later.');
+    }
   };
 
   const handleLogin = async (e) => {
@@ -50,7 +73,11 @@ const OrgSignIn = ({ onLogin, isLoggedIn, user, onLogout }) => {
     }
 
     try {
-      const userData = await getUserInfo(usernameOrEmail);
+      const allUsers = await getAllUsers();
+      const userData = Object.values(allUsers).find(
+        (user) => user.email === usernameOrEmail || user.username === usernameOrEmail
+      );
+
       if (userData && userData.password === password) {
         alert('Login successful');
         onLogin(userData);

@@ -276,8 +276,36 @@ const GPS = ({ foodItems }) => {
                 <button style={styles.button} onClick={toggleIndoorOutdoor}>
                     {isIndoor ? 'Switch to Outdoor Map' : 'Switch to Indoor Map'}
                 </button>
+                {isIndoor && 
+                (
+                <iframe
+                    href="https://www.mappedin.com/"
+                    title="Mappedin Map"
+                    name="Mappedin Map"
+                    allow="clipboard-write 'self' https://app.mappedin.com; web-share 'self' https://app.mappedin.com"
+                    scrolling="no"
+                    width="100%"
+                    height="650"
+                    frameBorder="0"
+                    style={{
+                        
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        height: '52.5%',
+                        width: '90.2%',
+                        marginTop: '19%',
+                        marginLeft:'4%',
+                        
+                        // marginBottom: '20px',
+                        //  border: '5px solid #0044CC'
+                    }}
+                    src="https://app.mappedin.com/map/6732310c66ce60000b9169e8?embedded=true"
+                ></iframe>
+            )}
+                </div>
             </div>
-        </div>
+
     );
 };
 
