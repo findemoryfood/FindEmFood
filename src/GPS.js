@@ -193,13 +193,6 @@ const GPS = ({ foodItems }) => {
     }, [foodItems]);
 
 
-    // Show popup if there are food items available
-    useEffect(() => {
-        if (foodItems.length > 0) {
-            setShowPopup(true);
-        }
-    }, [foodItems]);
-
     useEffect(() => {
         window.initMap = initMap;
     }, []);
@@ -291,6 +284,26 @@ const GPS = ({ foodItems }) => {
                     {isIndoor ? 'Switch to Outdoor Map' : 'Switch to Indoor Map'}
                 </button>
                 </div>
+                 {/* Popup Component */}
+                {showPopup && (
+                    <div style={styles.overlay}>
+                        <div style={styles.popup}>
+                            <h2>Food Events Available on Campus!</h2>
+                            <p>There are new events happening at the following locations:</p>
+                            <ul>
+                                {foodItems.map((item) => (
+                                    <li key={item.foodId}>
+                                        {item.building} - {item.food}, Room: {item.room}, Time: {item.time}, Club: {item.club}
+                                    </li>
+                                ))}
+                            </ul>
+                            <button onClick={() => setShowPopup(false)} style={styles.closeButton}>
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                )}
+
             </div>
 
     );
@@ -305,6 +318,14 @@ const styles = {
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    popup: {
+        backgroundColor: '#fff',
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+        width: '80%',
+        maxWidth: '500px',
     },
     mapContainer: {
         flex: 1,
