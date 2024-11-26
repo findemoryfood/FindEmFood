@@ -6,9 +6,7 @@ import Switch from 'react-switch'; // Add a library for toggle switches (Install
 import locations from "./BuildingContent";
 import IndoorMap from './floorplans/IndoorMap.js';
 import AttwoodMap from './floorplans/AttwoodMap.js';
-// Set Mapbox access token
-const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
-mapboxgl.accessToken = MAPBOX_TOKEN;
+
 
 const GPS = ({ foodItems }) => {
     
@@ -251,6 +249,8 @@ const GPS = ({ foodItems }) => {
                         handleDiameter={30}
                         height={20}
                         width={48}
+                        boxShadow="0px 1px 5px rgba(0, 68, 204, 0.6)"        // Blue shadow when the switch is OFF
+                        activeBoxShadow="0px 0px 1px 10px rgba(255, 204, 51, 0.2)" // Gold shadow when the switch is ON
                         uncheckedIcon={false}
                         checkedIcon={false}
                     />
@@ -333,6 +333,7 @@ const styles = {
         color: 'white',
         borderRadius: '5px',
         border: 'none',
+        margin: '5px',
     },
 };
 
