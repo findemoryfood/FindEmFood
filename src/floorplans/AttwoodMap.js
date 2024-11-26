@@ -10,7 +10,7 @@ const AttwoodMap = () => {
             allow="clipboard-write 'self' https://app.mappedin.com; web-share 'self' https://app.mappedin.com" 
             scrolling="no" 
             width="100%" 
-            height="510" 
+            height="500"
             frameborder="0" 
             style={{border:0}}
             src="https://app.mappedin.com/map/673983a659d165000b702e46?embedded=true"></iframe>
