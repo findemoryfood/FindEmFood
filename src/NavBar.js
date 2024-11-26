@@ -26,7 +26,7 @@ const NavBar = ({ isLoggedIn, user }) => {
                   <Link to="/FoodList" onClick={toggleSidebar}>Food List</Link>
               </li>
               <li>
-                  <Link to="/Setting" onClick={toggleSidebar}>Settings</Link>
+                  <Link to="/Settings" onClick={toggleSidebar}>Settings</Link>
               </li>
               <li>
                   <Link to="/AboutUs" onClick={toggleSidebar}>About Us</Link>
@@ -62,7 +62,7 @@ const NavBar = ({ isLoggedIn, user }) => {
                     <Link to="/FoodList">Food List</Link>
                 </li>
                 <li>
-                    <Link to="/Setting">Settings</Link>
+                    <Link to="/Settings">Settings</Link>
                 </li>
                 <li>
                     <Link to="/AboutUs">About Us</Link>

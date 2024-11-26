@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useSettings } from './SettingsContext';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import coxLayout from './floorplans/cox-layout.jpg';
@@ -9,7 +10,7 @@ import AttwoodMap from './floorplans/AttwoodMap.js';
 
 
 const GPS = ({ foodItems }) => {
-    
+
     const mapRef = useRef(null);
     const directionsService = useRef(null);
     const directionsRenderer = useRef(null);
@@ -19,9 +20,16 @@ const GPS = ({ foodItems }) => {
 
 
 
+    // Settings context for remembering preferences
+    const { settings, updateSettings } = useSettings();
+    const { useMyLocation, darkMode } = settings;
+
+    const handleLocationToggle = (checked) => {
+        updateSettings({ useMyLocation: checked });
+    };
+
     const [startLocation, setStartLocation] = useState('White Hall');
     const [destinationLocation, setDestinationLocation] = useState('MSC');
-    const [useMyLocation, setUseMyLocation] = useState(false); // State for toggle switch
     const [userLocation, setUserLocation] = useState(null); // State to store user's current location
     const [showPopup, setShowPopup] = useState(false); // State for popup visibility
 
@@ -106,7 +114,6 @@ const GPS = ({ foodItems }) => {
         );
     };
 
-
     // Get user's current geolocation
     const getUserLocation = () => {
         if (navigator.geolocation) {
@@ -121,7 +128,7 @@ const GPS = ({ foodItems }) => {
                     console.error("Error getting user's location: ", error);
 
                     // Reset the "Use My Location" toggle switch
-                    setUseMyLocation(false);
+                    updateSettings({ useMyLocation: false });
 
                     // Show an alert to inform the user
                     alert("Unable to access your location. Please select a starting location from the dropdown.");
@@ -132,7 +139,7 @@ const GPS = ({ foodItems }) => {
             alert('Geolocation is not supported by this browser.');
 
             // Reset the "Use My Location" toggle switch
-            setUseMyLocation(false);
+            updateSettings({ useMyLocation: false });
         }
     };
 
@@ -217,43 +224,48 @@ const GPS = ({ foodItems }) => {
     }, [useMyLocation]);
 
     return (
-        <div style={styles.container}>
+        <div style={styles(darkMode).container}>
+            {/* Outdoor Map Container */}
             <div
                 ref={mapRef}
                 id="google-map-container"
-                style={{ ...styles.mapContainer, display: isIndoor ? 'none' : 'block' }}
+                style={{ ...styles(darkMode).mapContainer, display: isIndoor ? 'none' : 'block' }}
             ></div>
 
             {isIndoor && (
-                <div style={styles.mapContainer}>
+                <div style={styles(darkMode).mapContainer}>
                     {renderIndoorMap()}
                 </div>
             )}
 
-            <div style={styles.buttonContainer}>
+            <div style={styles(darkMode).buttonContainer}>
                 <h3>Starting Location</h3>
+
+                {/* Toggle for My Location vs. Selected Start Location */}
                 <label style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                     <span style={{ marginRight: '10px' }}>Use My Location</span>
                     <Switch
                         checked={useMyLocation}
-                        onChange={setUseMyLocation}
-                        onColor="#ffcc33"
-                        offColor="#0044cc"
+                        onChange={handleLocationToggle}
+                        onColor="#ffcc33"              // Gold color when switch is ON
+                        offColor="#0044cc"             // Blue color when switch is OFF
+                        onHandleColor="#ffd966"        // Lighter gold for the handle when switch is ON
                         handleDiameter={30}
-                        height={20}
-                        width={48}
-                        boxShadow="0px 1px 5px rgba(0, 68, 204, 0.6)"        // Blue shadow when the switch is OFF
-                        activeBoxShadow="0px 0px 1px 10px rgba(255, 204, 51, 0.2)" // Gold shadow when the switch is ON
                         uncheckedIcon={false}
                         checkedIcon={false}
+                        boxShadow="0px 1px 5px rgba(0, 68, 204, 0.6)"        // Blue shadow when the switch is OFF
+                        activeBoxShadow="0px 0px 1px 10px rgba(255, 204, 51, 0.2)" // Gold shadow when the switch is ON
+                        height={20}
+                        width={48}
                     />
+
                 </label>
 
                 {!useMyLocation && (
                     <select
                         value={startLocation}
                         onChange={(e) => setStartLocation(e.target.value)}
-                        style={styles.select}
+                        style={styles(darkMode).select}
                     >
                         {Object.keys(locations).map((location) => (
                             <option key={location} value={location}>
@@ -267,7 +279,7 @@ const GPS = ({ foodItems }) => {
                 <select
                     value={destinationLocation}
                     onChange={(e) => setDestinationLocation(e.target.value)}
-                    style={styles.select}
+                    style={styles(darkMode).select}
                 >
                     {Object.keys(floorPlans).map((location) => (
                         <option key={location} value={location}>
@@ -276,18 +288,18 @@ const GPS = ({ foodItems }) => {
                     ))}
                 </select>
 
-                <button style={styles.button} onClick={handleRouteCalculation}>
+                <button style={styles(darkMode).button} onClick={handleRouteCalculation}>
                     Calculate Route
                 </button>
 
-                <button style={styles.button} onClick={toggleIndoorOutdoor}>
+                <button style={styles(darkMode).button} onClick={toggleIndoorOutdoor}>
                     {isIndoor ? 'Switch to Outdoor Map' : 'Switch to Indoor Map'}
                 </button>
                 </div>
                  {/* Popup Component */}
                 {showPopup && (
-                    <div style={styles.overlay}>
-                        <div style={styles.popup}>
+                    <div style={styles(darkMode).overlay}>
+                        <div style={styles(darkMode).popup}>
                             <h2>Food Events Available on Campus!</h2>
                             <p>There are new events happening at the following locations:</p>
                             <ul>
@@ -297,7 +309,7 @@ const GPS = ({ foodItems }) => {
                                     </li>
                                 ))}
                             </ul>
-                            <button onClick={() => setShowPopup(false)} style={styles.closeButton}>
+                            <button onClick={() => setShowPopup(false)} style={styles(darkMode).closeButton}>
                                 Close
                             </button>
                         </div>
@@ -310,7 +322,7 @@ const GPS = ({ foodItems }) => {
 };
 
 // CSS Styles
-const styles = {
+const styles = (darkMode) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
@@ -319,21 +331,13 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
     },
-    popup: {
-        backgroundColor: '#fff',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-        width: '80%',
-        maxWidth: '500px',
-    },
     mapContainer: {
         flex: 1,
         position: 'relative',
         height: '500px',
         width: '95%',
         marginBottom: '20px',
-        border: '5px solid #0044CC',
+        border: '5px solid #0044CC',  // Added blue border with thickness of 5px
     },
     buttonContainer: {
         width: '80%',
@@ -356,6 +360,34 @@ const styles = {
         border: 'none',
         margin: '5px',
     },
-};
+    overlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    popup: {
+        backgroundColor: darkMode ? '#333' : '#fff',
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+        width: '80%',
+        maxWidth: '500px',
+    },
+    closeButton: {
+        marginTop: '10px',
+        padding: '10px',
+        backgroundColor: '#0044CC',
+        color: 'white',
+        borderRadius: '5px',
+        border: 'none',
+        margin: '5px',
+    },
+});
 
 export default GPS;
