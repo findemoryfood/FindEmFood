@@ -323,6 +323,7 @@ const GPS = ({ foodItems }) => {
 
 // CSS Styles
 const styles = (darkMode) => ({
+
     container: {
         display: 'flex',
         flexDirection: 'column',
