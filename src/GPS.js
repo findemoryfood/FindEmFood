@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSettings } from './SettingsContext';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
 import coxLayout from './floorplans/cox-layout.jpg';
 import Switch from 'react-switch'; // Add a library for toggle switches (Install with `npm install react-switch`)
 import locations from "./BuildingContent";
@@ -15,7 +13,7 @@ const GPS = ({ foodItems }) => {
     const directionsService = useRef(null);
     const directionsRenderer = useRef(null);
     const [isIndoor, setIsIndoor] = useState(false);
-    const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
+    const [setSelectedFloorPlan] = useState(null);
     const mapInstance = useRef(null); // For the Google Map instance
 
 
@@ -327,29 +325,38 @@ const styles = (darkMode) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100vh',
+        height: '100%',
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: darkMode ? '#2d2d2d' : '#ffffff',
+        color: darkMode ? '#ffffff' : '#000000',
+
     },
     mapContainer: {
+        marginTop: '30px',
         flex: 1,
         position: 'relative',
         height: '500px',
         width: '95%',
         marginBottom: '20px',
         border: '5px solid #0044CC',  // Added blue border with thickness of 5px
+        backgroundColor: darkMode ? '#333' : '#fff',
     },
     buttonContainer: {
         width: '80%',
         padding: '10px',
         border: '1px solid #ccc',
         marginBottom: '20px',
+        backgroundColor: darkMode ? '#2c2c2c' : '#f9f9f9',
+        paddingBottom: '50px',
     },
     select: {
         width: '100%',
         padding: '10px',
         marginBottom: '10px',
+        backgroundColor: darkMode ? '#444' : '#fff',
+        color: darkMode ? '#fff' : '#000',
     },
     button: {
         padding: '10px',
@@ -373,7 +380,7 @@ const styles = (darkMode) => ({
         justifyContent: 'center',
     },
     popup: {
-        backgroundColor: darkMode ? '#333' : '#fff',
+        backgroundColor: darkMode ? '#af915c' : '#fff',
         padding: '20px',
         borderRadius: '8px',
         boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
@@ -389,6 +396,7 @@ const styles = (darkMode) => ({
         border: 'none',
         margin: '5px',
     },
+
 });
 
 export default GPS;

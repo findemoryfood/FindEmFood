@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px 40px;
-  background-color: rgba(72, 135, 236, 0.47);
+  background-color: rgb(72, 135, 236);
   box-shadow: 0 4px 6px rgba(0, 68, 204, 0.8);
   position: fixed; /* Makes sure that the navbar is at the top*/
   top: 0;
@@ -68,6 +68,14 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+}
+
+.darkmode .main-nav {
+  display: flex; /* Ensures the main navbar items are in a row */
+  align-items: center;
+  justify-content: space-between;
+  width: 3500px;
+
 }
 /* Styling for the logo container */
 .logo-container {
@@ -157,3 +165,10 @@ nav a:hover::before {
 body {
   padding-top: 140px; /* Prevents the page content from overlapping with the navbar*/
 }
+
+.darkmode .body {
+  padding-top: 180px; /* Prevents the page content from overlapping with the navbar*/
+  background-color: #2d2d2d;
+}
+
+

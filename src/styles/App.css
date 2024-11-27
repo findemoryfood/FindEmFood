@@ -11,14 +11,20 @@
 .App.darkmode {
   background-color: #2d2d2d;
   color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s; /* For smooth color transition */
 }
 
 /* Main content area */
 .App-content {
-  padding: 20px;
-  width: 95%;
+  width: 100%;
+  height: 200%;
   margin-top: 60px; /* Added margin to fix overlap problem with NavBar */
 }
+
+
 
 /* NavBar styling: NavBar is on the top and stays in position */
 .NavBar {
@@ -37,12 +43,7 @@
     overflow: hidden; /* Fix overflow problem */
 }
 
-/* For the Indoor GPS container */
-#mapbox-container {
-    height: 70vh;
-    min-height: 400px;
-    max-height: 70vh;
-    width: calc(100% - 20px); /* Adjust width to prevent overlap */
-    margin-top: 10px; /* Add space under NavBar */
-    overflow: hidden; /* Fix overflow problem */
-}
+
+
+
+

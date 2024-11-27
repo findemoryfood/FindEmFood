@@ -2,17 +2,21 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import logo from './assets/logo_v2.png';
 import './styles/NavBar.css';
+import { SettingsProvider, useSettings } from './SettingsContext'; // Use SettingsProvider for settings context
+
 
 const NavBar = ({ isLoggedIn, user }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-
+  // Settings context for remembering preferences
+  const { settings, updateSettings } = useSettings();
+  const {darkMode } = settings;
   // For the sidebar implementation for small devices and minimized screens
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
   };
 
   return (
-    <div className="navbar">
+    <div className={`navbar ${darkMode ? 'darkmode' : ''}`}>
       {/* Sidebar Toggle Button for small screens */}
       <button className="sidebar-toggle" onClick={toggleSidebar}>☰</button>
 

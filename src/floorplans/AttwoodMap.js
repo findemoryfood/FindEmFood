@@ -11,7 +11,7 @@ const AttwoodMap = () => {
             scrolling="no" 
             width="100%" 
             height="500"
-            frameborder="0" 
+            frameBorder="0"
             style={{border:0}}
             src="https://app.mappedin.com/map/673983a659d165000b702e46?embedded=true"></iframe>
         </div>

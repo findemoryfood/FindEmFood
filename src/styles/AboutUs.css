@@ -1,4 +1,3 @@
-
 .container_slide {
   width: 100%;
   max-width: 1100px;
@@ -28,6 +27,24 @@
   text-align: center;
 }
 
+.darkmode .msg-col {
+  width: calc(100% / 3);
+  padding: 20px;
+  flex-shrink: 0;
+  background: grey;
+
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+
+
 .controller {
   position: relative;
   display: flex;
@@ -39,6 +56,14 @@
   width: 15px;
   height: 15px;
   background: #ddd;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.darkmode .controller div {
+  width: 15px;
+  height: 15px;
+  background: grey;
   margin: 10px;
   cursor: pointer;
 }
@@ -55,8 +80,16 @@
   font-family: Arial, sans-serif;
 }
 
+
 .msg-col p {
   color: #0044cc;
+  font-size: 15px;
+  line-height: 1.5;
+  font-family: Arial, sans-serif;
+}
+
+.darkmode .msg-col p {
+  color: #ffff;
   font-size: 15px;
   line-height: 1.5;
   font-family: Arial, sans-serif;
@@ -72,6 +105,15 @@
   margin-top: 15px;
 }
 
+.darkmode.msg-col a {
+  display: inline-block;
+  color: #fff;
+  background: rgba(32, 104, 253, 0.47);
+  font-size: 15px;
+  padding: 10px 35px;
+  border-radius: 20px;
+  margin-top: 15px;
+}
 /* Styling for the links in the slides (Same thing basically as the nav bar links) */
 .links-style {
   color: #ffcc33;
@@ -127,8 +169,20 @@
   overflow: hidden;
 }
 
+.darkmode .about-us-card {
+  box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.1);
+  transition: 0.3s;
+  background-color: rgba(140, 140, 138, 0.7);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
 .about-us-card:hover {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.darkmode .about-us-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(246, 246, 246, 0.2);
 }
 
 .team-member-image {
@@ -147,8 +201,19 @@
   font-size: 18px;
 }
 
+.darkmode .title {
+  color: #fff;
+  font-size: 18px;
+}
+
 .email {
   color: #555;
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+.darkmode .email {
+  color: #ffff;
   font-size: 16px;
   margin-top: 5px;
 }
@@ -158,5 +223,12 @@
     flex: 1 1 100%;
     max-width: 100%;
     display: block;
+  }
+
+  .darkmode .about-us-column {
+    flex: 1 1 100%;
+    max-width: 100%;
+    display: block;
+    background-color: #555555;
   }
 }
