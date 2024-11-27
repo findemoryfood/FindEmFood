@@ -18,6 +18,7 @@ export const SettingsProvider = ({ children }) => {
         };
     });
 
+
     // Update settings and localStorage whenever settings change
     const updateSettings = (newSettings) => {
         setSettings((prevSettings) => {
