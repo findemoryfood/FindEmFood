@@ -1,4 +1,4 @@
-import logo from '../assets/logo_v2.png';
+import logo from '../assets/glass.png';
 import React, { useState } from 'react';
 import { useSettings } from '../SettingsContext';
 import '../styles/App.css';
@@ -58,9 +58,9 @@ const styles = {
     zIndex: 1000, // High z-index to overlay all content
   },
   spinningLogo: {
-    width: '400px', // Adjust size as needed
-    height: '400px',
-    animation: 'spin 2.5s linear infinite', // Infinite spinning animation
+    width: '500px', // Adjust size as needed
+    height: '600px',
+    animation: 'spin 3.5s linear infinite', // Infinite spinning animation
   },
 };
 
