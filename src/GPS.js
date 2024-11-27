@@ -62,6 +62,7 @@ const GPS = ({ foodItems }) => {
             draggable: true,
         });
 
+
         mapInstance.current = map; // Save the map instance for later use
 
         directionsService.current = new window.google.maps.DirectionsService();
