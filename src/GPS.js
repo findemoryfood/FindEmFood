@@ -332,6 +332,7 @@ const styles = (darkMode) => ({
         backgroundColor: darkMode ? '#2d2d2d' : '#ffffff',
         color: darkMode ? '#ffffff' : '#000000',
 
+
     },
     mapContainer: {
         marginTop: '30px',
