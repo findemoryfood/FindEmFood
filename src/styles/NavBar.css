@@ -157,6 +157,10 @@ nav a:hover::before {
     display: none; /* Hide the main navbar on small screens */
   }
 
+  .darkmode .main-nav {
+    display: none; /* Hide the main navbar on small screens */
+  }
+
   .sidebar-toggle {
     display: block; /* Show the toggle button on small screens */
   }
