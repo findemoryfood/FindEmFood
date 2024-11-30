@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { writeFoodInfo } from './firebaseUtils';
 
-const GROUPME_TOKEN = '9ICAEtyzcf2UyUvXgFVDZ6TsuvfciXaccXyQzlR4';
+const GROUPME_TOKEN = process.env.REACT_APP_GROUPME_TOKEN;
 const GROUPME_GROUP_ID = '104461918';
-const OPENAI_API_KEY = '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';
+const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
 
 // Fetch messages from GroupMe
 export const fetchGroupMeMessages = async () => {
