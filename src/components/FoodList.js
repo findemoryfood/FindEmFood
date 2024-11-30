@@ -1,5 +1,5 @@
-import { writeFoodInfo, getFoodInfo } from '../firebaseUtils'; 
-import { populateFirebaseFromGroupMe } from '../groupmeUtils'; // Updated import
+import { writeFoodInfo, getFoodInfo, deleteExpiredEntries } from '../firebaseUtils';
+import { populateFirebaseFromGroupMe } from '../groupmeUtils';
 import React, { useState, useEffect } from 'react';
 import locations from "../BuildingContent";
 
@@ -11,8 +11,8 @@ const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
   const [club, setClub] = useState('');
   const [showForm, setShowForm] = useState(false); // Toggle between showing form and displaying food list
   const [loading, setLoading] = useState(false); // To handle loading state when fetching data
-  const [selectedBuilding, setSelectedBuilding] = useState(''); // State to store selected building for GPS link
 
+  // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -26,7 +26,7 @@ const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
       return;
     }
 
-    const foodId = Math.random().toString(36).substr(2, 9);
+    const foodId = Math.random().toString(36).substr(2, 9); // Generate a random ID
     const foodData = {
       building,
       room: room || "Not Specified",
@@ -34,10 +34,12 @@ const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
       time: time || "Not Specified",
       club: club || "Not Specified",
     };
-    writeFoodInfo(foodId, foodData);
-    const updatedFoodItems = [...foodItems, { foodId, ...foodData }];
-    setFoodItems(updatedFoodItems);
 
+    writeFoodInfo(foodId, foodData); // Write food data to Firebase
+    const updatedFoodItems = [...foodItems, { foodId, ...foodData }];
+    setFoodItems(updatedFoodItems); // Update local state
+
+    // Clear form fields
     setBuilding('');
     setRoom('');
     setFood('');
@@ -45,9 +47,11 @@ const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
     setClub('');
   };
 
+  // Function to fetch food items and clean up expired ones
   const fetchFoodItems = async () => {
     setLoading(true);
-    const foodData = await getFoodInfo();
+    await deleteExpiredEntries(); // Clean up expired entries
+    const foodData = await getFoodInfo(); // Fetch current food items
     if (foodData) {
       const foodArray = Object.keys(foodData).map((key) => ({
         foodId: key,
@@ -58,13 +62,15 @@ const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
     setLoading(false);
   };
 
+  // Fetch food items on component mount
   useEffect(() => {
     fetchFoodItems();
   }, []);
 
+  // Function to handle fetching entries from GroupMe
   const handleGroupMeFetch = async () => {
-    await populateFirebaseFromGroupMe(); // Updated function call
-    fetchFoodItems(); // Refresh the food list after populating
+    await populateFirebaseFromGroupMe(); // Fetch new entries from GroupMe
+    fetchFoodItems(); // Refresh the food list
   };
 
   return (
@@ -90,7 +96,7 @@ const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
 
       {isLoggedIn && showForm && (
         <form onSubmit={handleSubmit}>
-          {/* Dropdown for Building Selection based on buildings from BuildingContent to prevent mapping error / typo*/}
+          {/* Dropdown for building selection */}
           <select value={building} onChange={(e) => setBuilding(e.target.value)} required>
             <option value="">Select Building</option>
             {Object.keys(locations).map((location) => (
@@ -108,7 +114,7 @@ const FoodList = ({ foodItems, setFoodItems, isLoggedIn }) => {
       )}
 
       <div>
-        <button onClick={handleGroupMeFetch}>Fetch Food Entries from GroupMe</button> {/* Updated Button */}
+        <button onClick={handleGroupMeFetch}>Fetch Food Entries from GroupMe</button>
       </div>
 
       <div>
