@@ -13,8 +13,8 @@ const GPS = ({ foodItems }) => {
     const directionsService = useRef(null);
     const directionsRenderer = useRef(null);
     const [isIndoor, setIsIndoor] = useState(false);
-    const [setSelectedFloorPlan] = useState(null);
-    const mapInstance = useRef(null); // For the Google Map instance
+    const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
+    const mapInstance = useRef(null);
 
 
 
