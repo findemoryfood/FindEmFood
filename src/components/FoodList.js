@@ -136,15 +136,21 @@ const FoodList = () => {
           <ul>
             {foodItems
               .filter((item) => item.name && item.location) // Exclude invalid entries like `init`
-              .map((item, index) => (
-                <li key={index}>
-                  {capitalizeWords(item.name)}
-                  {item.location && ` - ${capitalizeWords(item.location)}`}
-                  {item.room && `, Room: ${capitalizeWords(item.room)}`}
-                  {item.time && `, Time: ${capitalizeWords(item.time)}`}
-                  {item.club && `, Club: ${capitalizeWords(item.club)}`}
-                </li>
-              ))}
+              .map((item, index) => {
+                const formattedRoom =
+                  item.room && item.room.toLowerCase().startsWith('room')
+                    ? capitalizeWords(item.room.replace(/^room\s*/i, ''))
+                    : capitalizeWords(item.room);
+                return (
+                  <li key={index}>
+                    {capitalizeWords(item.name)}
+                    {item.location && ` - ${capitalizeWords(item.location)}`}
+                    {formattedRoom && `, Room: ${formattedRoom}`}
+                    {item.time && `, Time: ${capitalizeWords(item.time)}`}
+                    {item.club && `, Club: ${capitalizeWords(item.club)}`}
+                  </li>
+                );
+              })}
           </ul>
         )}
       </div>
