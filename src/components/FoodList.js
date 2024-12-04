@@ -6,6 +6,9 @@ import { writeFoodInfo, getFoodInfo } from '../firebaseUtils';
 import { populateFirebaseFromGroupMe } from '../groupmeUtils';
 import locations from "../BuildingContent";
 
+// List of building acronyms to display in all caps
+const buildingAcronyms = ["MSC", "ESC", "SAAC"];
+
 // Helper function to capitalize each word except for "AM" and "PM"
 const capitalizeWords = (text) => {
   if (!text) return '';
@@ -16,6 +19,13 @@ const capitalizeWords = (text) => {
       return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
     })
     .join(' ');
+};
+
+// Helper function to format building names with acronyms
+const formatBuildingName = (building) => {
+  if (!building) return '';
+  const upperCased = building.toUpperCase();
+  return buildingAcronyms.includes(upperCased) ? upperCased : capitalizeWords(building);
 };
 
 const FoodList = () => {
@@ -46,7 +56,7 @@ const FoodList = () => {
     const foodId = Math.random().toString(36).substr(2, 9);
     const foodData = {
       name: capitalizeWords(food || "Free Food!"),
-      location: capitalizeWords(building),
+      location: formatBuildingName(building),
       room: capitalizeWords(room || ""),
       time: capitalizeWords(time || ""),
       club: capitalizeWords(club || ""),
@@ -144,7 +154,7 @@ const FoodList = () => {
                 return (
                   <li key={index}>
                     {capitalizeWords(item.name)}
-                    {item.location && ` - ${capitalizeWords(item.location)}`}
+                    {item.location && ` - ${formatBuildingName(item.location)}`}
                     {formattedRoom && `, Room: ${formattedRoom}`}
                     {item.time && `, Time: ${capitalizeWords(item.time)}`}
                     {item.club && `, Club: ${capitalizeWords(item.club)}`}
