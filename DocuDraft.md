@@ -228,13 +228,54 @@ FindEmFood is a mobile app focused on connecting Emory students with food resour
 3. **Firebase Realtime Database**
    - Real-time synchronization for food and user records.
 
-#### **Configuration**
-- **firebaseConfig** object contains:
-  - `apiKey`, `authDomain`, `databaseURL`, `projectId`, `storageBucket`, `appId`, etc.
+---
 
-#### **Initialization**
-- **`initializeApp(firebaseConfig)`**: Sets up Firebase.
-- **`getDatabase(app)`**: Connects to the Realtime Database.
+### **Firebase Configuration**
+The firebaseConfig object contains the project-specific settings required to connect the app to Firebase services.
+
+|**Key**|**Description**|
+| :-: | :-: |
+|apiKey|API key for authenticating requests to Firebase services.|
+|authDomain|Domain for Firebase Authentication.|
+|databaseURL|URL of the Firebase Realtime Database instance.|
+|projectId|Unique identifier for the Firebase project.|
+|storageBucket|URL for Firebase Cloud Storage associated with the project.|
+|messagingSenderId|Sender ID for Firebase Cloud Messaging.|
+|appId|Unique identifier for the Firebase app instance.|
+|measurementId|Identifier for Firebase Analytics. Optional for older SDK versions.|
+
+-----
+### **Firebase Initialization**
+#### *initializeApp(firebaseConfig)*
+- Initializes the Firebase app with the provided configuration.
+- Returns a Firebase app instance that can be used to interact with Firebase services.
+#### *getAnalytics(app)*
+- Retrieves the Analytics instance for the initialized Firebase app.
+- Used for collecting and analyzing user interaction data.
+#### *getDatabase(app)*
+- Connects to the Firebase Realtime Database.
+- Provides methods for reading from and writing to the database in real time.
+-----
+### **Firebase Realtime Database Integration**
+#### *Import Statements*
+
+|**Import**|**Description**|
+| :-: | :-: |
+|getDatabase|Initializes the database instance for interactions.|
+|ref|Creates references to specific paths in the database.|
+|set|Writes data to a specific database reference.|
+|update|Partially updates a database record.|
+|remove|Deletes data at a specific path in the database.|
+|get, child|Fetches data from specific database nodes.|
+#### *Database Initialization*
+The module initializes the Firebase Realtime Database using the Firebase app instance imported from firebaseConfig:
+
+### **Exports**
+
+|**Export Name**|**Description**|
+| :-: | :-: |
+|database|Firebase Realtime Database instance for use in the application.|
+|app|The initialized Firebase app instance.|
 
 #### **Realtime Database Integration**
 - **Import Methods**:
