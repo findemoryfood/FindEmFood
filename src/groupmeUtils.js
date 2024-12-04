@@ -4,6 +4,7 @@ import { writeFoodInfo, getFoodInfo } from './firebaseUtils';
 const GROUPME_TOKEN = process.env.REACT_APP_GROUPME_TOKEN;
 const GROUPME_GROUP_ID = '104461918';
 const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
+const TIME_WINDOW = 180; // 3 minutes in seconds
 
 // Fetch messages from GroupMe
 export const fetchGroupMeMessages = async () => {
@@ -31,7 +32,34 @@ export const fetchGroupMeMessages = async () => {
   }
 };
 
-// Format messages using OpenAI
+// Group messages by user and proximity in time
+const groupMessagesByUser = (messages) => {
+  const groupedMessages = [];
+  const userGroups = {};
+
+  messages.forEach((message) => {
+    const { user_id, created_at, text } = message;
+
+    if (!userGroups[user_id]) {
+      userGroups[user_id] = [];
+    }
+
+    const lastMessage = userGroups[user_id].slice(-1)[0];
+    if (lastMessage && created_at - lastMessage.created_at <= TIME_WINDOW) {
+      // Combine texts if within the time window
+      lastMessage.text += ` ${text}`;
+    } else {
+      // Add new message group
+      userGroups[user_id].push({ text, created_at });
+    }
+  });
+
+  Object.values(userGroups).forEach((groups) => groupedMessages.push(...groups));
+  console.log('Grouped messages:', groupedMessages);
+  return groupedMessages;
+};
+
+// Format grouped messages using OpenAI
 const formatWithOpenAI = async (messages) => {
   if (!messages.length) {
     console.log('No messages to format.');
@@ -39,7 +67,8 @@ const formatWithOpenAI = async (messages) => {
   }
 
   try {
-    const formattedMessages = messages.map((msg) => msg.text).join('\n');
+    const groupedMessages = groupMessagesByUser(messages);
+    const formattedMessages = groupedMessages.map((msg) => msg.text).join('\n');
 
     const prompt = `Parse the following messages into structured JSON entries. Each entry must have:
 - A required "name" field for the food item.
