@@ -138,7 +138,7 @@ FindEmFood is a mobile app focused on connecting Emory students with food resour
 
 ---
 
-## GPS Component Documentation
+## GPS Documentation
 
 #### **Key Functionalities**
 
@@ -157,6 +157,61 @@ FindEmFood is a mobile app focused on connecting Emory students with food resour
 
 5. **Food Event Notifications**
    - Popups notify users of new food events on campus.
+
+### **Props**
+
+|**Prop Name**|**Type**|**Description**|
+| :-: | :-: | :-: |
+|foodItems|Array|List of food event objects to display in the popup.|
+
+-----
+### **State Variables**
+
+|**Variable**|**Type**|**Description**|
+| :-: | :-: | :-: |
+|isIndoor|boolean|Toggles between indoor and outdoor map views.|
+|startLocation|string|Selected starting location for route calculation.|
+|destinationLocation|string|Selected destination for route calculation.|
+|userLocation|object|Stores user's geolocation (latitude and longitude).|
+|showPopup|boolean|Controls visibility of the food event popup.|
+
+-----
+### **Methods**
+#### *1. initMap()*
+- Initializes the Google Map, sets its center, zoom, and restriction bounds.
+- Adds location markers on the map using predefined coordinates.
+#### *2. addLocationMarkers(map)*
+- Adds markers for all predefined locations from the locations object.
+- Each marker includes a title for easy identification.
+#### *3. calculateAndDisplayRoute(start, destination)*
+- Uses the Google Maps Directions API to compute and display the walking route between the start and destination points.
+- Adjusts the map bounds to fit the calculated route.
+#### *4. getUserLocation()*
+- Fetches the user's current location via the browser's Geolocation API.
+- Updates the userLocation state and handles errors gracefully.
+#### *5. renderIndoorMap()*
+- Renders the indoor map component or a floor plan image for the selected destination.
+#### *6. toggleIndoorOutdoor()*
+- Switches between indoor and outdoor map views.
+#### *7. calculateBounds(center, radiusInMiles)*
+- Calculates the bounds of the map based on a center point and radius.
+#### *8. handleRouteCalculation()*
+- Determines the start and destination points based on user input and calculates the route.
+-----
+### **Side Effects**
+1. **Initialization of Google Maps**
+   1. Adds a script dynamically to load the Google Maps API.
+   1. Removes the script on component unmount to clean up resources.
+1. **Geolocation Handling**
+   1. Fetches user location whenever the "Use My Location" toggle is enabled.
+1. **Food Event Popup**
+   1. Monitors foodItems for changes and displays a popup when new events are available.
+-----
+### **Dependencies**
+1. **Google Maps API**
+   1. Requires an API key (REACT\_APP\_GOOGLE\_MAPS\_API\_KEY) to function.
+1. **React-Switch**
+   1. Provides a toggle switch UI for the "Use My Location" feature (npm install react-switch).
 
 ---
 
