@@ -6,7 +6,7 @@ FindEmFood is a mobile app focused on connecting Emory students with food resour
 
 # Table of Contents
 
-1. [App Documentation](#Application-Documnetation)
+1. [Application Documentation](#Application-Documentation)
 2. [GPS Documentation](#GPS-Documentation)
 3. [Firebase Documentation](#Firebase-Documentation)
 4. [GroupMe Documentation](#GroupMe-and-Firebase-Integration-Documentation)
@@ -138,7 +138,7 @@ FindEmFood is a mobile app focused on connecting Emory students with food resour
 
 ---
 
-### GPS Component Documentation
+## GPS Component Documentation
 
 #### **Key Functionalities**
 
