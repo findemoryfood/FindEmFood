@@ -1,21 +1,13 @@
 import axios from 'axios';
-import { writeFoodInfo } from './firebaseUtils';
+import { writeFoodInfo, getFoodInfo } from './firebaseUtils';
 
 const GROUPME_TOKEN = process.env.REACT_APP_GROUPME_TOKEN;
 const GROUPME_GROUP_ID = '104461918';
 const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
 
-let lastFetchedTimestamp = 0; // Keeps track of the last fetched timestamp
-
-// Helper function to capitalize every word in a string
-const capitalizeWords = (text) => {
-  return text
-    .toLowerCase()
-    .replace(/\b\w/g, (char) => char.toUpperCase());
-};
-
 // Fetch messages from GroupMe
 export const fetchGroupMeMessages = async () => {
+  console.log('Fetching messages...');
   try {
     const response = await axios.get(
       `https://api.groupme.com/v3/groups/${GROUPME_GROUP_ID}/messages?token=${GROUPME_TOKEN}`
@@ -23,85 +15,51 @@ export const fetchGroupMeMessages = async () => {
 
     const messages = response.data.response.messages;
 
-    // Filter messages sent after the last fetched timestamp
-    const newMessages = messages
-      .filter((message) => message.created_at > lastFetchedTimestamp)
-      .map((message) => ({
-        ...message,
-        text: capitalizeWords(message.text || ''), // Capitalize message text
-      }));
+    // Filter messages from today's date onward
+    const today = new Date().toISOString().split('T')[0];
+    const startOfDayTimestamp = Math.floor(new Date(`${today}T00:00:00Z`).getTime() / 1000);
 
-    // Update the last fetched timestamp
-    if (newMessages.length > 0) {
-      lastFetchedTimestamp = Math.max(...newMessages.map((msg) => msg.created_at));
-    }
+    const filteredMessages = messages.filter(
+      (message) => message.created_at >= startOfDayTimestamp
+    );
 
-    return newMessages;
+    console.log('Filtered messages:', filteredMessages);
+    return filteredMessages;
   } catch (error) {
-    console.error("Error fetching messages:", error);
+    console.error('Error fetching messages:', error);
     return [];
   }
 };
 
-// Helper function to group messages by user and proximity in time
-const groupMessagesByUser = (messages, timeWindow = 300) => {
-  const groupedMessages = [];
-  const userMessages = {};
-
-  messages.forEach((message) => {
-    const { user_id, created_at, text } = message;
-
-    if (!userMessages[user_id]) {
-      userMessages[user_id] = [];
-    }
-
-    const lastMessage = userMessages[user_id].slice(-1)[0];
-
-    // Ensure timestamps are correctly checked in seconds
-    if (lastMessage && created_at - lastMessage.created_at <= timeWindow) {
-      userMessages[user_id].push({ text, created_at });
-    } else {
-      if (userMessages[user_id].length > 0) {
-        groupedMessages.push(userMessages[user_id]);
-      }
-      userMessages[user_id] = [{ text, created_at }];
-    }
-  });
-
-  Object.values(userMessages).forEach((group) => groupedMessages.push(group));
-  return groupedMessages;
-};
-
-// Function to extract time stamps (e.g., 5:00 PM) from text
-const extractTimeFromText = (text) => {
-  const timeRegex = /\b\d{1,2}:\d{2}\s?(AM|PM)?\b/i; // Match common time formats
-  const match = text.match(timeRegex);
-  return match ? match[0] : null; // Return the time or null
-};
-
-// OpenAI function to format and extract data
+// Format messages using OpenAI
 const formatWithOpenAI = async (messages) => {
-  try {
-    const groupedMessages = groupMessagesByUser(messages);
+  if (!messages.length) {
+    console.log('No messages to format.');
+    return [];
+  }
 
-    const formattedMessages = groupedMessages.map((group) =>
-      group.map((msg) => msg.text).join(' ')
-    );
+  try {
+    const formattedMessages = messages.map((msg) => msg.text).join('\n');
 
     const prompt = `Parse the following messages into structured JSON entries. Each entry must have:
-- A required "building" field (location of the food).
-- A required "food" field. If not specified, use "Free Food!", otherwise just use the food in the message.
-- Optional fields: "room", "time", and "club" (leave blank if missing, with no placeholders).
-If multiple messages are grouped together, treat them as one entry:
+- A required "name" field for the food item.
+- A required "location" field (building name).
+- An optional "room" field (if available).
+- An optional "time" field (if available).
+- An optional "club" field (if available).
+
 Messages:
-${formattedMessages.join('\n')}`;
+${formattedMessages}`;
 
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
         model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'system', content: "You are a parser converting messages into structured JSON for a food list." },
+          {
+            role: 'system',
+            content: 'You are a JSON formatter for GroupMe messages.',
+          },
           { role: 'user', content: prompt },
         ],
         max_tokens: 500,
@@ -114,29 +72,98 @@ ${formattedMessages.join('\n')}`;
       }
     );
 
-    const structuredData = JSON.parse(response.data.choices[0].message.content.trim());
-
-    // Add extracted time from text to the structured data
-    structuredData.forEach((entry) => {
-      entry.time = entry.time || extractTimeFromText(entry.text || '');
-    });
-
-    return structuredData;
+    const structuredData = JSON.parse(
+      response.data.choices[0].message.content.replace(/```json|```/g, '')
+    );
+    console.log('Structured data:', structuredData);
+    return structuredData || [];
   } catch (error) {
-    console.error("Error formatting with OpenAI:", error.response?.data || error.message);
+    console.error('Error formatting with OpenAI:', error);
     return [];
   }
 };
 
-// Function to populate Firebase with parsed food entries from OpenAI
-export const populateFirebaseFromGroupMe = async () => {
-  const messages = await fetchGroupMeMessages();
+// Initialize Firebase FoodInfo node if empty
+const initializeFoodInfo = async () => {
+  try {
+    const existingData = await getFoodInfo();
+    if (!existingData) {
+      await writeFoodInfo('init', {}); // Initialize with an empty object
+      console.log('Initialized FoodInfo in Firebase.');
+    }
+  } catch (error) {
+    console.error('Error initializing Firebase FoodInfo:', error);
+  }
+};
 
-  // Get structured data from OpenAI
+// Populate Firebase from GroupMe
+export const populateFirebaseFromGroupMe = async () => {
+  console.log('Populating Firebase from GroupMe...');
+  await initializeFoodInfo(); // Ensure Firebase is initialized
+
+  const messages = await fetchGroupMeMessages();
+  if (!messages.length) {
+    console.log('No new messages to process.');
+    return;
+  }
+
+  // Format messages using OpenAI
   const foodEntries = await formatWithOpenAI(messages);
 
-  foodEntries.forEach(async (foodData) => {
-    const foodId = Math.random().toString(36).substr(2, 9);
-    await writeFoodInfo(foodId, foodData);
-  });
+  if (!foodEntries.length) {
+    console.log('No structured data to process.');
+    return;
+  }
+
+  // Fetch existing Firebase data
+  const existingEntries = (await getFoodInfo()) || {};
+  console.log('Existing Firebase entries:', existingEntries);
+
+  const processedEntries = [];
+
+  for (const foodData of foodEntries) {
+    // Standardize data for comparison
+    const standardizedFoodData = {
+      name: (foodData.name || '').toLowerCase().trim(),
+      location: (foodData.location || '').toLowerCase().trim(),
+      room: (foodData.room || '').toLowerCase().trim(),
+      time: (foodData.time || '').toLowerCase().trim(),
+      club: (foodData.club || '').toLowerCase().trim(),
+    };
+
+    const isDuplicate = Object.values(existingEntries).some((entry) => {
+      // Standardize existing entry for comparison
+      const standardizedEntry = {
+        name: (entry.name || '').toLowerCase().trim(),
+        location: (entry.location || '').toLowerCase().trim(),
+        room: (entry.room || '').toLowerCase().trim(),
+        time: (entry.time || '').toLowerCase().trim(),
+        club: (entry.club || '').toLowerCase().trim(),
+      };
+
+      // Compare all standardized fields
+      return (
+        standardizedFoodData.name === standardizedEntry.name &&
+        standardizedFoodData.location === standardizedEntry.location &&
+        standardizedFoodData.room === standardizedEntry.room &&
+        standardizedFoodData.time === standardizedEntry.time &&
+        standardizedFoodData.club === standardizedEntry.club
+      );
+    });
+
+    if (isDuplicate) {
+      console.log('Duplicate entry skipped:', foodData);
+    } else {
+      const foodId = Math.random().toString(36).substr(2, 9);
+      try {
+        await writeFoodInfo(foodId, foodData);
+        processedEntries.push(foodData);
+        console.log('Written to Firebase:', foodData);
+      } catch (error) {
+        console.error('Error writing to Firebase:', error);
+      }
+    }
+  }
+
+  console.log('Food entries processed:', processedEntries);
 };

@@ -1,31 +1,32 @@
-// OrgSignIn.js
 import React, { useState } from 'react';
 import { writeUserInfo, getAllUsers } from '../firebaseUtils';
+import { useAuth } from '../AuthContext';
 
-const OrgSignIn = ({ onLogin, isLoggedIn, user, onLogout }) => {
-  const [username, setUsername] = useState(''); // Separate username field
-  const [email, setEmail] = useState(''); // Separate email field
+const OrgSignIn = () => {
+  const { user, isLoggedIn, login, logout } = useAuth();
+
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showLogin, setShowLogin] = useState(true);
-  const [usernameOrEmail, setUsernameOrEmail] = useState(''); // For login only
+  const [usernameOrEmail, setUsernameOrEmail] = useState('');
 
   const toggleForm = () => setShowLogin(!showLogin);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    // Check that all fields are filled out
     if (!username || !email || !password || !confirmPassword) {
       alert('All fields are required');
       return;
     }
+
     if (!email.endsWith('@emory.edu')) {
       alert('Please use an @emory.edu email to sign up.');
       return;
     }
 
-    // Validate password complexity
     const passwordRegex = /^(?=.*[!@#$%^&*])(?=.{8,})/;
     if (!passwordRegex.test(password)) {
       alert('Password must be at least 8 characters long and include at least one special character.');
@@ -38,7 +39,6 @@ const OrgSignIn = ({ onLogin, isLoggedIn, user, onLogout }) => {
     }
 
     try {
-      // Check if the email already exists
       const allUsers = await getAllUsers();
       const emailExists = Object.values(allUsers).some((user) => user.email === email);
 
@@ -47,7 +47,6 @@ const OrgSignIn = ({ onLogin, isLoggedIn, user, onLogout }) => {
         return;
       }
 
-      // Create new user if email does not exist
       const userId = Math.random().toString(36).substr(2, 9);
       const userData = { username, email, password };
       await writeUserInfo(userId, userData);
@@ -80,7 +79,7 @@ const OrgSignIn = ({ onLogin, isLoggedIn, user, onLogout }) => {
 
       if (userData && userData.password === password) {
         alert('Login successful');
-        onLogin(userData);
+        login(userData); // Use AuthContext login method
       } else {
         alert('Invalid username/email or password');
       }
@@ -92,65 +91,68 @@ const OrgSignIn = ({ onLogin, isLoggedIn, user, onLogout }) => {
 
   return (
     <div>
-      <h1>{showLogin ? 'User Login' : 'User Sign Up'}</h1>
       {isLoggedIn ? (
         <div>
+          <h1>User Profile</h1>
           <p>You are logged in as <strong>{user.username}</strong>.</p>
-          <button onClick={onLogout}>Log Out</button>
+          <button onClick={logout}>Log Out</button>
         </div>
       ) : (
-        <form onSubmit={showLogin ? handleLogin : handleSignUp}>
-          {!showLogin ? (
-            <>
+        <div>
+          <h1>{showLogin ? 'User Login' : 'User Sign Up'}</h1>
+          <form onSubmit={showLogin ? handleLogin : handleSignUp}>
+            {!showLogin ? (
+              <>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Username"
+                  required
+                />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email (@emory.edu)"
+                  required
+                />
+              </>
+            ) : (
               <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Username"
+                value={usernameOrEmail}
+                onChange={(e) => setUsernameOrEmail(e.target.value)}
+                placeholder="Email or Username"
                 required
               />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email (@emory.edu)"
-                required
-              />
-            </>
-          ) : (
-            <input
-              value={usernameOrEmail}
-              onChange={(e) => setUsernameOrEmail(e.target.value)}
-              placeholder="Email or Username"
-              required
-            />
-          )}
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            required
-          />
-          {!showLogin && (
+            )}
             <input
               type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
               required
             />
-          )}
-          <button type="submit">{showLogin ? 'Login' : 'Sign Up'}</button>
-        </form>
-      )}
-      {!isLoggedIn && (
-        <button onClick={toggleForm}>
-          {showLogin ? 'Need an account? Sign Up' : 'Already have an account? Log In'}
-        </button>
+            {!showLogin && (
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm Password"
+                required
+              />
+            )}
+            <button type="submit">{showLogin ? 'Login' : 'Sign Up'}</button>
+          </form>
+          <button onClick={toggleForm}>
+            {showLogin ? 'Need an account? Sign Up' : 'Already have an account? Log In'}
+          </button>
+        </div>
       )}
     </div>
   );
 };
 
 export default OrgSignIn;
+
+
