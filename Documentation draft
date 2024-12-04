@@ -1,4 +1,4 @@
-FindEmFood
+# FindEmFood
 Find Em Food is a mobile app focused on connecting Emory students with food resources on campus. Utilizing the user’s location, the app would connect hungry students with free food opportunities on campus around them, showing where these events are and how to get there. Information on free food opportunities would be user submitted from Emory-verified accounts, giving a space to connect event organizers (with excess food) and curious students.
 
 
@@ -9,7 +9,7 @@ The GPS component is a comprehensive navigation tool integrated with Google Maps
 This module initializes and configures a Firebase application for use in a web app. It includes setup for Firebase Analytics and Firebase Realtime Database. The configuration uses the Firebase JavaScript SDK. It supports operations for writing, updating, deleting, and fetching data for food and user-related records.
 This App also facilitates the automation of fetching messages from GroupMe, parsing them using OpenAI, and storing the structured data in Firebase Realtime Database. It includes utilities for message processing, AI-powered parsing, and database population.
 
-Application documentation
+# Application documentation
 Key Features
 •	Navigation: Implements a NavBar for dynamic user-based navigation.
 •	Routing: Uses react-router-dom to handle multiple page routes.
@@ -94,7 +94,7 @@ handleLogout()
 •	Parameters: None.
 •	Description: Logs out the user by resetting user and isLoggedIn.
 ________________________________________
-GPS documentation
+# GPS documentation
 Key Functionalities
 1.	Google Maps Integration
 o	Displays a Google Map with markers for predefined locations.
@@ -161,7 +161,7 @@ o	Requires an API key (REACT_APP_GOOGLE_MAPS_API_KEY) to function.
 o	Provides a toggle switch UI for the "Use My Location" feature (npm install react-switch).
 
 
-Firebase documentation
+# Firebase documentation
 Key Features
 1.	Firebase Initialization
 o	Configures and initializes a Firebase app using project-specific credentials.
@@ -211,7 +211,7 @@ Export Name	Description
 database	Firebase Realtime Database instance for use in the application.
 app	The initialized Firebase app instance.
 
-GroupMe and Firebase Integration Documentation
+# GroupMe and Firebase Integration Documentation
 Key Features
 1.	GroupMe Integration
 o	Fetch messages from a GroupMe group.
