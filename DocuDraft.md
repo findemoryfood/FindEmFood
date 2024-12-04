@@ -227,3 +227,43 @@ FindEmFood is a mobile app focused on connecting Emory students with food resour
 - **API Used**: 
   ```plaintext
   https://api.groupme.com/v3/groups/:GROUP_ID/messages
+
+### Message Grouping
+
+#### Function: `groupMessagesByUser(messages)`
+
+- **Description**: Groups messages by user and clusters them if they are sent within 5 minutes of each other.
+- **Returns**: An array of grouped messages.
+
+---
+
+### AI-Powered Data Parsing
+
+#### Function: `formatWithOpenAI(messages)`
+
+- **Description**:  
+  Uses OpenAI's GPT-3.5 Turbo to parse grouped messages into structured JSON. Combines messages from a group into a single entry and extracts fields such as `building`, `food`, `room`, `time`, and `club`.
+- **Returns**: Structured JSON data.
+
+---
+
+### Firebase Integration
+
+#### Function: `populateFirebaseFromGroupMe()`
+
+- **Description**:  
+  Combines all functionality:
+  1. Fetches messages from GroupMe.
+  2. Groups messages by user and proximity.
+  3. Parses grouped messages into structured JSON using OpenAI.
+  4. Saves the structured data into the Firebase `foodInfo` node.
+
+- **Firebase Write Function**: `writeFoodInfo(foodId, foodData)`
+
+---
+
+## Environment Variables
+
+- **`GROUPME_TOKEN`**: API token for GroupMe.
+- **`GROUPME_GROUP_ID`**: ID of the GroupMe group to fetch messages from.
+- **`OPENAI_API_KEY`**: API key for OpenAI GPT-3.5 Turbo.
