@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { writeUserInfo, getAllUsers } from '../firebaseUtils';
+import React, { useState } from 'react'; 
+import { writeUserInfo, getAllUsers, removeUserInfo } from '../firebaseUtils';
 import { useAuth } from '../AuthContext';
 
 const OrgSignIn = () => {
@@ -9,6 +9,9 @@ const OrgSignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [currentPasswordChange, setCurrentPasswordChange] = useState(''); // Separate state for Change Password
+  const [currentPasswordDelete, setCurrentPasswordDelete] = useState(''); // Separate state for Delete Account
+  const [newPassword, setNewPassword] = useState('');
   const [showLogin, setShowLogin] = useState(true);
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
 
@@ -73,13 +76,15 @@ const OrgSignIn = () => {
 
     try {
       const allUsers = await getAllUsers();
-      const userData = Object.values(allUsers).find(
-        (user) => user.email === usernameOrEmail || user.username === usernameOrEmail
+      const userEntry = Object.entries(allUsers).find(
+        ([_, user]) => user.email === usernameOrEmail || user.username === usernameOrEmail
       );
 
-      if (userData && userData.password === password) {
+      if (userEntry && userEntry[1].password === password) {
         alert('Login successful');
-        login(userData); // Use AuthContext login method
+        login({ ...userEntry[1], id: userEntry[0] }); // Include the unique identifier in the user object
+        setUsernameOrEmail('');
+        setPassword('');
       } else {
         alert('Invalid username/email or password');
       }
@@ -89,13 +94,108 @@ const OrgSignIn = () => {
     }
   };
 
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+
+    if (!currentPasswordChange || !newPassword) {
+      alert('Both current and new passwords are required.');
+      return;
+    }
+
+    try {
+      if (user.password === currentPasswordChange) {
+        // Update the existing entry with the new password
+        const updatedUserData = { ...user, password: newPassword };
+
+        await writeUserInfo(user.id, updatedUserData); // Use `writeUserInfo` with the existing ID
+
+        alert('Password changed successfully. You will be logged out. Please log in with your new password.');
+        logout(); // Log the user out to ensure they re-authenticate
+        setCurrentPasswordChange('');
+        setNewPassword('');
+      } else {
+        alert('Current password is incorrect.');
+      }
+    } catch (error) {
+      console.error('Error changing password:', error);
+      alert('An error occurred while changing the password. Please try again.');
+    }
+  };
+
+  const handleDeleteAccount = async (e) => {
+    e.preventDefault();
+
+    if (!currentPasswordDelete) {
+      alert('Please enter your current password to delete your account.');
+      return;
+    }
+
+    try {
+      if (user.password === currentPasswordDelete) {
+        // Delete the user's entry from Firebase
+        await removeUserInfo(user.id);
+
+        logout(); // Log the user out
+        alert('Account deleted successfully.');
+        setCurrentPasswordDelete('');
+      } else {
+        alert('Current password is incorrect.');
+      }
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      alert('An error occurred while deleting the account. Please try again.');
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    // Reset all input fields
+    setUsername('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setCurrentPasswordChange('');
+    setCurrentPasswordDelete('');
+    setNewPassword('');
+    setUsernameOrEmail('');
+  };
+
   return (
     <div>
       {isLoggedIn ? (
         <div>
           <h1>User Profile</h1>
           <p>You are logged in as <strong>{user.username}</strong>.</p>
-          <button onClick={logout}>Log Out</button>
+          <form onSubmit={handleChangePassword}>
+            <h2>Change Password</h2>
+            <input
+              type="password"
+              value={currentPasswordChange}
+              onChange={(e) => setCurrentPasswordChange(e.target.value)}
+              placeholder="Current Password"
+              required
+            />
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="New Password"
+              required
+            />
+            <button type="submit">Change Password</button>
+          </form>
+          <form onSubmit={handleDeleteAccount}>
+            <h2>Delete Account</h2>
+            <input
+              type="password"
+              value={currentPasswordDelete}
+              onChange={(e) => setCurrentPasswordDelete(e.target.value)}
+              placeholder="Current Password"
+              required
+            />
+            <button type="submit">Delete Account</button>
+          </form>
+          <button onClick={handleLogout}>Log Out</button>
         </div>
       ) : (
         <div>
@@ -154,5 +254,3 @@ const OrgSignIn = () => {
 };
 
 export default OrgSignIn;
-
-
