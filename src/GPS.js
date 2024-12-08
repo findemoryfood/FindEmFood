@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSettings } from './SettingsContext';
-import coxLayout from './floorplans/cox-layout.jpg';
 import Switch from 'react-switch'; // Add a library for toggle switches (Install with `npm install react-switch`)
 import locations from "./BuildingContent";
 import IndoorMap from './floorplans/IndoorMap.js';
