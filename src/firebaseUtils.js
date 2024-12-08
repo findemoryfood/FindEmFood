@@ -104,3 +104,27 @@ export const getAllUsers = async () => {
     return {};
   }
 };
+
+// Function to delete user data
+export async function deleteUser(userId) {
+  try {
+    await remove(ref(database, `userInfo/${userId}`));
+    console.log(`User with ID ${userId} has been deleted.`);
+  } catch (error) {
+    console.error(`Error deleting user with ID ${userId}:`, error);
+    throw new Error("Failed to delete user.");
+  }
+}
+
+// Function to delete a user entry by userId
+export async function removeUserInfo(userId) {
+  const dbRef = ref(database, `userInfo/${userId}`);
+  try {
+    await remove(dbRef);
+    console.log(`User with ID ${userId} deleted successfully.`);
+  } catch (error) {
+    console.error(`Error deleting user with ID ${userId}:`, error);
+    throw error;
+  }
+}
+
