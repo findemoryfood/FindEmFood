@@ -5,6 +5,9 @@ import Switch from 'react-switch'; // Add a library for toggle switches (Install
 import locations from "./BuildingContent";
 import IndoorMap from './floorplans/IndoorMap.js';
 import AttwoodMap from './floorplans/AttwoodMap.js';
+import WoodruffMap from './floorplans/WoodruffMap.js';
+import ESC from './floorplans/ESC.js';
+import CoxBuilding from './floorplans/CoxBuilding.js';
 
 
 const GPS = ({ foodItems }) => {
@@ -35,16 +38,16 @@ const GPS = ({ foodItems }) => {
         'Atwood Chemistry Center': () => <AttwoodMap />,
         'Callaway Center': null,
         'Clairmont Campus': null,
-        'Cox Hall': () => <img src={coxLayout} alt="Cox Hall Floor Plan" style={{ width: '100%' }} />,
+        'Cox Hall': () => <CoxBuilding />,
         'Emerson Hall': null,
-        'Emory Student Center': null,
+        'Emory Student Center': () => <ESC />,
         'Goizueta Business School': null,
         'McDonough Field': null,
         'MSC': () => <IndoorMap />,
         'Quadrangle': null,
         'Rita Anne Rollins Building':null,
         'White Hall': () => <IndoorMap />,
-        'Woodruff Library':null,
+        'Woodruff Library':() => <WoodruffMap />,
         'Woodruff Soccer Field':null,
     };
 
@@ -396,6 +399,12 @@ const styles = (darkMode) => ({
         borderRadius: '5px',
         border: 'none',
         margin: '5px',
+    },
+    IndoorMap:{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '1000px'
     },
 
 });
