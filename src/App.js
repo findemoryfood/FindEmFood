@@ -23,6 +23,7 @@ function App() {
         <Router>
           <div className={`App ${settings.darkMode ? 'darkmode' : ''}`}>
             <NavBar />
+            <SettingsSidebar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} />
             <div className="App-content">
               <Routes>
                 <Route path="/" element={<GPS foodItems={foodItems} />} />
