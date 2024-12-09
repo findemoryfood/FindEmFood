@@ -1,0 +1,122 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-size: cover;
+    color: #ffffff;
+}
+
+.org-signin-container,
+.org-profile-container {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                url('../media/foodimg5.png') no-repeat center center fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.auth-form-container,
+.profile-card {
+    background-color: #1a1a2e;
+    border-radius: 15px;
+    padding: 50px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.auth-form-container:hover,
+.profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+.auth-header,
+.profile-header {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #f0f0f0;
+}
+
+.input-field {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #333;
+    color: white;
+    font-size: 16px;
+}
+
+.input-field::placeholder {
+    color: #aaa;
+}
+
+.input-field,
+.form-button,
+.logout-button {
+  width: 100%; /* Ensures all elements span the full width of the container */
+  padding: 15px; /* Uniform padding */
+  box-sizing: border-box; /* Includes padding and border in the element's total width */
+  margin-bottom: 20px; /* Consistent spacing */
+  border-radius: 8px; /* Rounded corners */
+  font-size: 16px; /* Consistent font size */
+}
+
+.input-field {
+  border: 1px solid #ccc;
+  background: #333;
+  color: white;
+}
+
+.input-field::placeholder {
+  color: #aaa;
+}
+
+.form-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+.form-button:hover {
+  background-color: #0056b3;
+}
+
+.logout-button {
+  background-color: #e63946;
+  color: white;
+  border: none;
+}
+
+.logout-button:hover {
+  background-color: #c0273e;
+}
+
+.logout-button:hover {
+  background-color: #c0273e;
+}
+
+.navbar {
+    margin-bottom: 0px;
+    z-index: 1000;
+}
+
+
+@media (max-width: 768px) {
+    .auth-form-container,
+    .profile-card {
+        padding: 30px;
+        max-width: 90%;
+    }
+    .form-button,
+    .logout-button {
+        font-size: 16px;
+        padding: 12px;
+    }
+}

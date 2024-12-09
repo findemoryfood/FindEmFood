@@ -11,6 +11,9 @@ import SettingsSidebar from './components/SettingsSidebar';
 import { SettingsProvider, useSettings } from './SettingsContext';
 import { AuthProvider } from './AuthContext';
 import { FoodListProvider } from './FoodListContext';
+import Footer from './components/Footer';
+import HomePage from './components/HomePage';
+
 
 function App() {
   const [foodItems, setFoodItems] = useState([]); // Shared state for food items
@@ -37,6 +40,10 @@ function App() {
                 />
                 <Route path="/OrgSignIn" element={<OrgSignIn />} />
                 <Route path="/AboutUs" element={<AboutUs />} />
+                <Route path="/Settings" element={<Settings />} />
+                <Route path="/HomePage"
+              element={<HomePage />}
+            />
               </Routes>
             </div>
           </div>

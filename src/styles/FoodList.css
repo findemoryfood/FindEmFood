@@ -1,0 +1,140 @@
+/* General Container */
+.foodlist-parent {
+    min-height: 100vh; /* Ensures it spans the entire viewport height */
+    background: url('../media/newback.jpg') no-repeat center center fixed; /* Background image for the entire page */
+    background-size: cover; /* Ensures the background covers the viewport */
+    display: flex; /* Allows for centering child content */
+    justify-content: center; /* Centers the content horizontally */
+    align-items: flex-start; /* Aligns content to the top of the parent */
+    padding-top: 0 20px; /* Adds space at the top for better layout */
+    box-sizing: border-box; /* Includes padding in the height calculation */
+    width: 100%; /* Allows the parent to take the full width of the page */
+    overflow-x: hidden; /* Prevents horizontal scrolling caused by card overflow */
+    padding: 0 20px; /* Adds padding on the sides to prevent content from touching the edges */
+        
+      
+  }
+  
+  
+  .foodlist-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh; /* Makes sure the content fills the entire viewport */
+    padding: 20px;
+    text-align: center;
+  }
+  .foodlist-card {
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black for contrast */
+    border-radius: 15px;
+    padding: 100px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Adds a soft shadow */
+    max-width: 900px;
+    margin: 20px auto;
+    text-align: center;
+  }
+  
+
+  /* Header */
+ /* Header */
+.foodlist-header {
+    text-align: center;
+    font-size: 90px; /* Larger and more prominent */
+    font-weight: bold; /* Emphasize the header */
+    color: #f0f0f0; /* Slightly lighter text color */
+    margin-bottom: 30px; /* Add more spacing */
+    text-transform: uppercase; /* Optional: Make text all uppercase */
+    letter-spacing: 2px; /* Add spacing between letters */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.801); /* Subtle shadow for depth */
+    position: relative; /* Positioning for decorative elements */
+  }
+  
+  /* Optional decorative line below the header */
+  .foodlist-header::after {
+    content: '';
+    display: block;
+    width: 80px; /* Line width */
+    height: 4px; /* Line height */
+    background-color: #0c2461; /* Line color */
+    margin: 10px auto 0; /* Center the line below the header */
+    border-radius: 2px; /* Slightly rounded edges */
+  }
+  
+  /* Buttons */
+  .foodlist-buttons {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .foodlist-button {
+    padding: 10px 20px;
+    background-color: #0c2461;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    margin: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .foodlist-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Filters */
+  .foodlist-form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .dropdown-filter {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+  }
+  
+  /* Flexbox Grid for Cards */
+  .foodlist-grid {
+    display: flex;
+    flex-wrap: wrap; /* Ensures cards wrap to the next line if there's not enough space */
+    justify-content: center; /* Centers the cards within the container */
+    gap: 20px; /* Adds consistent spacing between the cards */
+    max-width: 100%; /* Prevents cards from exceeding the grid container's width */
+    padding: 20px; /* Adds padding around the grid to prevent content from touching the edges */
+    box-sizing: border-box; /* Ensures padding is included in the container's dimensions */
+  }
+  
+  .food-card {
+    background-color: #0c2461; /* A dark, sleek background */
+    border-radius: 15px; /* Rounded corners for a softer look */
+    padding: 20px; /* Add space around the text */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add subtle depth */
+    width: 250px; /* Set a fixed width for uniformity */
+    margin: 10px; /* Spacing between cards */
+    color: #ffffff; /* White text for readability */
+    text-align: left; /* Align text to the left for a cleaner layout */
+    font-size: 16px; /* Standard font size for readability */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add hover effect */
+  }
+  
+  .food-card:hover {
+    transform: translateY(-10px); /* Lift card on hover */
+    transform: scale(1.5);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Emphasize shadow on hover */
+  }
+  
+  .food-card p {
+    margin: 5px 0; /* Add spacing between lines */
+  }
+  
+  .food-card strong {
+    color: #ffffff; /* Highlight labels with a vibrant color */
+  }
+  

@@ -56,11 +56,14 @@ const NavBar = ({ isLoggedIn, user }) => {
         {/* Left Links */}
         <nav className="nav-links nav-left">
             <ul>
+            <li>
+                    <Link to="/HomePage">Home</Link>
+                </li>
                 <li>
                     <Link to="/GPS">GPS</Link>
                 </li>
                 <li>
-                    <Link to="/FoodList">Food List</Link>
+                    <Link to="/FoodList">Food Hub</Link>
                 </li>
                 <li>
                     <Link to="/AboutUs">About Us</Link>
