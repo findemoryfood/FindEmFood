@@ -41,7 +41,7 @@ const SettingsSidebar = () => {
                     onStateChange={({ isOpen }) => setIsOpen(isOpen)} // Update isOpen state when sidebar opens or closes
                 >
                 <div className="settings-menu">
-                    <h1>Settings</h1>
+                    <h1>SETTINGS</h1>
                         <div className="setting-item">
                             <label>
                                 <input

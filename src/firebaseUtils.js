@@ -1,4 +1,5 @@
 import { getDatabase, ref, set, remove, get, child } from 'firebase/database';
+import { getFirestore, doc, deleteDoc } from 'firebase/firestore';
 import { app } from './firebaseConfig'; // Import the initialized app
 
 // Initialize Realtime Database
@@ -38,6 +39,20 @@ export async function getFoodInfo() {
     return null;
   }
 }
+
+export const deleteFoodInfo = async (foodId) => {
+  try {
+    // Construct a reference to the specific food entry
+    const foodRef = ref(database, `foodInfo/${foodId}`);
+    
+    // Remove the entry
+    await remove(foodRef);
+    console.log(`Food entry with ID ${foodId} has been deleted.`);
+  } catch (error) {
+    console.error(`Error deleting food entry with ID ${foodId}:`, error);
+    throw new Error("Failed to delete food entry.");
+  }
+};
 
 // Function to fetch user information based on identifier (username or email)
 export async function getUserInfo(identifier) {
