@@ -40,7 +40,6 @@ function App() {
                 />
                 <Route path="/OrgSignIn" element={<OrgSignIn />} />
                 <Route path="/AboutUs" element={<AboutUs />} />
-                <Route path="/Settings" element={<Settings />} />
                 <Route path="/HomePage"
               element={<HomePage />}
             />
