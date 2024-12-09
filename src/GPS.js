@@ -13,6 +13,7 @@ const GPS = ({ foodItems }) => {
     const directionsService = useRef(null);
     const directionsRenderer = useRef(null);
     const [isIndoor, setIsIndoor] = useState(false);
+    const [setSelectedFloorPlan] = useState(null);
     const mapInstance = useRef(null); // For the Google Map instance
 
 
@@ -94,7 +95,7 @@ const GPS = ({ foodItems }) => {
             (response, status) => {
                 if (status === window.google.maps.DirectionsStatus.OK) {
                     directionsRenderer.current.setDirections(response);
-
+                    setSelectedFloorPlan(floorPlans[destinationLocation]);
 
                     const bounds = new window.google.maps.LatLngBounds();
                     const route = response.routes[0];
