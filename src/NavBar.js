@@ -24,10 +24,13 @@ const NavBar = ({ isLoggedIn, user }) => {
       <div className={`sidebar ${isSidebarOpen ? 'show' : ''}`}>
           <ul>
               <li>
+                  <Link to="/HomePage">Home</Link>
+              </li>
+              <li>
                   <Link to="/GPS" onClick={toggleSidebar}>GPS</Link>
               </li>
               <li>
-                  <Link to="/FoodList" onClick={toggleSidebar}>Food List</Link>
+                  <Link to="/Food Hub" onClick={toggleSidebar}>Food List</Link>
               </li>
               <li>
                   <Link to="/AboutUs" onClick={toggleSidebar}>About Us</Link>
@@ -63,7 +66,7 @@ const NavBar = ({ isLoggedIn, user }) => {
                     <Link to="/GPS">GPS</Link>
                 </li>
                 <li>
-                    <Link to="/FoodList">Food Hub</Link>
+                    <Link to="/Food Hub">Food Hub</Link>
                 </li>
                 <li>
                     <Link to="/AboutUs">About Us</Link>
