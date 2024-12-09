@@ -35,7 +35,7 @@ const SettingsSidebar = () => {
             </div>
             )}
 
-            <IconContext.Provider value={{ color: settings.darkMode ? 'white' : 'black', className: "global-class-name" }}>
+            <IconContext.Provider value={{ color: settings.darkMode ? 'white' : '#ffcc33', className: "global-class-name" }}>
             <Menu right width={ 275 } customBurgerIcon={<IoSettingsOutline />} 
                 isOpen={isOpen} 
                     onStateChange={({ isOpen }) => setIsOpen(isOpen)} // Update isOpen state when sidebar opens or closes
