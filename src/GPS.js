@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSettings } from './SettingsContext';
-import coxLayout from './floorplans/cox-layout.jpg';
 import Switch from 'react-switch'; // Add a library for toggle switches (Install with `npm install react-switch`)
 import locations from "./BuildingContent";
 import IndoorMap from './floorplans/IndoorMap.js';
 import AttwoodMap from './floorplans/AttwoodMap.js';
+import WoodruffMap from './floorplans/WoodruffMap.js';
+import ESC from './floorplans/ESC.js';
+import CoxBuilding from './floorplans/CoxBuilding.js';
 
 
 const GPS = ({ foodItems }) => {
@@ -13,8 +15,8 @@ const GPS = ({ foodItems }) => {
     const directionsService = useRef(null);
     const directionsRenderer = useRef(null);
     const [isIndoor, setIsIndoor] = useState(false);
-    const [setSelectedFloorPlan] = useState(null);
-    const mapInstance = useRef(null); // For the Google Map instance
+    const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
+    const mapInstance = useRef(null);
 
 
 
@@ -35,16 +37,16 @@ const GPS = ({ foodItems }) => {
         'Atwood Chemistry Center': () => <AttwoodMap />,
         'Callaway Center': null,
         'Clairmont Campus': null,
-        'Cox Hall': () => <img src={coxLayout} alt="Cox Hall Floor Plan" style={{ width: '100%' }} />,
+        'Cox Hall': () => <CoxBuilding />,
         'Emerson Hall': null,
-        'Emory Student Center': null,
+        'Emory Student Center': () => <ESC />,
         'Goizueta Business School': null,
         'McDonough Field': null,
         'MSC': () => <IndoorMap />,
         'Quadrangle': null,
         'Rita Anne Rollins Building':null,
-        'White Hall': () => <IndoorMap />,
-        'Woodruff Library':null,
+        'White Hall': null,
+        'Woodruff Library':() => <WoodruffMap />,
         'Woodruff Soccer Field':null,
     };
 
@@ -397,6 +399,12 @@ const styles = (darkMode) => ({
         borderRadius: '5px',
         border: 'none',
         margin: '5px',
+    },
+    IndoorMap:{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '1000px'
     },
 
 });
