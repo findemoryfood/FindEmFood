@@ -7,7 +7,6 @@ import GPS from './GPS';
 import FoodList from './components/FoodList';
 import OrgSignIn from './components/OrgSignIn';
 import AboutUs from './components/AboutUs';
-import Settings from './components/Settings';
 import SettingsSidebar from './components/SettingsSidebar';
 import { SettingsProvider, useSettings } from './SettingsContext';
 import { AuthProvider } from './AuthContext';
@@ -38,7 +37,6 @@ function App() {
                 />
                 <Route path="/OrgSignIn" element={<OrgSignIn />} />
                 <Route path="/AboutUs" element={<AboutUs />} />
-                <Route path="/Settings" element={<Settings />} />
               </Routes>
             </div>
           </div>
