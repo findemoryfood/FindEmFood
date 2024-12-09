@@ -30,9 +30,6 @@ const NavBar = ({ isLoggedIn, user }) => {
                   <Link to="/FoodList" onClick={toggleSidebar}>Food List</Link>
               </li>
               <li>
-                  <Link to="/Settings" onClick={toggleSidebar}>Settings</Link>
-              </li>
-              <li>
                   <Link to="/AboutUs" onClick={toggleSidebar}>About Us</Link>
               </li>
               <li>
@@ -67,9 +64,6 @@ const NavBar = ({ isLoggedIn, user }) => {
                 </li>
                 <li>
                     <Link to="/FoodList">Food Hub</Link>
-                </li>
-                <li>
-                    <Link to="/Settings">Settings</Link>
                 </li>
                 <li>
                     <Link to="/AboutUs">About Us</Link>
