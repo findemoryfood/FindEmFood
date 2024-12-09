@@ -5,11 +5,10 @@ import { useFoodList } from '../FoodListContext';
 import { writeFoodInfo, getFoodInfo } from '../firebaseUtils';
 import { populateFirebaseFromGroupMe } from '../groupmeUtils';
 import locations from "../BuildingContent";
+import '../styles/FoodList.css'
 
-// List of building acronyms to display in all caps
 const buildingAcronyms = ["MSC", "ESC", "SAAC"];
 
-// Helper function to capitalize each word except for "AM" and "PM"
 const capitalizeWords = (text) => {
   if (!text) return '';
   return text
@@ -21,7 +20,6 @@ const capitalizeWords = (text) => {
     .join(' ');
 };
 
-// Helper function to format building names with acronyms
 const formatBuildingName = (building) => {
   if (!building) return '';
   const upperCased = building.toUpperCase();
@@ -96,17 +94,25 @@ const FoodList = () => {
   }, [fetchFoodItems]);
 
   return (
-    <div>
-      <h1>Food List</h1>
+    <div className= "foodlist-parent">
+    <div className="foodlist-container">
+    <div className="foodlist-card">
+      <h1 className="foodlist-header">Food Hub</h1>
+      
 
       {isLoggedIn ? (
         <>
-          <button onClick={() => setShowForm(!showForm)}>
-            {showForm ? 'Hide Form' : 'Add Food'}
-          </button>
+          <div className="foodlist-buttons">
+            <button onClick={() => setShowForm(!showForm)} className="foodlist-button">
+              {showForm ? 'Hide Form' : 'Add Food'}
+            </button>
+            <button onClick={handleGroupMeFetch} disabled={loading} className="foodlist-button">
+              {loading ? 'Fetching...' : 'Fetch Food Entries from GroupMe'}
+            </button>
+          </div>
           {showForm && (
-            <form onSubmit={handleSubmit}>
-              <select value={building} onChange={(e) => setBuilding(e.target.value)} required>
+            <form onSubmit={handleSubmit} className="foodlist-form">
+              <select value={building} onChange={(e) => setBuilding(e.target.value)} required className="dropdown-filter">
                 <option value="">Select Building</option>
                 {Object.keys(locations).map((location) => (
                   <option key={location} value={location}>
@@ -114,17 +120,37 @@ const FoodList = () => {
                   </option>
                 ))}
               </select>
-              <input value={room} onChange={(e) => setRoom(e.target.value)} placeholder="Room" />
-              <input value={food} onChange={(e) => setFood(e.target.value)} placeholder="Food" />
-              <input value={time} onChange={(e) => setTime(e.target.value)} placeholder="Time" />
-              <input value={club} onChange={(e) => setClub(e.target.value)} placeholder="Club" />
-              <button type="submit">Add Food</button>
+              <input
+                value={room}
+                onChange={(e) => setRoom(e.target.value)}
+                placeholder="Room"
+                className="dropdown-filter"
+              />
+              <input
+                value={food}
+                onChange={(e) => setFood(e.target.value)}
+                placeholder="Food"
+                className="dropdown-filter"
+              />
+              <input
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                placeholder="Time"
+                className="dropdown-filter"
+              />
+              <input
+                value={club}
+                onChange={(e) => setClub(e.target.value)}
+                placeholder="Club"
+                className="dropdown-filter"
+              />
+              <button type="submit" className="foodlist-button">Add Food</button>
             </form>
           )}
         </>
       ) : (
-        <div>
-          <button onClick={() => navigate('/OrgSignIn')} style={{ cursor: 'pointer' }}>
+        <div className="foodlist-buttons">
+          <button onClick={() => navigate('/OrgSignIn')} className="foodlist-button">
             Log in to add food entries
           </button>
           <p style={{ fontSize: '0.9em', color: '#555' }}>
@@ -133,37 +159,31 @@ const FoodList = () => {
         </div>
       )}
 
-      <div>
-        <button onClick={handleGroupMeFetch} disabled={loading}>
-          {loading ? 'Fetching...' : 'Fetch Food Entries from GroupMe'}
-        </button>
-      </div>
-
-      <div>
+      <div className="foodlist-grid">
         {loading ? (
           <p>Loading food items...</p>
         ) : (
-          <ul>
-            {foodItems
-              .filter((item) => item.name && item.location) // Exclude invalid entries like `init`
-              .map((item, index) => {
-                const formattedRoom =
-                  item.room && item.room.toLowerCase().startsWith('room')
-                    ? capitalizeWords(item.room.replace(/^room\s*/i, ''))
-                    : capitalizeWords(item.room);
-                return (
-                  <li key={index}>
-                    {capitalizeWords(item.name)}
-                    {item.location && ` - ${formatBuildingName(item.location)}`}
-                    {formattedRoom && `, Room: ${formattedRoom}`}
-                    {item.time && `, Time: ${capitalizeWords(item.time)}`}
-                    {item.club && `, Club: ${capitalizeWords(item.club)}`}
-                  </li>
-                );
-              })}
-          </ul>
+          foodItems
+            .filter((item) => item.name && item.location)
+            .map((item, index) => {
+              const formattedRoom =
+                item.room && item.room.toLowerCase().startsWith('room')
+                  ? capitalizeWords(item.room.replace(/^room\s*/i, ''))
+                  : capitalizeWords(item.room);
+              return (
+                <div key={index} className="food-card">
+                  <p><strong>Food:</strong> {capitalizeWords(item.name)}</p>
+                  <p><strong>Building:</strong> {formatBuildingName(item.location)}</p>
+                  <p><strong>Room:</strong> {formattedRoom}</p>
+                  <p><strong>Time:</strong> {capitalizeWords(item.time)}</p>
+                  <p><strong>Club:</strong> {capitalizeWords(item.club)}</p>
+                </div>
+              );
+            })
         )}
       </div>
+    </div>
+    </div>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'; 
 import { writeUserInfo, getAllUsers, removeUserInfo } from '../firebaseUtils';
 import { useAuth } from '../AuthContext';
+import '../styles/OrgSignIn.css';
 
 const OrgSignIn = () => {
   const { user, isLoggedIn, login, logout } = useAuth();
@@ -161,49 +162,62 @@ const OrgSignIn = () => {
   };
 
   return (
-    <div>
+    <div className="org-signin-container">
       {isLoggedIn ? (
-        <div>
-          <h1>User Profile</h1>
-          <p>You are logged in as <strong>{user.username}</strong>.</p>
-          <form onSubmit={handleChangePassword}>
-            <h2>Change Password</h2>
-            <input
-              type="password"
-              value={currentPasswordChange}
-              onChange={(e) => setCurrentPasswordChange(e.target.value)}
-              placeholder="Current Password"
-              required
-            />
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="New Password"
-              required
-            />
-            <button type="submit">Change Password</button>
-          </form>
-          <form onSubmit={handleDeleteAccount}>
-            <h2>Delete Account</h2>
-            <input
-              type="password"
-              value={currentPasswordDelete}
-              onChange={(e) => setCurrentPasswordDelete(e.target.value)}
-              placeholder="Current Password"
-              required
-            />
-            <button type="submit">Delete Account</button>
-          </form>
-          <button onClick={handleLogout}>Log Out</button>
+        <div className="org-profile-container">
+        <div className="profile-card">
+          <div className="user-profile-container">
+            <h1 className="profile-header">User Profile</h1>
+            <p className="profile-info">
+              You are logged in as <strong>{user.username}</strong>.
+            </p>
+            <form onSubmit={handleChangePassword} className="change-password-form">
+              <h2 className="form-header">Change Password</h2>
+              <input
+                className="input-field"
+                type="password"
+                value={currentPasswordChange}
+                onChange={(e) => setCurrentPasswordChange(e.target.value)}
+                placeholder="Current Password"
+                required
+              />
+              <input
+                className="input-field"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="New Password"
+                required
+              />
+              <button type="submit" className="form-button">Change Password</button>
+            </form>
+            <form onSubmit={handleDeleteAccount} className="delete-account-form">
+              <h2 className="form-header">Delete Account</h2>
+              <input
+                className="input-field"
+                type="password"
+                value={currentPasswordDelete}
+                onChange={(e) => setCurrentPasswordDelete(e.target.value)}
+                placeholder="Current Password"
+                required
+              />
+              <button type="submit" className="form-button">Delete Account</button>
+            </form>
+            <button onClick={handleLogout} className="logout-button">Log Out</button>
+          </div>
         </div>
+      </div>
       ) : (
-        <div>
-          <h1>{showLogin ? 'User Login' : 'User Sign Up'}</h1>
-          <form onSubmit={showLogin ? handleLogin : handleSignUp}>
+        <div className="auth-form-container">
+          <h1 className="auth-header">{showLogin ? 'User or Organization Login' : 'User or Organization Sign Up'}</h1>
+          <form
+            onSubmit={showLogin ? handleLogin : handleSignUp}
+            className="auth-form"
+          >
             {!showLogin ? (
               <>
                 <input
+                  className="input-field"
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -211,6 +225,7 @@ const OrgSignIn = () => {
                   required
                 />
                 <input
+                  className="input-field"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -220,6 +235,7 @@ const OrgSignIn = () => {
               </>
             ) : (
               <input
+                className="input-field"
                 value={usernameOrEmail}
                 onChange={(e) => setUsernameOrEmail(e.target.value)}
                 placeholder="Email or Username"
@@ -227,6 +243,7 @@ const OrgSignIn = () => {
               />
             )}
             <input
+              className="input-field"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -235,6 +252,7 @@ const OrgSignIn = () => {
             />
             {!showLogin && (
               <input
+                className="input-field"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -242,9 +260,11 @@ const OrgSignIn = () => {
                 required
               />
             )}
-            <button type="submit">{showLogin ? 'Login' : 'Sign Up'}</button>
+            <button type="submit" className="form-button">
+              {showLogin ? 'Login' : 'Sign Up'}
+            </button>
           </form>
-          <button onClick={toggleForm}>
+          <button onClick={toggleForm} className="toggle-form-button">
             {showLogin ? 'Need an account? Sign Up' : 'Already have an account? Log In'}
           </button>
         </div>
@@ -252,5 +272,4 @@ const OrgSignIn = () => {
     </div>
   );
 };
-
-export default OrgSignIn;
+  export default OrgSignIn;  
