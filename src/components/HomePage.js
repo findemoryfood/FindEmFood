@@ -3,6 +3,7 @@ import '../styles/Home.css';
 import { ParallaxProvider, Parallax } from 'react-scroll-parallax';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { useSettings } from '../SettingsContext';
 
 /*
 const sections = [
@@ -75,6 +76,7 @@ const HomePage = () => {
     'Connecting Students with Food Resources',
     'Reducing Food Waste Sustainably',
   ];
+  const { settings } = useSettings();
 
   useEffect(() => {
     const typeText = async () => {
@@ -104,7 +106,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="features-section">
+      <div className={`features-section ${settings.darkMode ? 'darkmode' : ''}`}>
         <div className="feature fade-in">
           <h2>Find Food Quickly</h2>
           <p>Access real-time updates about free food spots across campus.</p>

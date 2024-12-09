@@ -85,6 +85,10 @@ body, html {
     color: #333;
     text-align: center;
   }
+
+  .features-section.darkmode {
+    background-color: #2d2d2d;
+  }
   
   .feature {
     flex: 1;
