@@ -7,7 +7,7 @@ import GPS from './GPS';
 import FoodList from './components/FoodList';
 import OrgSignIn from './components/OrgSignIn';
 import AboutUs from './components/AboutUs';
-import Settings from './components/Settings';
+import SettingsSidebar from './components/SettingsSidebar';
 import { SettingsProvider, useSettings } from './SettingsContext';
 import { AuthProvider } from './AuthContext';
 import { FoodListProvider } from './FoodListContext';
@@ -25,6 +25,7 @@ function App() {
         <Router>
           <div className={`App ${settings.darkMode ? 'darkmode' : ''}`}>
             <NavBar />
+            <SettingsSidebar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} />
             <div className="App-content">
               <Routes>
                 <Route path="/" element={<GPS foodItems={foodItems} />} />
@@ -39,7 +40,6 @@ function App() {
                 />
                 <Route path="/OrgSignIn" element={<OrgSignIn />} />
                 <Route path="/AboutUs" element={<AboutUs />} />
-                <Route path="/Settings" element={<Settings />} />
                 <Route path="/HomePage"
               element={<HomePage />}
             />
