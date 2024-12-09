@@ -45,7 +45,7 @@ const GPS = ({ foodItems }) => {
         'MSC': () => <IndoorMap />,
         'Quadrangle': null,
         'Rita Anne Rollins Building':null,
-        'White Hall': () => <IndoorMap />,
+        'White Hall': null,
         'Woodruff Library':() => <WoodruffMap />,
         'Woodruff Soccer Field':null,
     };
