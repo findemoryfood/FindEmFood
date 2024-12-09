@@ -8,6 +8,7 @@ import FoodList from './components/FoodList';
 import OrgSignIn from './components/OrgSignIn';
 import AboutUs from './components/AboutUs';
 import Settings from './components/Settings';
+import SettingsSidebar from './components/SettingsSidebar';
 import { SettingsProvider, useSettings } from './SettingsContext'; // Use SettingsProvider for settings context
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
 
   return (
     <SettingsProvider>
+      <SettingsSidebar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} />
       <Router>
         <div className={`App ${settings.darkMode ? 'darkmode' : ''}`}>
           <NavBar isLoggedIn={isLoggedIn} user={user} onLogout={handleLogout} />
