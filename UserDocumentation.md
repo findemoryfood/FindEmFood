@@ -97,6 +97,14 @@ The Settings page allows you to personalize the app to your preferences.
 
 - Activate Dark Mode: Click the “Dark Mode” checkbox to switch between light and dark themes.
 
+### **Font Size**
+
+- Adjust the font size: Move the slider to the right to increase the font size and to the left to decrease the font size.
+
+### **Restore Defaults*
+
+- Restore the Default Settings: Click "Restore Defaults" to restore the default settings.
+
 ###  **Use My Location**
 
 - This option allows the GPS to automatically set your current position as the starting point for navigation.  
