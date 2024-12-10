@@ -1,6 +1,6 @@
 # **Table of Contents**
 
-1. Getting Started  
+1. [Getting Started](#Getting-Started)  
 2. Login Page  
 3. GPS Page  
 4. Indoor Navigation  
