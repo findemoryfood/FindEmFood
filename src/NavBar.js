@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 import logo from './assets/logo_v2.png';
 import './styles/NavBar.css';
 import { SettingsProvider, useSettings } from './SettingsContext'; // Use SettingsProvider for settings context
 
 
-const NavBar = ({ isLoggedIn, user }) => {
+const NavBar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   // Settings context for remembering preferences
   const { settings, updateSettings } = useSettings();
@@ -14,6 +15,7 @@ const NavBar = ({ isLoggedIn, user }) => {
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
   };
+  const { user, isLoggedIn } = useAuth();
 
   return (
     <div className={`navbar ${darkMode ? 'darkmode' : ''}`}>
@@ -30,14 +32,14 @@ const NavBar = ({ isLoggedIn, user }) => {
                   <Link to="/GPS" onClick={toggleSidebar}>GPS</Link>
               </li>
               <li>
-                  <Link to="/Food Hub" onClick={toggleSidebar}>Food List</Link>
+                  <Link to="/FoodList" onClick={toggleSidebar}>Food List</Link>
               </li>
               <li>
                   <Link to="/AboutUs" onClick={toggleSidebar}>About Us</Link>
               </li>
               <li>
                   {isLoggedIn ? (
-                      <Link to="/UserProfile" onClick={toggleSidebar}>
+                      <Link to="/OrgSignIn" onClick={toggleSidebar}>
                           <span>{user?.username}</span>
                       </Link>
                   ) : (
@@ -66,7 +68,7 @@ const NavBar = ({ isLoggedIn, user }) => {
                     <Link to="/GPS">GPS</Link>
                 </li>
                 <li>
-                    <Link to="/Food Hub">Food Hub</Link>
+                    <Link to="/FoodList">Food Hub</Link>
                 </li>
                 <li>
                     <Link to="/AboutUs">About Us</Link>
@@ -81,7 +83,7 @@ const NavBar = ({ isLoggedIn, user }) => {
 
             <li>
               {isLoggedIn ? (
-                <Link to="/UserProfile">
+                <Link to="/OrgSignIn">
                   <span>{user?.username}</span>
                 </Link>
               ) : (

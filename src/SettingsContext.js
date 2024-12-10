@@ -13,11 +13,9 @@ export const SettingsProvider = ({ children }) => {
         return savedSettings ? JSON.parse(savedSettings) : {
             useMyLocation: false,
             darkMode: false,
-            myInfo: [],
-            myEvents: [],
+            fontSize: 16, // Default font size
         };
     });
-
 
     // Update settings and localStorage whenever settings change
     const updateSettings = (newSettings) => {

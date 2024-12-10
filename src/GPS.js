@@ -361,6 +361,7 @@ const styles = (darkMode) => ({
         marginBottom: '10px',
         backgroundColor: darkMode ? '#444' : '#fff',
         color: darkMode ? '#fff' : '#000',
+        fontSize: '1rem',
     },
     button: {
         padding: '10px',
@@ -371,6 +372,7 @@ const styles = (darkMode) => ({
         borderRadius: '5px',
         border: 'none',
         margin: '5px',
+        fontSize: '1rem',
     },
     overlay: {
         position: 'fixed',

@@ -10,11 +10,8 @@
     box-sizing: border-box; /* Includes padding in the height calculation */
     width: 100%; /* Allows the parent to take the full width of the page */
     overflow-x: hidden; /* Prevents horizontal scrolling caused by card overflow */
-    padding: 0 20px; /* Adds padding on the sides to prevent content from touching the edges */
-        
-      
+    padding: 0 20px; /* Adds padding on the sides to prevent content from touching the edges */   
   }
-  
   
   .foodlist-container {
     display: flex;
@@ -35,8 +32,6 @@
     text-align: center;
   }
   
-
-  /* Header */
  /* Header */
 .foodlist-header {
     text-align: center;
@@ -71,7 +66,7 @@
     padding: 10px 20px;
     background-color: #0c2461;
     color: white;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: bold;
     border: none;
     border-radius: 8px;
@@ -90,11 +85,21 @@
     justify-content: center;
     gap: 10px;
     margin-bottom: 20px;
+    z-index: 20; /* Higher than other cards to appear on top */
   }
   
+  .foodlist-form.small {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    z-index: 20; /* Higher than other cards to appear on top */
+    scale: 0.5;
+  }
+
   .dropdown-filter {
     padding: 10px;
-    font-size: 14px;
+    font-size: 0.9rem;
     border: 1px solid #ccc;
     border-radius: 5px;
     width: 200px;
@@ -109,6 +114,7 @@
     max-width: 100%; /* Prevents cards from exceeding the grid container's width */
     padding: 20px; /* Adds padding around the grid to prevent content from touching the edges */
     box-sizing: border-box; /* Ensures padding is included in the container's dimensions */
+    z-index: 5; 
   }
   
   .food-card {
@@ -120,16 +126,26 @@
     margin: 10px; /* Spacing between cards */
     color: #ffffff; /* White text for readability */
     text-align: left; /* Align text to the left for a cleaner layout */
-    font-size: 16px; /* Standard font size for readability */
+    font-size: 1rem; /* Standard font size for readability */
     transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add hover effect */
+    z-index: 5;
+  }
+
+  .food-card.editing {
+    z-index: 10; /* Higher z-index for the card being edited */
   }
   
   .food-card:hover {
     transform: translateY(-10px); /* Lift card on hover */
-    transform: scale(1.5);
+    transform: scale(1.25);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Emphasize shadow on hover */
   }
   
+  .food-card.editing:hover {
+    transform: none; /* Disable hover effects for editing cards */
+    box-shadow: none;
+  }
+
   .food-card p {
     margin: 5px 0; /* Add spacing between lines */
   }
