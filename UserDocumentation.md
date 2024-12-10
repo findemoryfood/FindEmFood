@@ -8,6 +8,7 @@
 6. [Settings](#Settings)  
 7. [About Us](#About-Us)  
 8. [Troubleshooting](#Troubleshooting)
+9. [Deployment](#Deployment)
 
 ---
 
@@ -131,4 +132,62 @@ Here are some common issues you might encounter while using Find'Em Food, along 
 
 ---
 
+# Deployment
+This document outlines the steps required to deploy FindEmFood to the staging and production environments. It also covers prerequisites, environment configurations, and troubleshooting guidelines. The goal is to ensure a smooth, repeatable deployment process.
+
+
+# Pre-Requisties
+---
+- React (Frontend framework for building the UI)
+- Node.js (JavaScript runtime for development and build processes)
+- Google Maps API (Provides location services)
+
+# Environment Variables
+---
+The application uses environment variables stored in .env files
+
+#### Required variables:
+- `REACT_APP_GOOGLE_MAPS_API_KEY`: API key for Google Maps services.
+- `REACT_APP_GOOGLE_ANALYTICS_ID`: Google Analytics tracking ID for monitoring user engagement.
+
+Clone the project from the repository:
+   ```plaintext
+   git clone https://github.com/findemoryfood/FindEmFood.git
+   cd FindEmFood
+  ```
+
+Set up the environment variables in the .env file.
+
+#### Example `.env` file:
+```plaintext
+REACT_APP_GOOGLE_MAPS_API_KEY=your-google-maps-api-key
+```
+
+# Dependencies
+```plaintext
+npm install
+npm install react-icons
+npm install axios
+npm install react-router-dom
+npm install react-scroll-parallax
+npm install firebase
+```
+
+Test the application locally
+```plaintext
+npm start
+```
+
+# Troubleshooting
+---
+Build Errors:
+
+- Verify all dependencies are installed: npm install.
+- Check .env variables for typos or missing values.
+- API Errors:
+    Ensure the Google Maps API key is valid and has sufficient quotas.
+    Verify network requests to the backend API.
+- UI Issues:
+    Reload the page.
+    Inspect the browser console for errors.
  
