@@ -101,7 +101,7 @@ The Settings page allows you to personalize the app to your preferences.
 
 - Adjust the font size: Move the slider to the right to increase the font size and to the left to decrease the font size.
 
-### **Restore Defaults*
+### **Restore Defaults**
 
 - Restore the Default Settings: Click "Restore Defaults" to restore the default settings.
 
