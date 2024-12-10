@@ -1,13 +1,13 @@
 # **Table of Contents**
 
 1. [Getting Started](#Getting-Started)  
-2. Login Page  
-3. GPS Page  
-4. Indoor Navigation  
-5. Food List  
-6. Settings  
-7. About Us  
-8. Troubleshooting
+2. [Login Page](#Login-Page) 
+3. [GPS Page](#GPS-Page)  
+4. [Indoor Navigation](#Indoor-Navigation) 
+5. [Food Hub](#Food-Hub)
+6. [Settings](#Settings)  
+7. [About Us](#About-Us)  
+8. [Troubleshooting](#Troubleshooting)
 
 ---
 
@@ -66,7 +66,7 @@ The GPS page helps you navigate to food events on campus. Follow these instructi
 
 ---
 
-## **Food List**
+## **Food Hub**
 
 View all the current food events happening around campus. Here's how to use this page:
 
