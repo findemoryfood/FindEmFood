@@ -153,7 +153,7 @@ FindEmFood is a mobile app focused on connecting Emory students with food resour
    - Utilizes geolocation to set the user's current location.
 
 4. **Settings Integration**
-   - Supports dark mode and location preferences.
+   - Supports dark mode and font size preferences.
 
 5. **Food Event Notifications**
    - Popups notify users of new food events on campus.

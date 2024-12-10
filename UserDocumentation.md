@@ -87,6 +87,10 @@ View all the current food events happening around campus. Here's how to use this
 
  **Note: Manually added events will automatically appear on this page.**
 
+###  **Edit/Delete Food Events**
+
+-  If you are logged in, click “Manage Food”, and options to Edit or Delete existing food events will pop up. Click "Done" to hide these options. 
+
 ---
 
 ## **Settings**
