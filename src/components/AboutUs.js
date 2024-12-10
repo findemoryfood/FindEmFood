@@ -33,7 +33,7 @@ const teamMembers = [
     {
         name: "Cassie St. Felix",
         role: "Frontend Team",
-        email: "rose.st.felix@emory.edu",
+        email: "rstfeli@emory.edu",
         image: cassie,
     },
     {
@@ -124,7 +124,7 @@ const AboutUs = () => {
                       <div className="about-us-card">
                           <img src={member.image} alt={`${member.name}`} className="team-member-image"/>
                           <div className="about-us-card-container">
-                              <h2>{member.name}</h2>
+                              <h2 className="name">{member.name}</h2>
                               <p className="title">{member.role}</p>
                               <p className="email">{member.email}</p>
                           </div>

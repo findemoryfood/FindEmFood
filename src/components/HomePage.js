@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/Home.css';
 import { ParallaxProvider, Parallax } from 'react-scroll-parallax';
 import { motion } from 'framer-motion';
@@ -101,8 +102,8 @@ const HomePage = () => {
         <h1 className="hero-title">Find Em' Food</h1>
         <p className="hero-subtitle">{typewriterText}</p>
         <div className="hero-buttons">
-          <button className="cta-button pulse">Explore Features</button>
-          <button className="cta-button outline shimmer">Learn More</button>
+          <Link to="/GPS"><button className="cta-button pulse">Explore Features</button></Link>
+          <Link to="/AboutUs"><button className="cta-button outline shimmer"> Learn More</button></Link>
         </div>
       </div>
 

@@ -233,7 +233,7 @@ const FoodList = () => {
                   {isEditing ? (
                     <form
                       onSubmit={(e) => handleEditSubmit(e, item.foodId)}
-                      className="foodlist-form"
+                      className="foodlist-form.small"
                     >
                       <input
                         value={building}

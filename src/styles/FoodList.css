@@ -66,7 +66,7 @@
     padding: 10px 20px;
     background-color: #0c2461;
     color: white;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: bold;
     border: none;
     border-radius: 8px;
@@ -88,9 +88,18 @@
     z-index: 20; /* Higher than other cards to appear on top */
   }
   
+  .foodlist-form.small {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    z-index: 20; /* Higher than other cards to appear on top */
+    scale: 0.5;
+  }
+
   .dropdown-filter {
     padding: 10px;
-    font-size: 14px;
+    font-size: 0.9rem;
     border: 1px solid #ccc;
     border-radius: 5px;
     width: 200px;
@@ -117,7 +126,7 @@
     margin: 10px; /* Spacing between cards */
     color: #ffffff; /* White text for readability */
     text-align: left; /* Align text to the left for a cleaner layout */
-    font-size: 16px; /* Standard font size for readability */
+    font-size: 1rem; /* Standard font size for readability */
     transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add hover effect */
     z-index: 5;
   }
