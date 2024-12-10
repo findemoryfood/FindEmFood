@@ -148,7 +148,6 @@ The application uses environment variables stored in .env files
 
 #### Required variables:
 - `REACT_APP_GOOGLE_MAPS_API_KEY`: API key for Google Maps services.
-- `REACT_APP_GOOGLE_ANALYTICS_ID`: Google Analytics tracking ID for monitoring user engagement.
 
 Clone the project from the repository:
    ```plaintext
